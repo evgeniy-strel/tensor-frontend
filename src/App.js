@@ -21,8 +21,6 @@ import Auth from "./views/Auth";
 import '@vkontakte/vkui/dist/vkui.css';
 import './styles/App.css';
 
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-
 
 const pages = [
   { id: "home", name: "Home", icon: <Icon28HomeOutline /> },
@@ -64,16 +62,9 @@ function App() {
               />
             }
           >
-            {/* <Home id="home" />
+            <Home id="home" />
             <Notifications id="notifications" />
-            <Auth id="auth" /> */}
-            <Router>
-              <Routes>
-                  <Route path="/" element={<Home id="home"/>} />
-                  <Route path="/notifications" element={<Notifications id="notifications"/>} />
-                  <Route path="/auth" element={<Auth id="auth"/>} />
-              </Routes>
-            </Router>
+            <Auth id="auth" />
           </Epic>
         </SplitCol>
     </SplitLayout>

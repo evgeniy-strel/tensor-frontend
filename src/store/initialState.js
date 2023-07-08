@@ -1,5 +1,7 @@
 const initialState = {
-    userInfo: {}
+    status: "",
+    token: localStorage.getItem("token") || "",
+    user: {},
 }
 
 export default initialState;

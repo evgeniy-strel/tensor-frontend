@@ -9,6 +9,11 @@ axios.defaults.headers = {
     "Access-Control-Allow-Methods": "PUT, POST, GET, DELETE, PATCH, OPTIONS",
 }
 
+let token = localStorage.getItem("token");
+if (token) {
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+}
+
 export default class RequestAPIauth {
     static async login({ username, password }) {
         let formData = new FormData();
@@ -17,18 +22,20 @@ export default class RequestAPIauth {
 
         return axios.post("/auth/jwt/login", formData)
             .then(res => {
-                const token = res.data.token;
+                token = res.data.access_token;
                 localStorage.setItem("token", token);
-                axios.defaults.headers.common["Authorization"] = token;
+                axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
             })
             .catch(rej => {
                 localStorage.removeItem("token");
-                console.log(rej)
+                axios.defaults.headers.common["Authorization"] = null;
             })
     }
 
     static async logout() {
-        return axios.post()
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        axios.defaults.headers.common["Authorization"] = null;
     }
 
     static async register() {

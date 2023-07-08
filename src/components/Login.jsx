@@ -9,10 +9,12 @@ import {
     Input,
     Button,
 } from "@vkontakte/vkui";
-import RequestAPIauth from "../API/authRequests";
+import { useDispatch } from "react-redux";
+import { postLogin } from "../store/reducers/userSlice";
 
 
 const Login = ({ setActivePanel }) => {
+    const dispatch = useDispatch();
     const [formData, setFormData] = useState({
         username: "",
         password: ""
@@ -20,7 +22,7 @@ const Login = ({ setActivePanel }) => {
 
     const handlerSubmit = (e) => {
         e.preventDefault();
-        RequestAPIauth.login(formData);
+        dispatch(postLogin(formData))
     }
 
     return (

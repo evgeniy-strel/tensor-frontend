@@ -8,7 +8,8 @@ import {
     FormLayoutGroup,
     FormItem,
     Input,
-    Select
+    Select,
+    Button
 } from "@vkontakte/vkui";
 
 
@@ -96,11 +97,20 @@ const Register = ({ setActivePanel }) => {
                         <Input 
                             id="password"
                             type="password"
+                            autoComplete="on"
                             onChange={e => setFormData({...formData, password: e.target.value})}
                             value={formData.password}
                         />
                     </FormItem>
-
+                    <FormItem>
+                        <Button 
+                            onClick={handlerSubmit}
+                            size="l" 
+                            stretched
+                        >
+                            sign up
+                        </Button>
+                    </FormItem>
                 </FormLayout>
             </Group>
         </Panel>

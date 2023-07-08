@@ -1,12 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import RequestAPIauth from "../../API/authRequests";
-import RequestAPIusers from "../../API/usersRequests";
+import RequestAPI from "../../API/requests";
 import initialState from "../initialState";
 
 export const postLogin = createAsyncThunk(
     "auth/login",
     async (formData, {rejectWithValue}) => {
-        const res = await RequestAPIauth.login(formData)
+        const res = await RequestAPI.login(formData)
             .then(res => res.data)
             .catch(err => rejectWithValue(err.message))
         return res
@@ -18,18 +17,21 @@ const userSlice = createSlice({
     initialState,
     reducers: {
         logout(state) {
-            RequestAPIauth.logout();
+            RequestAPI.logout();
             state.token = "";
         }
     },
-    extraReducers: {
-        [postLogin.pending]: (state, action) => {
-            state.loading = "loading";
-        },
-        [postLogin.fulfilled]: (state, action) => {
-        },
-        [postLogin.rejected]: (state, action) => {
-        }
+    extraReducers: (builder) => {
+        builder.addCase(postLogin.pending, (state, action) => {
+            state.status = "loading";
+            console.log(action)
+        })
+        builder.addCase(postLogin.fulfilled, (state, action) => {
+            console.log(action)
+        })
+        builder.addCase(postLogin.rejected, (state, action) => {
+            console.log(action)
+        })
     }
 })
 

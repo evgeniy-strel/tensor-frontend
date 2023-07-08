@@ -55,7 +55,12 @@ const Login = ({ setActivePanel }) => {
                             </Button>
                         </FormItem>
                         <FormItem>
-                            <Button onClick={() => setActivePanel("register")} size="l" stretched appearance="neutral"> 
+                            <Button 
+                                onClick={() => setActivePanel("register")} 
+                                size="l" 
+                                stretched 
+                                appearance="neutral"
+                            > 
                                 sign up
                             </Button>
                         </FormItem>

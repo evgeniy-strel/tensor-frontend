@@ -1,5 +1,6 @@
 import axios from "axios";
 
+// TODO: вынести в параметры. Ссылка на API-сервер
 axios.defaults.baseURL = process.env.REACT_APP_URL_API;
 axios.defaults.headers = {
     "Access-Control-Allow-Origin": "*",
@@ -9,20 +10,20 @@ axios.defaults.headers = {
     "Access-Control-Allow-Methods": "PUT, POST, GET, DELETE, PATCH, OPTIONS",
 }
 
-let token = localStorage.getItem("token");
+// При загрузке приложения загружаем токен из хранилища
+const token = localStorage.getItem("token");
 if (token) {
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 }
 
-export default class RequestAPIauth {
-    static async login({ username, password }) {
+export default class RequestAPI {
+    static async login({ login, password }) {
         let formData = new FormData();
-        formData.append("username", username);
+        formData.append("username", login);
         formData.append("password", password);
-
         return axios.post("/auth/jwt/login", formData)
             .then(res => {
-                token = res.data.access_token;
+                const token = res.data.access_token;
                 localStorage.setItem("token", token);
                 axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
             })
@@ -56,5 +57,34 @@ export default class RequestAPIauth {
 
     static async resetPassword(token, password) {
         return axios.post()
+    }
+
+    static async info() {
+        // Функция получения информации о текущем пользователе.
+        // TODO: В будущем адрес должен изменитьс, этот не подходящий
+        return axios.get("/users/me")
+            .then(res => {
+                console.log("/users/me", res.data);
+                localStorage.setItem("user", res.data);
+            })
+            .catch(rej => {
+                localStorage.removeItem("user");
+            })
+    }
+
+    static async patchCurrentUser() {
+        return axios.patch("/me")
+    }
+
+    static async getUserById(id) {
+        return axios.get(`/${id}`)
+    }
+
+    static async deleteUser(id) {
+        return axios.delete(`/${id}`)
+    }
+
+    static async patchUserById(id) {
+        return axios.patch(`/${id}`)
     }
 }

@@ -19,7 +19,6 @@ import Home from "./views/Home";
 import Notifications from "./views/Notifications";
 import Auth from "./views/Auth";
 import '@vkontakte/vkui/dist/vkui.css';
-import './styles/App.css';
 
 
 const pages = [

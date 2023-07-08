@@ -1,15 +1,12 @@
 import React from "react";
-import { 
-  Tabbar,
-  TabbarItem 
-} from "@vkontakte/vkui";
+import { Tabbar, TabbarItem } from "@vkontakte/vkui";
 
 
-const Mob = ({ activeStory, onStoryChange, viewWidth, pages }) => {
+const Mobile = ({ activeStory, onStoryChange, viewWidth, pages }) => {
     return (
         <Tabbar className={viewWidth.tabletMinus.className}>
-            {pages.map((el, i) => 
-                <TabbarItem
+            {pages.map(el => 
+              <TabbarItem
                 onClick={onStoryChange}
                 selected={activeStory === el.id}
                 data-story={el.id}
@@ -23,4 +20,4 @@ const Mob = ({ activeStory, onStoryChange, viewWidth, pages }) => {
     )
 }
 
-export default Mob;
+export default Mobile;

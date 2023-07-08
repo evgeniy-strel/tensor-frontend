@@ -1,14 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './styles/index.css';
+import { ConfigProvider, AdaptivityProvider, AppRoot } from '@vkontakte/vkui';
 import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
-import { ConfigProvider, AdaptivityProvider, AppRoot } from '@vkontakte/vkui';
+import './styles/index.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <ConfigProvider appearance="light">
+    <ConfigProvider>
       <AdaptivityProvider>
         <AppRoot>
           <App />

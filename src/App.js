@@ -1,6 +1,8 @@
 import React from 'react';
 import {
   SplitLayout,
+  SplitCol,
+  Epic,
   PanelHeader,
   Platform,
   usePlatform,
@@ -8,20 +10,24 @@ import {
 } from '@vkontakte/vkui';
 import { 
   Icon28HomeOutline,
-  Icon28BookOutline,
   Icon28DoorArrowLeftOutline,
   Icon28Notifications
 } from "@vkontakte/icons";
-import Main from './components/Main';
+import Mobile from "./layouts/Mobile";
+import Desktop from "./layouts/Desktop";
+import Home from "./views/Home";
+import Notifications from "./views/Notifications";
+import Auth from "./views/Auth";
 import '@vkontakte/vkui/dist/vkui.css';
 import './styles/App.css';
+
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 
 const pages = [
   { id: "home", name: "Home", icon: <Icon28HomeOutline /> },
-  { id: "about", name: "About", icon: <Icon28BookOutline /> },
   { id: "notifications", name: "Notifications", icon: <Icon28Notifications /> },
-  { id: "login", name: "Login", icon: <Icon28DoorArrowLeftOutline /> },
+  { id: "auth", name: "Auth", icon: <Icon28DoorArrowLeftOutline /> },
 ]
 
 
@@ -37,13 +43,39 @@ function App() {
       header={isVKCOM && <PanelHeader separator={false} />}
       style={{ justifyContent: 'center' }}
     >
-      <Main 
-        isVKCOM={isVKCOM} 
-        activeStory={activeStory} 
-        onStoryChange={onStoryChange}
-        viewWidth={viewWidth}
-        pages={pages}
-      />
+      {viewWidth.tabletPlus && 
+        <Desktop 
+          isVKCOM={isVKCOM} 
+          activeStory={activeStory} 
+          onStoryChange={onStoryChange}
+          viewWidth={viewWidth}
+          pages={pages}
+        />
+      }
+        <SplitCol width="100%" maxWidth="560px" stretchedOnMobile autoSpaced>
+          <Epic
+            activeStory={activeStory}
+            tabbar={viewWidth.tabletMinus && 
+              <Mobile 
+                activeStory={activeStory} 
+                onStoryChange={onStoryChange} 
+                viewWidth={viewWidth}
+                pages={pages}
+              />
+            }
+          >
+            {/* <Home id="home" />
+            <Notifications id="notifications" />
+            <Auth id="auth" /> */}
+            <Router>
+              <Routes>
+                  <Route path="/" element={<Home id="home"/>} />
+                  <Route path="/notifications" element={<Notifications id="notifications"/>} />
+                  <Route path="/auth" element={<Auth id="auth"/>} />
+              </Routes>
+            </Router>
+          </Epic>
+        </SplitCol>
     </SplitLayout>
   );
 }

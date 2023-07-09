@@ -1,21 +1,18 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "../views/Home";
-import About from "../views/About";
 import Notifications from "../views/Notifications";
-import Login from "../views/Login";
-
+import Auth from "../views/Auth";
 
 const Rout = () => {
     return (
-        <>
+        <Router>
             <Routes>
                 <Route path="/" element={<Home />} />
-                <Route path="/about" element={<About />} />
                 <Route path="/notifications" element={<Notifications />} />
-                <Route path="/login" element={<Login />} />
+                <Route path="/auth" element={<Auth />} />
             </Routes>
-        </>
+        </Router>
     )
 }
 

@@ -1,17 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './styles/index.css';
+import { ConfigProvider, AdaptivityProvider, AppRoot } from '@vkontakte/vkui';
 import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
-import { ConfigProvider, AdaptivityProvider, AppRoot } from '@vkontakte/vkui';
+import { Provider } from 'react-redux';
+import { store } from './store';
+import './styles/index.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <ConfigProvider appearance="light">
+    <ConfigProvider>
       <AdaptivityProvider>
         <AppRoot>
-          <App />
+          <Provider store={store}>
+            <App />
+          </Provider>
         </AppRoot>
       </AdaptivityProvider>
     </ConfigProvider>

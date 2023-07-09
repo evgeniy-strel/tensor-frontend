@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   SplitLayout,
   SplitCol,
@@ -15,25 +15,27 @@ import {
 } from "@vkontakte/icons";
 import Mobile from "./layouts/Mobile";
 import Desktop from "./layouts/Desktop";
-import Home from "./views/Home";
-import Notifications from "./views/Notifications";
-import Auth from "./views/Auth";
 import '@vkontakte/vkui/dist/vkui.css';
 
+import { useLocation } from 'react-router-dom';
+import Rout from './components/Rout';
 
 const pages = [
-  { id: "home", name: "Home", icon: <Icon28HomeOutline /> },
-  { id: "notifications", name: "Notifications", icon: <Icon28Notifications /> },
-  { id: "auth", name: "Auth", icon: <Icon28DoorArrowLeftOutline /> },
+  { id: "home", name: "Home", icon: <Icon28HomeOutline />, path: "/" },
+  { id: "notifications", name: "Notifications", icon: <Icon28Notifications />, path: "/notifications" },
+  { id: "auth", name: "Auth", icon: <Icon28DoorArrowLeftOutline />, path: "/auth" },
 ]
-
 
 function App() {
   const platform = usePlatform();
   const isVKCOM = platform !== Platform.VKCOM;
   const { viewWidth } = useAdaptivityConditionalRender();
-  const [activeStory, setActiveStory] = React.useState('home');
-  const onStoryChange = (e) => setActiveStory(e.currentTarget.dataset.story);
+  const location = useLocation();
+  const currentStory = () => location.pathname === "/" ? "home" : location.pathname.substring(1);
+  const [activeStory, setActiveStory] = useState(currentStory());
+  const onStoryChange = (e) => setActiveStory(e.currentTarget.dataset.story)
+
+  useEffect(() => setActiveStory(currentStory()), [location])
 
   return (
     <SplitLayout
@@ -61,9 +63,7 @@ function App() {
               />
             }
           >
-            <Home id="home" />
-            <Notifications id="notifications" />
-            <Auth id="auth" />
+            <Rout id={activeStory}/>
           </Epic>
         </SplitCol>
     </SplitLayout>

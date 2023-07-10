@@ -1,8 +1,5 @@
 import React, { useState } from "react";
 import { 
-    Panel,
-    PanelHeader,
-    Group,
     FormLayout,
     FormLayoutGroup,
     FormItem,
@@ -11,6 +8,7 @@ import {
 } from "@vkontakte/vkui";
 import { useDispatch } from "react-redux";
 import { postLogin } from "../store/reducers/userSlice";
+import { Link } from "react-router-dom";
 
 
 const Login = ({ setActivePanel }) => {
@@ -26,48 +24,60 @@ const Login = ({ setActivePanel }) => {
     }
 
     return (
-        <Panel id="login">
-            <PanelHeader>Login</PanelHeader>
-            <Group style={{ height: '1000px' }}>
-                <FormLayout onSubmit={handlerSubmit}>
-                    <FormLayoutGroup mode="vertical">
-                        <FormItem top="Username" htmlFor="username">
-                            <Input 
-                                id="username" 
-                                onChange={(e) => setFormData({...formData, username: e.target.value})} 
-                                type="text" 
-                                value={formData.login}
-                                autoFocus
-                            />
-                        </FormItem>
-                        <FormItem top="Password" htmlFor="pass">
-                            <Input 
-                                id="pass"
-                                onChange={(e) => setFormData({...formData, password: e.target.value})}  
-                                type="password" 
-                                autoComplete="on"
-                                value={formData.password}
-                            />
-                        </FormItem>
-                        <FormItem>
-                            <Button onClick={handlerSubmit} size="l" stretched> 
-                                login
-                            </Button>
-                        </FormItem>
-                        <FormItem>
-                            <Button 
-                                onClick={() => setActivePanel("register")} 
-                                size="l" 
-                                stretched 
-                                appearance="neutral"
-                            > 
-                                sign up
-                            </Button>
-                        </FormItem>
-                    </FormLayoutGroup>
-                </FormLayout>
-            </Group>
-        </Panel>
+        <FormLayout onSubmit={handlerSubmit}>
+            <FormLayoutGroup mode="vertical">
+                <FormItem top="Username" htmlFor="username">
+                    <Input 
+                        id="username" 
+                        type="text" 
+                        onChange={(e) => setFormData({...formData, username: e.target.value})} 
+                        value={formData.login}
+                        autoFocus
+                    />
+                </FormItem>
+                <FormItem top="Password" htmlFor="password">
+                    <Input 
+                        id="password"
+                        type="password" 
+                        autoComplete="on"
+                        onChange={(e) => setFormData({...formData, password: e.target.value})}  
+                        value={formData.password}
+                    />
+                </FormItem>
+            </FormLayoutGroup>
+            <FormLayoutGroup>
+                <FormItem>
+                    <Button onClick={handlerSubmit} size="l" stretched> 
+                        login
+                    </Button>
+                </FormItem>
+                <FormItem>
+                    <Link to="forgot">
+                        <Button 
+                            onClick={() => setActivePanel("forgot")} 
+                            size="l" 
+                            stretched 
+                            appearance="neutral"
+                        > 
+                            forgot password
+                        </Button>
+                    </Link>
+                </FormItem>
+                <FormItem>
+                    <Link to="register">
+                        <Button 
+                            onClick={() => setActivePanel("register")} 
+                            size="l" 
+                            stretched 
+                            appearance="neutral"
+                        > 
+                            sign up
+                        </Button>
+                    </Link>
+                </FormItem>
+            </FormLayoutGroup>
+        </FormLayout>
+
     )
 }
 

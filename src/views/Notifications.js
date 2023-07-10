@@ -14,7 +14,7 @@ const Notifications = () => {
         <View id="notifications" activePanel="notifications">
             <Panel id="notifications">
                 <PanelHeader>Notifications</PanelHeader>
-                <Group style={{ height: '1000px' }}>
+                <Group style={{ height: '80vh' }}>
                     <Placeholder icon={<Icon28Notifications width={56} height={56} />} />
                 </Group>
             </Panel>

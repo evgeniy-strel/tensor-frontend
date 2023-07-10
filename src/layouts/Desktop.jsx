@@ -6,6 +6,8 @@ import {
     Group,
     Cell,
 } from "@vkontakte/vkui";
+import { Link } from "react-router-dom";
+
 
 
 const Desktop = ({ isVKCOM, activeStory, onStoryChange, viewWidth, pages }) => {
@@ -15,23 +17,24 @@ const Desktop = ({ isVKCOM, activeStory, onStoryChange, viewWidth, pages }) => {
           {isVKCOM && <PanelHeader />}
           <Group>
             {pages.map(el => 
-              <Cell
-                disabled={activeStory === el.id}
-                style={
-                  activeStory === el.id
-                    ? {
-                        backgroundColor: 'var(--vkui--color_background_secondary)',
-                        borderRadius: 8,
-                      }
-                    : {}
-                }
-                data-story={el.id}
-                onClick={onStoryChange}
-                before={el.icon}
-                key={el.id}
-              >
-                {el.name}
-              </Cell> 
+              <Link to={el.path} key={el.id}>
+                <Cell
+                  disabled={activeStory === el.id}
+                  style={
+                    activeStory === el.id
+                      ? {
+                          backgroundColor: 'var(--vkui--color_background_secondary)',
+                          borderRadius: 8,
+                        }
+                      : {}
+                  }
+                  data-story={el.id}
+                  onClick={onStoryChange}
+                  before={el.icon}
+                >
+                  {el.name}
+                </Cell> 
+              </Link>
             )}
           </Group>
         </Panel>

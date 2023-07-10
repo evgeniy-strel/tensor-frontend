@@ -12,6 +12,16 @@ export const postLogin = createAsyncThunk(
     }    
 )
 
+export const postRegister = createAsyncThunk(
+    "auth/register",
+    async (formData, {rejectWithValue}) => {
+        const res = await RequestAPI.register(formData)
+            .then(res => res.data)
+            .catch(err => rejectWithValue(err.message))
+        return res
+    }
+)
+
 const userSlice = createSlice({
     name: "user",
     initialState,
@@ -25,13 +35,23 @@ const userSlice = createSlice({
         builder.addCase(postLogin.pending, (state, action) => {
             state.status = "loading";
             console.log(action)
-        })
+        });
         builder.addCase(postLogin.fulfilled, (state, action) => {
-            console.log(action)
-        })
+
+        });
         builder.addCase(postLogin.rejected, (state, action) => {
-            console.log(action)
+
+        });
+        builder.addCase(postRegister.pending, (state, action) => {
+            
         })
+        builder.addCase(postRegister.fulfilled, (state, action) => {
+            
+        })
+        builder.addCase(postRegister.rejected, (state, action) => {
+            
+        })
+
     }
 })
 

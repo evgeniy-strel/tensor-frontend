@@ -15,10 +15,9 @@ import {
 } from "@vkontakte/icons";
 import Mobile from "./layouts/Mobile";
 import Desktop from "./layouts/Desktop";
-import '@vkontakte/vkui/dist/vkui.css';
-
 import { useLocation } from 'react-router-dom';
 import Rout from './components/Rout';
+import '@vkontakte/vkui/dist/vkui.css';
 
 const pages = [
   { id: "home", name: "Home", icon: <Icon28HomeOutline />, path: "/" },
@@ -31,11 +30,11 @@ function App() {
   const isVKCOM = platform !== Platform.VKCOM;
   const { viewWidth } = useAdaptivityConditionalRender();
   const location = useLocation();
-  const currentStory = () => location.pathname === "/" ? "home" : location.pathname.substring(1);
+  const currentStory = () => location.pathname === "/" ? "home" : location.pathname.split("/")[1];
   const [activeStory, setActiveStory] = useState(currentStory());
-  const onStoryChange = (e) => setActiveStory(e.currentTarget.dataset.story)
+  const onStoryChange = (e) => setActiveStory(e.currentTarget.dataset.story);
 
-  useEffect(() => setActiveStory(currentStory()), [location])
+  useEffect(() => setActiveStory(currentStory()), [location.pathname])
 
   return (
     <SplitLayout

@@ -1,24 +1,30 @@
-import React from "react";
 import { Tabbar, TabbarItem } from "@vkontakte/vkui";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const Mobile = ({ activeStory, onStoryChange, viewWidth, pages }) => {
+const Mobile = ({ viewWidth, pages, activeStory, setActiveStory }) => {
+    const navigate = useNavigate();
+
     return (
-        <Tabbar className={viewWidth.tabletMinus.className} style={{justifyContent: "space-around"}}>
-            {pages.map(el => 
-            <Link to={el.path} key={el.id}>
-              <TabbarItem
-                onClick={onStoryChange}
-                selected={activeStory === el.id}
-                data-story={el.id}
-                text={el.name}
-              >
-                {el.icon}
-              </TabbarItem>
-            </Link>
-            )}
+        <Tabbar
+            className={viewWidth.tabletMinus.className}
+            style={{ justifyContent: "space-around" }}
+        >
+            {pages.map((el) => (
+                <TabbarItem
+                    onClick={(e) => {
+                        setActiveStory(e.currentTarget.dataset.story);
+                        navigate(el.path);
+                    }}
+                    selected={activeStory === el.id}
+                    data-story={el.id}
+                    text={el.name}
+                    key={el.id}
+                >
+                    {el.icon}
+                </TabbarItem>
+            ))}
         </Tabbar>
-    )
-}
+    );
+};
 
 export default Mobile;

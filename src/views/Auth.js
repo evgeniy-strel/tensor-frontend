@@ -1,55 +1,83 @@
-import React, { useState, useEffect } from "react";
-import { View, Panel, PanelHeader, PanelHeaderBack, Group } from "@vkontakte/vkui";
-import Login from "../components/Login";
-import Register from "../components/Register";
-import ForgotPassword from "../components/ForgotPassword";
-import { Routes, Route, useLocation, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import {
+    View,
+    Panel,
+    PanelHeader,
+    Group,
+    TabsItem,
+    Tabs,
+    Spinner,
+} from "@vkontakte/vkui";
+import { useSelector } from "react-redux";
+import { useLocation, Outlet, useNavigate } from "react-router-dom";
 
-const panels = {
-    login: {
+const panels = [
+    {
         id: "login",
-        title: "Login",
+        text: "Вход",
+        path: "",
     },
-    forgot: {
-        id: "forgot",
-        title: "Forgot Password"
-    },
-    register: {
+    {
         id: "register",
-        title: "Sign Up"
-    }
-}
+        text: "Регистрация",
+        path: "register",
+    },
+];
 
-const Auth = () => {
-    const location = useLocation();
-    const currentStory = () => location.pathname === "/auth" ? "login" : location.pathname.split("/")[2];
-    const [activePanel, setActivePanel] = useState(currentStory());
-
-    useEffect(() => setActivePanel(currentStory()), [])
+const TabsHeader = ({ selected, setSelected }) => {
+    const navigate = useNavigate();
 
     return (
-        <View id="auth" activePanel={activePanel}> 
-            <Panel id={activePanel}>
-                <PanelHeader 
-                    before={ activePanel !== "login" &&
-                        <Link to="" style={{ color: "#FFF" }}>
-                            <PanelHeaderBack onClick={() => setActivePanel("login")}/>
-                        </Link>
-                    }
+        <Tabs>
+            {panels.map(({ id, text, path }) => (
+                <TabsItem
+                    selected={selected === id}
+                    onClick={() => {
+                        setSelected(id);
+                        navigate(path);
+                    }}
+                    aria-controls={id}
+                    id={id}
+                    key={id}
                 >
-                    {panels[activePanel].title}
+                    {text}
+                </TabsItem>
+            ))}
+        </Tabs>
+    );
+};
+
+const Auth = () => {
+    const loader = useSelector((state) => state.user.loader);
+    const location = useLocation();
+
+    const currentStory = () => {
+        return location.pathname === "/auth"
+            ? "login"
+            : location.pathname.split("/")[2];
+    };
+
+    const [activePanel, setActivePanel] = useState(
+        currentStory(location.pathname)
+    );
+
+    useEffect(() => setActivePanel(currentStory()), [location.pathname]);
+
+    return (
+        <View id="auth" activePanel={activePanel}>
+            <Panel id={activePanel}>
+                <PanelHeader>
+                    <TabsHeader
+                        selected={activePanel}
+                        setSelected={setActivePanel}
+                    />
                 </PanelHeader>
-                <Group style={{ height: '80vh' }}>
-                    <Routes id={activePanel}>
-                        <Route path="" element={<Login setActivePanel={setActivePanel} />}/>
-                        <Route path="forgot" element={<ForgotPassword setActivePanel={setActivePanel} />}/>
-                        <Route path="register" element={<Register setActivePanel={setActivePanel} />}/>
-                    </Routes>
+                <Group>
+                    {loader ? <Spinner size="medium" /> : <Outlet />}
                 </Group>
             </Panel>
-
         </View>
-    )
-}
+    );
+};
 
 export default Auth;

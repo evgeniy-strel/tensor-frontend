@@ -5,6 +5,7 @@ import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import { Provider } from 'react-redux';
 import { store } from './store';
+import "@vkontakte/vkui/dist/vkui.css";
 import './styles/index.css';
 
 import { BrowserRouter as Router } from 'react-router-dom';

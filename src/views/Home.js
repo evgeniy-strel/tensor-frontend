@@ -1,4 +1,3 @@
-import React from "react";
 import { 
     View,
     Panel,
@@ -14,7 +13,7 @@ const Home = () => {
         <View id="home" activePanel="home">
             <Panel id="home">
                 <PanelHeader>Home</PanelHeader>
-                <Group style={{ height: '80vh' }}>
+                <Group>
                     <Placeholder icon={<Icon28HomeOutline width={56} height={56} />} />
                 </Group>
             </Panel>

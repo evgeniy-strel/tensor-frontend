@@ -46,6 +46,7 @@ const TabsHeader = ({ selected, setSelected }) => {
           setSelected={setSelected}
           id={id}
           text={text}
+          key={id}
         />
       ))}
     </Tabs>

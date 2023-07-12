@@ -13,7 +13,10 @@ const Rout = () => {
     <Routes>
       <Route path="/*" element={<Home />} />
       <Route path="/event" element={<Event />} />
-      <Route path="/messenger" element={<Messenger />} />
+      <Route path="/messenger/">
+        <Route path="" element={<Messenger />} />
+        <Route path=":id" element={<Messenger />} />
+      </Route>
       <Route path="/profile/:id" element={<Profile />} />
       <Route path="/auth/*" element={<Auth />}>
         <Route path="" element={<Login />} />

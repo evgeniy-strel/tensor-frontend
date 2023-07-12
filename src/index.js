@@ -1,6 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { ConfigProvider, AdaptivityProvider, AppRoot } from "@vkontakte/vkui";
+import {
+  ConfigProvider,
+  AdaptivityProvider,
+  AppRoot,
+  WebviewType,
+} from "@vkontakte/vkui";
 import App from "./App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import { Provider } from "react-redux";
@@ -13,7 +18,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <ConfigProvider>
+    <ConfigProvider webviewType={WebviewType.INTERNAL}>
       <AdaptivityProvider>
         <AppRoot>
           <Provider store={store}>

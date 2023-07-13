@@ -63,14 +63,15 @@ function App() {
   const currentStory = () =>
     location.pathname === "/" ? "home" : location.pathname.split("/")[1];
   const [activeStory, setActiveStory] = useState(currentStory());
+  const onStoryChange = (e) => setActiveStory(e.currentTarget.dataset.story);
+  const isNeedTabbar = !location.pathname.includes("/messenger/");
 
   useEffect(() => setActiveStory(currentStory()), [location.pathname]);
 
   return (
     <SplitLayout
       header={isVKCOM && <PanelHeader separator={false} />}
-      style={{ justifyContent: "center" }}
-    >
+      style={{ justifyContent: "center" }}>
       {viewWidth.tabletPlus && (
         <Desktop
           isVKCOM={isVKCOM}
@@ -84,7 +85,8 @@ function App() {
         <Epic
           activeStory={activeStory}
           tabbar={
-            viewWidth.tabletMinus && (
+            viewWidth.tabletMinus &&
+            isNeedTabbar && (
               <Mobile
                 viewWidth={viewWidth}
                 pages={pages}
@@ -92,8 +94,7 @@ function App() {
                 setActiveStory={setActiveStory}
               />
             )
-          }
-        >
+          }>
           <Rout id={activeStory} />
         </Epic>
       </SplitCol>

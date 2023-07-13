@@ -32,7 +32,8 @@ const TabsItemCustom = ({ selected, setSelected, id, text }) => (
       setSelected(id);
     }}
     id={id}
-    aria-controls={id}>
+    aria-controls={id}
+  >
     {text}
   </TabsItem>
 );
@@ -46,6 +47,7 @@ const TabsHeader = ({ selected, setSelected }) => {
           setSelected={setSelected}
           id={id}
           text={text}
+          key={id}
         />
       ))}
     </Tabs>
@@ -91,7 +93,8 @@ const Messenger = () => {
                     subtitle="последнее сообщение чата"
                     indicator={
                       Boolean(countUnread) && <Counter>{countUnread}</Counter>
-                    }>
+                    }
+                  >
                     {name}
                   </Cell>
                 );

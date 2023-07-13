@@ -12,16 +12,23 @@ import {
   Icon28HomeOutline,
   Icon28DoorArrowLeftOutline,
   Icon28MessageOutline,
+  Icon28Profile,
+  Icon28CalendarOutline,
+  Icon28KeySquareOutline,
 } from "@vkontakte/icons";
 import Mobile from "./layouts/Mobile";
 import Desktop from "./layouts/Desktop";
-import "@vkontakte/vkui/dist/vkui.css";
-
 import { useLocation } from "react-router-dom";
 import Rout from "./components/Rout";
 
 const pages = [
   { id: "home", name: "Home", icon: <Icon28HomeOutline />, path: "/" },
+  {
+    id: "event",
+    name: "События",
+    icon: <Icon28CalendarOutline />,
+    path: "/event",
+  },
   {
     id: "messenger",
     name: "Мессенджер",
@@ -29,10 +36,22 @@ const pages = [
     path: "/messenger",
   },
   {
+    id: "profile",
+    name: "Профиль",
+    icon: <Icon28Profile />,
+    path: "/profile/:id",
+  },
+  {
     id: "auth",
-    name: "Auth",
+    name: "Войти",
     icon: <Icon28DoorArrowLeftOutline />,
     path: "/auth",
+  },
+  {
+    id: "register",
+    name: "Регистрация",
+    icon: <Icon28KeySquareOutline />,
+    path: "/register",
   },
 ];
 
@@ -44,21 +63,21 @@ function App() {
   const currentStory = () =>
     location.pathname === "/" ? "home" : location.pathname.split("/")[1];
   const [activeStory, setActiveStory] = useState(currentStory());
-  const onStoryChange = (e) => setActiveStory(e.currentTarget.dataset.story);
 
   useEffect(() => setActiveStory(currentStory()), [location.pathname]);
 
   return (
     <SplitLayout
       header={isVKCOM && <PanelHeader separator={false} />}
-      style={{ justifyContent: "center" }}>
+      style={{ justifyContent: "center" }}
+    >
       {viewWidth.tabletPlus && (
         <Desktop
           isVKCOM={isVKCOM}
-          activeStory={activeStory}
-          onStoryChange={onStoryChange}
           viewWidth={viewWidth}
           pages={pages}
+          activeStory={activeStory}
+          setActiveStory={setActiveStory}
         />
       )}
       <SplitCol width="100%" maxWidth="560px" stretchedOnMobile autoSpaced>
@@ -67,13 +86,14 @@ function App() {
           tabbar={
             viewWidth.tabletMinus && (
               <Mobile
-                activeStory={activeStory}
-                onStoryChange={onStoryChange}
                 viewWidth={viewWidth}
                 pages={pages}
+                activeStory={activeStory}
+                setActiveStory={setActiveStory}
               />
             )
-          }>
+          }
+        >
           <Rout id={activeStory} />
         </Epic>
       </SplitCol>

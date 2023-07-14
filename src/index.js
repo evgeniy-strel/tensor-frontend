@@ -11,25 +11,23 @@ import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import { Provider } from "react-redux";
 import { store } from "./store";
 import "@vkontakte/vkui/dist/vkui.css";
-import "./styles/index.css";
+import "./styles/index.scss";
 
 import { BrowserRouter as Router } from "react-router-dom";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <ConfigProvider webviewType={WebviewType.INTERNAL}>
-      <AdaptivityProvider>
-        <AppRoot>
-          <Provider store={store}>
-            <Router>
-              <App />
-            </Router>
-          </Provider>
-        </AppRoot>
-      </AdaptivityProvider>
-    </ConfigProvider>
-  </React.StrictMode>
+  <ConfigProvider webviewType={WebviewType.INTERNAL}>
+    <AdaptivityProvider>
+      <AppRoot>
+        <Provider store={store}>
+          <Router>
+            <App />
+          </Router>
+        </Provider>
+      </AppRoot>
+    </AdaptivityProvider>
+  </ConfigProvider>
 );
 
 // If you want your app to work offline and load faster, you can change

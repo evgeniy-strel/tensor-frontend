@@ -3,7 +3,9 @@
   box-sizing: border-box;
 
   @media screen and (min-width: 768px) {
-    min-height: calc(100vh - 72px - 52px);
+    min-height: calc(
+      100vh - var(--vkui--size_panel_header_height--regular) - 16px - 52px
+    );
     border-end-start-radius: 0 !important;
     border-end-end-radius: 0 !important ;
   }

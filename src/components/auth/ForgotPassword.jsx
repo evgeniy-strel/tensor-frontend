@@ -10,9 +10,10 @@ import {
   Spinner,
 } from "@vkontakte/vkui";
 import { useSelector } from "react-redux";
-import { Link, useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 
 const ForgotPassword = () => {
+  const navigate = useNavigate();
   const loader = useSelector((state) => state.user.loader);
   const [setActivePanel] = useOutletContext();
   const [email, setEmail] = useState("");
@@ -25,9 +26,12 @@ const ForgotPassword = () => {
     <>
       <PanelHeader
         before={
-          <Link to="/auth" onClick={() => setActivePanel("login")} style={{ color: "#FFF" }}>
-            <PanelHeaderBack />
-          </Link>
+          <PanelHeaderBack
+            onClick={() => {
+              setActivePanel("login");
+              navigate("/auth")
+            }}
+          />
         }
       >
         Восстановление пароля

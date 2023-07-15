@@ -16,12 +16,12 @@ import {
   Icon24VoiceOutline,
 } from "@vkontakte/icons";
 
-const CustomWriteBar = () => {
+const CustomWriteBar = ({ onSendMessage, user }) => {
   const platform = usePlatform();
   const [text, setText] = React.useState("");
 
   const sendMessage = () => {
-    console.log(text);
+    onSendMessage({ text, user });
     setText("");
   };
 

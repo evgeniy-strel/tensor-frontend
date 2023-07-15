@@ -1,0 +1,88 @@
+.pm-chat-container {
+  .panel-header-pm {
+    @media screen and (max-width: 767px) {
+      .vkuiPanelHeader__fixed {
+        box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.06),
+          0px 0px 2px 0px rgba(0, 0, 0, 0.03);
+      }
+      .vkuiSeparator {
+        display: none !important;
+      }
+    }
+  }
+
+  .vkuiPanelHeader--android .vkuiPanelHeader__content > * {
+    padding-left: 2px !important;
+  }
+
+  .chat-name {
+    letter-spacing: 0.1px;
+  }
+
+  .was-online {
+    letter-spacing: 0.2px;
+  }
+
+  .messages-container {
+    display: flex;
+    @media screen and (min-width: 768px) {
+      .vkuiGroup {
+        padding: 0px 8px;
+      }
+    }
+  }
+
+  .messages-container {
+    height: calc(
+      100vh - var(--vkui--size_panel_header_height--regular) - 52.5px
+    );
+    @media screen and (min-width: 768px) {
+      height: calc(
+        100vh - var(--vkui--size_panel_header_height--regular) - 52.5px - 16px
+      );
+    }
+  }
+
+  .messages {
+    width: 100%;
+    height: inherit;
+    max-height: inherit;
+    overflow: auto;
+    padding: 0 !important;
+
+    .table-messages {
+      height: 100%;
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .message-block {
+      display: grid;
+      margin: 8px;
+      @media screen and (min-width: 768px) {
+        margin: 12px;
+      }
+      .message {
+        max-width: 80%;
+        justify-self: flex-start;
+        padding: 12px 9px;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        border-radius: 16px;
+        background: var(--light-background-background, #ebedf0);
+        color: var(--light-text-text-primary, #000);
+        font-size: 13px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 16px; /* 123.077% */
+        letter-spacing: -0.052px;
+
+        &.mine {
+          background: var(--light-background-background-accent-tint, #5a9eff);
+          color: var(--light-text-text-contrast, #fff);
+          justify-self: flex-end;
+        }
+      }
+    }
+  }
+}

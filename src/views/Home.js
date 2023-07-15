@@ -1,17 +1,12 @@
-import { View, Panel, PanelHeader, Group, Placeholder } from "@vkontakte/vkui";
-import { Icon28HomeOutline } from "@vkontakte/icons";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const Home = () => {
-  return (
-    <View id="home" activePanel="home">
-      <Panel id="home">
-        <PanelHeader>Home</PanelHeader>
-        <Group>
-          <Placeholder icon={<Icon28HomeOutline width={56} height={56} />} />
-        </Group>
-      </Panel>
-    </View>
-  );
+  const navigate = useNavigate();
+
+  useEffect(() => true ? navigate("/event") : navigate("/auth"));
+
+  return;
 };
 
 export default Home;

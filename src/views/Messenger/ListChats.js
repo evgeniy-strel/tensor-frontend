@@ -3,15 +3,18 @@ import {
   PanelHeader,
   Group,
   List,
-  Cell,
-  Avatar,
-  Counter,
   Tabs,
   TabsItem,
-  Search,
+  FixedLayout,
 } from "@vkontakte/vkui";
 import { allChats, myChats } from "../../mocks/chats";
-import { Link } from "react-router-dom";
+import "./ListChats.scss";
+import {
+  Icon28AddOutline,
+  Icon28SlidersOutline,
+  Icon28Search,
+} from "@vkontakte/icons";
+import ChatItem from "./ChatItem";
 
 const tabs = [
   {
@@ -31,8 +34,7 @@ const TabsItemCustom = ({ selected, setSelected, id, text }) => (
       setSelected(id);
     }}
     id={id}
-    aria-controls={id}
-  >
+    aria-controls={id}>
     {text}
   </TabsItem>
 );
@@ -69,39 +71,33 @@ const ListChats = () => {
   }, [selected]);
 
   return (
-    <>
-      <PanelHeader className="panel-header-custom">
-        <TabsHeader selected={selected} setSelected={setSelected} />
+    <div className="list-chats-container">
+      <PanelHeader
+        separator={false}
+        after={
+          <>
+            <Icon28AddOutline />
+            <Icon28SlidersOutline />
+            <Icon28Search />
+          </>
+        }>
+        <span>Сообщения</span>
       </PanelHeader>
+      <FixedLayout vertical="top" className="fixed-layout">
+        <TabsHeader selected={selected} setSelected={setSelected} />
+      </FixedLayout>
       <Group>
-        <Search
-          value={inputSearch}
-          onChange={onChangeInputSearch}
-          after={null}
-        />
-        <List>
+        <List className="list-chats">
           {chats
             .filter((chat) =>
               chat.name.toLowerCase().includes(inputSearch.toLowerCase())
             )
-            .map(({ id, name, img, countUnread }) => {
-              return (
-                <Link to={`${id}`} key={id}>
-                  <Cell
-                    before={<Avatar src={img} />}
-                    subtitle="последнее сообщение чата"
-                    indicator={
-                      Boolean(countUnread) && <Counter>{countUnread}</Counter>
-                    }
-                  >
-                    {name}
-                  </Cell>
-                </Link>
-              );
+            .map((chat) => {
+              return <ChatItem {...chat} />;
             })}
         </List>
       </Group>
-    </>
+    </div>
   );
 };
 

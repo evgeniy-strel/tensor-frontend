@@ -1,0 +1,58 @@
+.list-chats-container {
+  .vkuiPanelHeader__in {
+    padding: 0 10px 0 12px;
+  }
+
+  .fixed-layout {
+    box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.06),
+      0px 0px 2px 0px rgba(0, 0, 0, 0.03);
+    background-color: #fff;
+  }
+
+  .list-chats {
+    padding-top: 48px;
+  }
+
+  .vkuiPanelHeader__before {
+    padding: 0 !important;
+    flex-grow: 0 !important;
+  }
+
+  .vkuiPanelHeader__after {
+    gap: 20px;
+  }
+
+  .chat-item {
+    padding: 2px 4px;
+    .vkuiSimpleCell__main {
+      margin-left: 4px;
+    }
+    .last-message,
+    .name-chat {
+      text-overflow: ellipsis !important;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+    }
+    .last-message {
+      letter-spacing: 0.1px;
+      width: 100%;
+      padding-top: 6px;
+    }
+    .name-chat {
+      letter-spacing: 0.2px;
+    }
+    .vkuiSimpleCell__indicator {
+      align-self: flex-start;
+      padding-top: 20px !important;
+      flex-shrink: 0 !important;
+    }
+    .time-message {
+      position: relative;
+    }
+    &.group-item {
+      .vkuiAvatar {
+        border-radius: 6px;
+      }
+    }
+  }
+}

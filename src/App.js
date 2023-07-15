@@ -9,12 +9,10 @@ import {
   useAdaptivityConditionalRender,
 } from "@vkontakte/vkui";
 import {
-  Icon28HomeOutline,
   Icon28DoorArrowLeftOutline,
   Icon28MessageOutline,
   Icon28Profile,
   Icon28CalendarOutline,
-  Icon28KeySquareOutline,
 } from "@vkontakte/icons";
 import Mobile from "./layouts/Mobile";
 import Desktop from "./layouts/Desktop";
@@ -22,7 +20,6 @@ import { useLocation } from "react-router-dom";
 import Rout from "./components/Rout";
 
 const pages = [
-  { id: "home", name: "Home", icon: <Icon28HomeOutline />, path: "/" },
   {
     id: "event",
     name: "События",
@@ -39,19 +36,13 @@ const pages = [
     id: "profile",
     name: "Профиль",
     icon: <Icon28Profile />,
-    path: "/profile/:id",
+    path: "/profile/:username",
   },
   {
     id: "auth",
     name: "Войти",
     icon: <Icon28DoorArrowLeftOutline />,
     path: "/auth",
-  },
-  {
-    id: "register",
-    name: "Регистрация",
-    icon: <Icon28KeySquareOutline />,
-    path: "/register",
   },
 ];
 
@@ -63,7 +54,6 @@ function App() {
   const currentStory = () =>
     location.pathname === "/" ? "home" : location.pathname.split("/")[1];
   const [activeStory, setActiveStory] = useState(currentStory());
-  const onStoryChange = (e) => setActiveStory(e.currentTarget.dataset.story);
   const isNeedTabbar = !location.pathname.includes("/messenger/");
 
   useEffect(() => setActiveStory(currentStory()), [location.pathname]);

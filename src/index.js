@@ -18,7 +18,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <ConfigProvider webviewType={WebviewType.INTERNAL}>
+    <ConfigProvider webviewType={WebviewType.INTERNAL} appearance="light">
       <AdaptivityProvider>
         <AppRoot>
           <Provider store={store}>

@@ -1,4 +1,4 @@
-import { PanelHeader, PanelHeaderBack, Group, Spinner } from "@vkontakte/vkui";
+import { PanelHeader, PanelHeaderBack, Group, PanelSpinner } from "@vkontakte/vkui";
 import { useSelector } from "react-redux";
 import FormLogin from "./FormLogin";
 import { useOutletContext } from "react-router-dom";
@@ -12,7 +12,7 @@ const Login = () => {
       <PanelHeader before={<PanelHeaderBack onClick={() => setActivePanel("selector")}/>}>Вход</PanelHeader>
       <Group>
         {loader ? (
-          <Spinner size="medium" />
+          <PanelSpinner size="medium" />
         ) : (
           <FormLogin setActivePanel={setActivePanel} />
         )}

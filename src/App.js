@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from "react";
 import {
   SplitLayout,
   SplitCol,
@@ -18,6 +17,7 @@ import Mobile from "./layouts/Mobile";
 import Desktop from "./layouts/Desktop";
 import { useLocation } from "react-router-dom";
 import Rout from "./components/Rout";
+import useStory from "./hooks/useStory";
 
 const pages = [
   {
@@ -51,17 +51,14 @@ function App() {
   const isVKCOM = platform !== Platform.VKCOM;
   const { viewWidth } = useAdaptivityConditionalRender();
   const location = useLocation();
-  const currentStory = () =>
-    location.pathname === "/" ? "home" : location.pathname.split("/")[1];
-  const [activeStory, setActiveStory] = useState(currentStory());
+  const [activeStory, setActiveStory] = useStory("/", "home", 1);
   const isNeedTabbar = !location.pathname.includes("/messenger/");
-
-  useEffect(() => setActiveStory(currentStory()), [location.pathname]);
 
   return (
     <SplitLayout
       header={isVKCOM && <PanelHeader separator={false} />}
-      style={{ justifyContent: "center" }}>
+      style={{ justifyContent: "center" }}
+    >
       {viewWidth.tabletPlus && (
         <Desktop
           isVKCOM={isVKCOM}
@@ -84,7 +81,8 @@ function App() {
                 setActiveStory={setActiveStory}
               />
             )
-          }>
+          }
+        >
           <Rout id={activeStory} />
         </Epic>
       </SplitCol>

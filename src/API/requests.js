@@ -1,6 +1,12 @@
 import axios from "./axios";
 
 export default class RequestAPI {
+  static tokenExpired() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    axios.defaults.headers.common["Authorization"] = null;
+  }
+
   static async login({ username, password }) {
     let formDataLogin = new FormData();
     formDataLogin.append("username", username);
@@ -13,16 +19,13 @@ export default class RequestAPI {
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       })
       .catch((rej) => {
-        localStorage.removeItem("token");
-        axios.defaults.headers.common["Authorization"] = null;
+        RequestAPI.tokenExpired();
       });
     return res;
   }
 
   static async logout() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    axios.defaults.headers.common["Authorization"] = null;
+    this.tokenExpired();
   }
 
   static async register(formData) {
@@ -38,10 +41,11 @@ export default class RequestAPI {
       password: formData.password,
       is_active: true,
       is_superuser: false,
-      is_verified: false,
+      is_verified: formData.is_verified,
       username: formData.username,
       fullname: `${formData.firstName} ${formData.lastName}`,
       birthdate: formData.dateBirth,
+      external: JSON.stringify(formData.external),
     });
   }
 

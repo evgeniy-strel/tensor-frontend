@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
-const Home = () => {
+const Redirect = () => {
   const navigate = useNavigate();
 
   useEffect(() => true ? navigate("/event") : navigate("/auth"));
@@ -9,4 +9,4 @@ const Home = () => {
   return;
 };
 
-export default Home;
+export default Redirect;

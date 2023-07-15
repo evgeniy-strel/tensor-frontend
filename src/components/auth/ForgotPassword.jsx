@@ -7,19 +7,29 @@ import {
   FormItem,
   Input,
   Button,
-  Spinner,
+  FormStatus,
+  PanelSpinner
 } from "@vkontakte/vkui";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { forgotPassword } from "../../store/reducers/userSlice";
 import { useNavigate, useOutletContext } from "react-router-dom";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
-  const loader = useSelector((state) => state.user.loader);
+  const { loader, resultForgot } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const [setActivePanel] = useOutletContext();
   const [email, setEmail] = useState("");
+  const [isValid, setIsValid] = useState(true);
+  const EMAIL_REGEXP =
+    /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
 
   const handlerSubmit = () => {
-    console.log();
+    if (EMAIL_REGEXP.test(email)) {
+      dispatch(forgotPassword(email));
+    } else {
+      setIsValid(false);
+    }
   };
 
   return (
@@ -27,9 +37,9 @@ const ForgotPassword = () => {
       <PanelHeader
         before={
           <PanelHeaderBack
-            onClick={() => {
+            onClick={async () => {
+              await navigate("/auth");
               setActivePanel("login");
-              navigate("/auth")
             }}
           />
         }
@@ -38,10 +48,20 @@ const ForgotPassword = () => {
       </PanelHeader>
       <Group>
         {loader ? (
-          <Spinner size="medium" />
+          <PanelSpinner size="medium" />
         ) : (
           <FormLayout onSubmit={handlerSubmit}>
-            <FormItem top="Email" htmlFor="email">
+            {resultForgot.error !== "" && (
+              <FormStatus header="Ошибка" mode="error">
+                {resultForgot.error}
+              </FormStatus>
+            )}
+            <FormItem
+              top="Email"
+              htmlFor="email"
+              status={!isValid && "error"}
+              bottom={!isValid && "Некорректная почта!"}
+            >
               <Input
                 id="email"
                 type="email"

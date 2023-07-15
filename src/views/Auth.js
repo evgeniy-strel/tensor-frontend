@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
 import { View, Panel } from "@vkontakte/vkui";
-import { useLocation, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import AuthSelector from "../components/auth/AuthSelector";
+import useStory from "../hooks/useStory";
 
 const panels = [
   { id: "login", title: "Вход" },
@@ -9,24 +9,12 @@ const panels = [
 ];
 
 const Auth = () => {
-  const location = useLocation();
-
-  const currentStory = () => {
-    return location.pathname === "/auth"
-      ? "selector"
-      : location.pathname.split("/")[2];
-  };
-
-  const [activePanel, setActivePanel] = useState(currentStory());
-
-  useEffect(() => {
-    setActivePanel(currentStory());
-  }, []);
+  const [activePanel, setActivePanel] = useStory("/auth", "selector", 2);
 
   return (
     <View id="auth" activePanel={activePanel}>
       <Panel id="selector">
-        <AuthSelector setActivePanel={setActivePanel}/>
+        <AuthSelector setActivePanel={setActivePanel} />
       </Panel>
       {panels.map((el) => (
         <Panel id={el.id} key={el.id}>

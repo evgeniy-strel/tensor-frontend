@@ -40,11 +40,6 @@ const FormRegister = ({ formData, setFormData, setActivePanel }) => {
       </PanelHeader>
       <Group>
         <FormLayout onSubmit={handlerNext}>
-          {resultReg.error !== "" && (
-            <FormStatus header="Ошибка" mode="error">
-              {resultReg.error}
-            </FormStatus>
-          )}
           <FormItem
             top="Имя пользователя"
             htmlFor="username"

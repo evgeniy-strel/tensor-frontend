@@ -11,7 +11,7 @@ import {
   PanelSpinner
 } from "@vkontakte/vkui";
 import { useSelector, useDispatch } from "react-redux";
-import { forgotPassword } from "../../store/reducers/userSlice";
+import { postForgot } from "../../store/reducers/userSlice";
 import { useNavigate, useOutletContext } from "react-router-dom";
 
 const ForgotPassword = () => {
@@ -26,7 +26,7 @@ const ForgotPassword = () => {
 
   const handlerSubmit = () => {
     if (EMAIL_REGEXP.test(email)) {
-      dispatch(forgotPassword(email));
+      dispatch(postForgot(email));
     } else {
       setIsValid(false);
     }

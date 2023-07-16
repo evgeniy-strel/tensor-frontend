@@ -16,7 +16,7 @@ import {
 import Mobile from "./layouts/Mobile";
 import Desktop from "./layouts/Desktop";
 import { useLocation } from "react-router-dom";
-import Rout from "./components/Rout";
+import Rout from "./router/Rout";
 import useStory from "./hooks/useStory";
 
 const pages = [

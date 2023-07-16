@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { View, Panel } from "@vkontakte/vkui";
-import FormRegister from "../components/register/FormRegister";
-import FormVerify from "../components/register/FormVerify";
-import ProfileSetup from "../components/register/ProfileSetup";
+import FormRegister from "./FormRegister";
+import FormVerify from "./FormVerify";
+import ProfileSetup from "./ProfileSetup";
 
 const Register = () => {
   const [activePanel, setActivePanel] = useState("register");
@@ -15,20 +15,33 @@ const Register = () => {
     dateBirth: "",
     is_verified: false,
     external: {
-      name: ""
-    }
+      name: "",
+      avatar: {},
+    },
   });
 
   return (
     <View id="register" activePanel={activePanel}>
       <Panel id="register">
-        <FormRegister formData={formData} setFormData={setFormData} setActivePanel={setActivePanel}/>
+        <FormRegister
+          formData={formData}
+          setFormData={setFormData}
+          setActivePanel={setActivePanel}
+        />
       </Panel>
       <Panel id="verify">
-        <FormVerify formData={formData} setFormData={setFormData} setActivePanel={setActivePanel}/>
+        <FormVerify
+          formData={formData}
+          setFormData={setFormData}
+          setActivePanel={setActivePanel}
+        />
       </Panel>
       <Panel id="profsetup">
-        <ProfileSetup formData={formData} setFormData={setFormData} setActivePanel={setActivePanel}/>
+        <ProfileSetup
+          formData={formData}
+          setFormData={setFormData}
+          setActivePanel={setActivePanel}
+        />
       </Panel>
     </View>
   );

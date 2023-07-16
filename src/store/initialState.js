@@ -1,5 +1,7 @@
-const initialState = {
-  authLoader: false,
+const initialStateUser = {
+  token: localStorage.getItem("token") || "",
+  user: {},
+  loader: false,
   resultLogin: {
     data: {},
     error: "",
@@ -12,8 +14,6 @@ const initialState = {
     data: {},
     error: "",
   },
-  token: localStorage.getItem("token") || "",
-  user: {},
 };
 
-export default initialState;
+export default initialStateUser;

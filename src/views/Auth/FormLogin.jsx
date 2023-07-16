@@ -16,7 +16,7 @@ const FormLogin = ({ setActivePanel }) => {
     username: "",
     password: "",
   });
-  const [isValid, setIsValid] = useState(false);
+  const [isValid, setIsValid] = useState(true);
   const resultLogin = useSelector((state) => state.user.resultLogin);
   const dispatch = useDispatch();
 
@@ -24,7 +24,7 @@ const FormLogin = ({ setActivePanel }) => {
     e.preventDefault();
 
     if (formData.password.length < 8) {
-      setIsValid(true);
+      setIsValid(false);
     } else {
       dispatch(postLogin(formData));
     }
@@ -55,8 +55,12 @@ const FormLogin = ({ setActivePanel }) => {
         <FormItem
           top="Пароль"
           htmlFor="password"
-          status={isValid && "error"}
-          bottom={isValid && "Пароль введен неверно!"}
+          status={!isValid && "error"}
+          bottom={
+            (!isValid ||
+              (formData.password.length < 8 && formData.password !== "")) &&
+            "Длина пароля должна быть больше 8 символов"
+          }
         >
           <Input
             id="password"

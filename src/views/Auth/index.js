@@ -1,7 +1,7 @@
 import { View, Panel } from "@vkontakte/vkui";
 import { Outlet } from "react-router-dom";
-import AuthSelector from "../components/auth/AuthSelector";
-import useStory from "../hooks/useStory";
+import AuthSelector from "./AuthSelector";
+import useStory from "../../hooks/useStory";
 
 const panels = [
   { id: "login", title: "Вход" },

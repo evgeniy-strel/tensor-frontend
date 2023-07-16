@@ -1,12 +1,12 @@
 import { Routes, Route } from "react-router-dom";
-import Redirect from "../views/Redirect";
+import Redirect from "./Redirect";
 import Event from "../views/Event";
-import Messenger from "./../views/Messenger";
+import Messenger from "../views/Messenger";
 import Profile from "../views/Profile";
 import Auth from "../views/Auth";
-import Login from "./auth/Login";
+import Login from "../views/Auth/Login"
+import ForgotPassword from "../views/Auth/ForgotPassword";
 import Register from "../views/Register";
-import ForgotPassword from "./auth/ForgotPassword";
 
 const Rout = () => {
   return (

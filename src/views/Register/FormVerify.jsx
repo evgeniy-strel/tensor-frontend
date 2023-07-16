@@ -16,14 +16,14 @@ import {
 import { useSelector } from "react-redux";
 
 const FormVerify = ({ formData, setFormData, setActivePanel }) => {
-  const [isValid, setIsValid] = useState(false);
+  const [isValid, setIsValid] = useState(true);
   const [code, setCode] = useState("");
   const loader = useSelector((state) => state.user.loader);
 
   const handlerSubmit = (e) => {
     e.preventDefault();
     if (code === "") {
-      setIsValid(true);
+      setIsValid(false);
     } else {
       setFormData({ ...formData, is_verified: true });
       setActivePanel("profsetup");
@@ -60,8 +60,8 @@ const FormVerify = ({ formData, setFormData, setActivePanel }) => {
           <FormLayout onSubmit={handlerSubmit}>
             <FormItem
               htmlFor="code"
-              status={isValid && code === "" && "error"}
-              bottom={isValid && code === "" && "Введите данные"}
+              status={!isValid && code === "" && "error"}
+              bottom={!isValid && code === "" && "Введите данные"}
             >
               <Input
                 id="code"
@@ -84,7 +84,8 @@ const FormVerify = ({ formData, setFormData, setActivePanel }) => {
                   size="l"
                   stretched
                 >
-                  Отправить код ещё раз
+                  {/* Отправить код ещё раз */}
+                  Пропустить
                 </Button>
               </FormItem>
             </FormLayoutGroup>

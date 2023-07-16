@@ -1,13 +1,13 @@
 import debounce from "lodash.debounce";
 
+const doc = document.documentElement;
+
 const appHeight = () => {
-  const doc = document.documentElement;
   doc.style.setProperty("--app-height", `${window.innerHeight}px`);
 };
 appHeight();
 
 const debouncedAppHeight = debounce(() => {
-  const doc = document.documentElement;
   doc.style.setProperty("--app-height", `${window.innerHeight}px`);
 }, 200);
 

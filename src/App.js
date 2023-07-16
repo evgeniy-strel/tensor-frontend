@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
   SplitLayout,
   SplitCol,
@@ -54,8 +55,6 @@ function App() {
   const location = useLocation();
   const [activeStory, setActiveStory] = useStory("/", "home", 1);
   const isNeedTabbar = !location.pathname.includes("/messenger/");
-
-  useEffect(() => setActiveStory(currentStory()), [location.pathname]);
 
   useEffect(() => calculateAppHeight(), []);
 

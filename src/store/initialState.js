@@ -4,6 +4,10 @@ const initialState = {
     data: {},
     error: "",
   },
+  resultForgot: {
+    data: {},
+    error: "",
+  },
   resultReg: {
     data: {},
     error: "",

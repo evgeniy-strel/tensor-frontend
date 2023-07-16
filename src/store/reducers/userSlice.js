@@ -12,6 +12,16 @@ export const postLogin = createAsyncThunk(
   }
 );
 
+export const forgotPassword = createAsyncThunk(
+  "auth/forgotpass",
+  async (email, { rejectWithValue }) => {
+    const res = await RequestAPI.forgotPassword(email)
+      .then((res) => res.data)
+      .catch((err) => rejectWithValue(err.message));
+    return res;
+  }
+);
+
 export const postRegister = createAsyncThunk(
   "auth/register",
   async (formData, { rejectWithValue }) => {
@@ -42,6 +52,17 @@ const userSlice = createSlice({
       .addCase(postLogin.rejected, (state, action) => {
         state.loader = false;
         state.resultLogin.error = action.payload;
+      });
+    builder
+      .addCase(forgotPassword.pending, (state, action) => {
+        state.loader = true;
+      })
+      .addCase(forgotPassword.fulfilled, (state, action) => {
+        state.loader = false;
+      })
+      .addCase(forgotPassword.rejected, (state, action) => {
+        state.loader = false;
+        state.resultForgot.error = action.payload;
       });
     builder
       .addCase(postRegister.pending, (state, action) => {

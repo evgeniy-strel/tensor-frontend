@@ -7,7 +7,7 @@ import {
   WebviewType,
 } from "@vkontakte/vkui";
 import App from "./App";
-import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
+import * as serviceWorkerRegistration from "./serviceWorkers/serviceWorkerRegistration";
 import { Provider } from "react-redux";
 import { store } from "./store";
 import "@vkontakte/vkui/dist/vkui.css";
@@ -30,7 +30,6 @@ root.render(
   </ConfigProvider>
 );
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
+
 // Learn more about service workers: https://cra.link/PWA
 serviceWorkerRegistration.register();

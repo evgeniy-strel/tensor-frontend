@@ -7,7 +7,7 @@ import {
   FormItem,
   Input,
   Button,
-  Spinner,
+  PanelSpinner,
   Header,
   Paragraph,
   Div,
@@ -22,7 +22,7 @@ const FormVerify = ({ formData, setFormData, setActivePanel }) => {
 
   const handlerSubmit = (e) => {
     e.preventDefault();
-    if (Object.values(formData).includes("")) {
+    if (code === "") {
       setIsValid(true);
     } else {
       setFormData({ ...formData, is_verified: true });
@@ -55,7 +55,7 @@ const FormVerify = ({ formData, setFormData, setActivePanel }) => {
           </Paragraph>
         </Div>
         {loader ? (
-          <Spinner size="medium" />
+          <PanelSpinner size="medium" />
         ) : (
           <FormLayout onSubmit={handlerSubmit}>
             <FormItem

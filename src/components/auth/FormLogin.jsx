@@ -32,12 +32,12 @@ const FormLogin = ({ setActivePanel }) => {
 
   return (
     <FormLayout onSubmit={handlerSubmit}>
+      {resultLogin.error !== "" && (
+        <FormStatus header="Ошибка" mode="error">
+          {resultLogin.error}
+        </FormStatus>
+      )}
       <FormLayoutGroup mode="vertical">
-        {resultLogin.error !== "" && (
-          <FormStatus header="Ошибка" mode="error">
-            {resultLogin.error}
-          </FormStatus>
-        )}
         <FormItem top="Имя пользователя" htmlFor="username">
           <Input
             id="username"

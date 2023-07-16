@@ -1,9 +1,9 @@
 .pm-chat-container {
   .panel-header-pm {
+    touch-action: none;
     @media screen and (max-width: 767px) {
       .vkuiPanelHeader__fixed {
-        box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.06),
-          0px 0px 2px 0px rgba(0, 0, 0, 0.03);
+        box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.06), 0px 0px 2px 0px rgba(0, 0, 0, 0.03);
       }
       .vkuiSeparator {
         display: none !important;
@@ -13,6 +13,11 @@
 
   .vkuiPanelHeader--android .vkuiPanelHeader__content > * {
     padding-left: 2px !important;
+  }
+
+  .vkuiFixedLayout,
+  .vkuiWriteBar__form {
+    touch-action: none;
   }
 
   .chat-name {
@@ -28,18 +33,20 @@
     @media screen and (min-width: 768px) {
       .vkuiGroup {
         padding: 0px 8px;
+        border-end-start-radius: 0px;
+        border-end-end-radius: 0px;
       }
     }
   }
 
   .messages-container {
     height: calc(
-      100vh - var(--vkui--size_panel_header_height--regular) - 52.5px
+      var(--app-height) - var(--vkui--size_panel_header_height--regular) - 54px -
+        var(--vkui_internal--safe_area_inset_bottom)
     );
+
     @media screen and (min-width: 768px) {
-      height: calc(
-        100vh - var(--vkui--size_panel_header_height--regular) - 52.5px - 16px
-      );
+      height: calc(100vh - var(--vkui--size_panel_header_height--regular) - 52.5px - 16px);
     }
   }
 
@@ -47,7 +54,6 @@
     width: 100%;
     height: inherit;
     max-height: inherit;
-    overflow: auto;
     padding: 0 !important;
 
     .table-messages {

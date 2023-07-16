@@ -1,16 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./index.scss";
-import {
-  PanelHeader,
-  Group,
-  PanelHeaderBack,
-  Avatar,
-  PanelHeaderContent,
-} from "@vkontakte/vkui";
+import { PanelHeader, Group, PanelHeaderBack, Avatar, PanelHeaderContent } from "@vkontakte/vkui";
 import { useNavigate } from "react-router-dom";
 import { messagesPM } from "../../../mocks/messages";
 import CustomWriteBar from "../CustomWriteBar";
 import ScrollableFeed from "react-scrollable-feed";
+import { addBounceEffect, removeBounceEffect } from "../../../utils/bounceEffect";
 
 const PMChat = ({ chat }) => {
   const navigate = useNavigate();
@@ -29,6 +24,7 @@ const PMChat = ({ chat }) => {
   const addMessage = (message) => {
     setMessages((prev) => [...prev, message]);
     setCounter((prev) => prev + 1);
+    scrollBottom();
   };
 
   if (counter < messages.length) {
@@ -37,11 +33,23 @@ const PMChat = ({ chat }) => {
     }, 500);
   }
 
+  const scrollableRef = useRef();
+
+  const scrollBottom = () => scrollableRef.current.scrollToBottom();
+
+  useEffect(() => {
+    scrollBottom();
+  }, []);
+
+  useEffect(() => {
+    removeBounceEffect();
+
+    return () => addBounceEffect();
+  }, []);
+
   return (
     <div className="pm-chat-container">
-      <PanelHeader
-        className="panel-header-pm"
-        before={<PanelHeaderBack onClick={onClickBack} />}>
+      <PanelHeader className="panel-header-pm" before={<PanelHeaderBack onClick={onClickBack} />}>
         <PanelHeaderContent
           status={<span className="was-online">Была онлайн</span>}
           before={
@@ -57,7 +65,7 @@ const PMChat = ({ chat }) => {
       </PanelHeader>
       <div className="messages-container">
         <Group className="messages">
-          <ScrollableFeed>
+          <ScrollableFeed ref={scrollableRef}>
             <table className="table-messages">
               <tr>
                 <td valign="bottom">
@@ -79,7 +87,9 @@ const PMChat = ({ chat }) => {
           </ScrollableFeed>
         </Group>
       </div>
-      <CustomWriteBar onSendMessage={addMessage} user={currentUser} />
+      <div>
+        <CustomWriteBar onSendMessage={addMessage} user={currentUser} />
+      </div>
     </div>
   );
 };

@@ -73,3 +73,188 @@ export const messages = [
     date: new Date(),
   },
 ];
+
+export const messagesPM = [
+  {
+    text: "Самое первое сообщение",
+    user: {
+      username: "Евгений",
+      img: null,
+    },
+  },
+  {
+    text: "Сообщение Двуа",
+    user: {
+      username: "Карина Ноготок",
+      img: "/img/ls-avatar-chat.png",
+    },
+  },
+  {
+    text: "Сообщение одинdfhdhdhdhdhdhdhd",
+    user: {
+      username: "Евгений",
+      img: null,
+    },
+  },
+  {
+    text: "Сообщенаыаыаыаыаие Двуа очень и очень длинное сообщение!",
+    user: {
+      username: "Карина Ноготок",
+      img: "/img/ls-avatar-chat.png",
+    },
+  },
+  {
+    text: "Сообщение Двуа",
+    user: {
+      username: "Карина Ноготок",
+      img: "/img/ls-avatar-chat.png",
+    },
+  },
+  {
+    text: "Сообщение одинdfhdhdhdhdhdhdhd очень и очень длинное сообщение в ответ!",
+    user: {
+      username: "Евгений",
+      img: null,
+    },
+  },
+  {
+    text: "Сообщенаыаыаыаыаие Двуа",
+    user: {
+      username: "Карина Ноготок",
+      img: "/img/ls-avatar-chat.png",
+    },
+  },
+  {
+    text: "Сообщение один",
+    user: {
+      username: "Евгений",
+      img: null,
+    },
+  },
+  {
+    text: "Сообщение Двуа",
+    user: {
+      username: "Карина Ноготок",
+      img: "/img/ls-avatar-chat.png",
+    },
+  },
+  {
+    text: "Сообщение одинdfhdhdhdhdhdhdhd",
+    user: {
+      username: "Евгений",
+      img: null,
+    },
+  },
+  {
+    text: "Сообщение одинdfhdhdhdhdhdhdhd",
+    user: {
+      username: "Евгений",
+      img: null,
+    },
+  },
+  {
+    text: "Сообщенаыаыаыаыаие Двуа",
+    user: {
+      username: "Карина Ноготок",
+      img: "/img/ls-avatar-chat.png",
+    },
+  },
+  {
+    text: "Сообщение один",
+    user: {
+      username: "Евгений",
+      img: null,
+    },
+  },
+  {
+    text: "Сообщение Двуа",
+    user: {
+      username: "Карина Ноготок",
+      img: "/img/ls-avatar-chat.png",
+    },
+  },
+  {
+    text: "Сообщение одинdfhdhdhdhdhdhdhd",
+    user: {
+      username: "Евгений",
+      img: null,
+    },
+  },
+  {
+    text: "Сообщение одинdfhdhdhdhdhdhdhd",
+    user: {
+      username: "Евгений",
+      img: null,
+    },
+  },
+  {
+    text: "Сообщенаыаыаыаыаие Двуа",
+    user: {
+      username: "Карина Ноготок",
+      img: "/img/ls-avatar-chat.png",
+    },
+  },
+  {
+    text: "Сообщение один",
+    user: {
+      username: "Евгений",
+      img: null,
+    },
+  },
+  {
+    text: "Очень длинное сообщение очень длинное сообщение очень длинное сообщение очень длинное сообщение очень длинное сообщение очень длинное сообщение очень длинное сообщение очень длинное сообщение.\n\nОчень длинное сообщение очень длинное сообщение очень длинное сообщение очень длинное сообщение очень длинное сообщение очень длинное сообщение очень длинное сообщение очень длинное сообщение",
+    user: {
+      username: "Карина Ноготок",
+      img: "/img/ls-avatar-chat.png",
+    },
+  },
+  {
+    text: "Сообщение одинdfhdhdhdhdhdhdhd",
+    user: {
+      username: "Евгений",
+      img: null,
+    },
+  },
+  {
+    text: "Сообщение одинdfhdhdhdhdhdhdhd",
+    user: {
+      username: "Евгений",
+      img: null,
+    },
+  },
+  {
+    text: "Сообщенаыаыаыаыаие Двуа",
+    user: {
+      username: "Карина Ноготок",
+      img: "/img/ls-avatar-chat.png",
+    },
+  },
+  {
+    text: "Сообщение один",
+    user: {
+      username: "Евгений",
+      img: null,
+    },
+  },
+  {
+    text: "Сообщение Двуа",
+    user: {
+      username: "Карина Ноготок",
+      img: "/img/ls-avatar-chat.png",
+    },
+  },
+  {
+    text: "Сообщение одинdfhdhdhdhdhdhdhd",
+    user: {
+      username: "Евгений",
+      img: null,
+    },
+  },
+  {
+    text: "Это последнее сообщение, но вы можете написать новое!",
+    user: {
+      username: "Евгений",
+      img: null,
+    },
+  },
+];

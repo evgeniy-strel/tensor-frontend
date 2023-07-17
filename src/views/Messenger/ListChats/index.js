@@ -7,8 +7,8 @@ import {
   TabsItem,
   FixedLayout,
 } from "@vkontakte/vkui";
-import { allChats, myChats } from "../../mocks/chats";
-import "./ListChats.scss";
+import { allChats, myChats } from "../../../mocks/chats";
+import "./index.scss";
 import {
   Icon28AddOutline,
   Icon28SlidersOutline,

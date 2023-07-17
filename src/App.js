@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
   SplitLayout,
   SplitCol,
@@ -18,6 +19,7 @@ import Desktop from "./layouts/Desktop";
 import { useLocation } from "react-router-dom";
 import Rout from "./components/Rout";
 import useStory from "./hooks/useStory";
+import calculateAppHeight from "./utils/calculateAppHeight";
 
 const pages = [
   {
@@ -54,11 +56,12 @@ function App() {
   const [activeStory, setActiveStory] = useStory("/", "home", 1);
   const isNeedTabbar = !location.pathname.includes("/messenger/");
 
+  useEffect(() => calculateAppHeight(), []);
+
   return (
     <SplitLayout
       header={isVKCOM && <PanelHeader separator={false} />}
-      style={{ justifyContent: "center" }}
-    >
+      style={{ justifyContent: "center" }}>
       {viewWidth.tabletPlus && (
         <Desktop
           isVKCOM={isVKCOM}
@@ -81,8 +84,7 @@ function App() {
                 setActiveStory={setActiveStory}
               />
             )
-          }
-        >
+          }>
           <Rout id={activeStory} />
         </Epic>
       </SplitCol>

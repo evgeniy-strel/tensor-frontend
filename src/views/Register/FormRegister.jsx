@@ -8,24 +8,27 @@ import {
   FormItem,
   FormLayoutGroup,
   Input,
-  Select,
   Button,
 } from "@vkontakte/vkui";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-
-const domain = ["@mail.ru", "@gmail.com", "@yandex.ru"];
 
 const FormRegister = ({ formData, setFormData, setActivePanel }) => {
   const navigate = useNavigate();
-  const resultReg = useSelector((state) => state.user.resultReg);
-  const [isValid, setIsValid] = useState(false);
+  const [isValid, setIsValid] = useState(true);
+  const [pass2, setPass2] = useState("");
+  const EMAIL_REGEXP =
+    /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
 
   const handlerNext = (e) => {
     e.preventDefault();
-    // setFormData({...formData, email: formData.email + })
-    if (Object.values(formData).includes("")) {
-      setIsValid(true);
+    if (
+      Object.values(formData).includes("") ||
+      pass2 === "" ||
+      pass2 !== formData.password ||
+      !EMAIL_REGEXP.test(formData.email) ||
+      formData.password.length < 8
+    ) {
+      setIsValid(false);
     } else {
       setActivePanel("verify");
     }
@@ -40,11 +43,15 @@ const FormRegister = ({ formData, setFormData, setActivePanel }) => {
       </PanelHeader>
       <Group>
         <FormLayout onSubmit={handlerNext}>
+          {!isValid && (
+            <FormStatus header="Ошибка" mode="error">
+              Введите данные
+            </FormStatus>
+          )}
           <FormItem
             top="Имя пользователя"
             htmlFor="username"
-            status={isValid && formData.username === "" && "error"}
-            bottom={isValid && formData.username === "" && "Введите данные"}
+            status={!isValid && formData.username === "" && "error"}
           >
             <Input
               id="username"
@@ -59,8 +66,7 @@ const FormRegister = ({ formData, setFormData, setActivePanel }) => {
             <FormItem
               top="Имя"
               htmlFor="firstName"
-              status={isValid && formData.firstName === "" && "error"}
-              bottom={isValid && formData.firstName === "" && "Введите данные"}
+              status={!isValid && formData.firstName === "" && "error"}
             >
               <Input
                 id="firstName"
@@ -77,8 +83,7 @@ const FormRegister = ({ formData, setFormData, setActivePanel }) => {
             <FormItem
               top="Фамилия"
               htmlFor="lastName"
-              status={isValid && formData.lastName === "" && "error"}
-              bottom={isValid && formData.lastName === "" && "Введите данные"}
+              status={!isValid && formData.lastName === "" && "error"}
             >
               <Input
                 id="lastName"
@@ -96,8 +101,7 @@ const FormRegister = ({ formData, setFormData, setActivePanel }) => {
           <FormItem
             top="Дата рождения"
             htmlFor="dateBirth"
-            status={isValid && formData.dateBirth === "" && "error"}
-            bottom={isValid && formData.dateBirth === "" && "Введите данные"}
+            status={!isValid && formData.dateBirth === "" && "error"}
           >
             <Input
               id="dateBirth"
@@ -112,8 +116,16 @@ const FormRegister = ({ formData, setFormData, setActivePanel }) => {
             <FormItem
               top="Почта"
               htmlFor="email"
-              status={isValid && formData.email === "" && "error"}
-              bottom={isValid && formData.email === "" && "Введите данные"}
+              status={
+                !isValid &&
+                (formData.email === "" || !EMAIL_REGEXP.test(formData.email)) &&
+                "error"
+              }
+              bottom={
+                !EMAIL_REGEXP.test(formData.email) &&
+                formData.email !== "" &&
+                "Некорректная почта!"
+              }
             >
               <Input
                 id="email"
@@ -124,32 +136,55 @@ const FormRegister = ({ formData, setFormData, setActivePanel }) => {
                 value={formData.email}
               />
             </FormItem>
-            <FormItem>
-              <Select
-                options={domain.map((i) => ({
-                  label: i,
-                  value: i,
-                }))}
-                defaultValue={"@mail.ru"}
+          </FormLayoutGroup>
+          <FormLayoutGroup>
+            <FormItem
+              top="Пароль"
+              htmlFor="password"
+              status={
+                !isValid &&
+                (formData.password === "" || formData.password.length < 8) &&
+                "error"
+              }
+              bottom={
+                formData.password !== "" &&
+                formData.password.length < 8 &&
+                "Длина пароля должна быть больше 8 символов"
+              }
+            >
+              <Input
+                id="password"
+                type="password"
+                autoComplete="on"
+                onChange={(e) =>
+                  setFormData({ ...formData, password: e.target.value })
+                }
+                value={formData.password}
+              />
+            </FormItem>
+            <FormItem
+              top="Повторный пароль"
+              htmlFor="password2"
+              status={
+                !isValid &&
+                (pass2 === "" || formData.password !== pass2) &&
+                "error"
+              }
+              bottom={
+                !isValid &&
+                (pass2 === "" || formData.password !== pass2) &&
+                "Пароли не совпадают!"
+              }
+            >
+              <Input
+                id="password2"
+                type="password"
+                autoComplete="on"
+                onChange={(e) => setPass2(e.target.value)}
+                value={pass2}
               />
             </FormItem>
           </FormLayoutGroup>
-          <FormItem
-            top="Пароль"
-            htmlFor="password"
-            status={isValid && formData.password === "" && "error"}
-            bottom={isValid && formData.password === "" && "Введите данные"}
-          >
-            <Input
-              id="password"
-              type="password"
-              autoComplete="on"
-              onChange={(e) =>
-                setFormData({ ...formData, password: e.target.value })
-              }
-              value={formData.password}
-            />
-          </FormItem>
           <FormItem>
             <Button onClick={handlerNext} size="l" stretched>
               Дальше

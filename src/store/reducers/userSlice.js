@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import RequestAPI from "../../API/requests";
-import initialState from "../initialState";
+import initialStateUser from "../initialState";
 
 export const postLogin = createAsyncThunk(
-  "auth/login",
+  "user/login",
   async (formData, { rejectWithValue }) => {
     const res = await RequestAPI.login(formData)
       .then((res) => res.data)
@@ -12,8 +12,8 @@ export const postLogin = createAsyncThunk(
   }
 );
 
-export const forgotPassword = createAsyncThunk(
-  "auth/forgotpass",
+export const postForgot = createAsyncThunk(
+  "user/forgot",
   async (email, { rejectWithValue }) => {
     const res = await RequestAPI.forgotPassword(email)
       .then((res) => res.data)
@@ -23,7 +23,7 @@ export const forgotPassword = createAsyncThunk(
 );
 
 export const postRegister = createAsyncThunk(
-  "auth/register",
+  "user/register",
   async (formData, { rejectWithValue }) => {
     const res = await RequestAPI.register(formData)
       .then((res) => res.data)
@@ -34,7 +34,7 @@ export const postRegister = createAsyncThunk(
 
 const userSlice = createSlice({
   name: "user",
-  initialState,
+  initialState: initialStateUser,
   reducers: {
     logout(state) {
       RequestAPI.logout();
@@ -54,13 +54,13 @@ const userSlice = createSlice({
         state.resultLogin.error = action.payload;
       });
     builder
-      .addCase(forgotPassword.pending, (state, action) => {
+      .addCase(postForgot.pending, (state, action) => {
         state.loader = true;
       })
-      .addCase(forgotPassword.fulfilled, (state, action) => {
+      .addCase(postForgot.fulfilled, (state, action) => {
         state.loader = false;
       })
-      .addCase(forgotPassword.rejected, (state, action) => {
+      .addCase(postForgot.rejected, (state, action) => {
         state.loader = false;
         state.resultForgot.error = action.payload;
       });
@@ -73,7 +73,6 @@ const userSlice = createSlice({
       })
       .addCase(postRegister.rejected, (state, action) => {
         state.loader = false;
-        console.log(action);
         state.resultReg.error = action.payload;
       });
   },

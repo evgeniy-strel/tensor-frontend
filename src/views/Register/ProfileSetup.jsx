@@ -21,23 +21,33 @@ import { postRegister } from "../../store/reducers/userSlice";
 const ProfileSetup = ({ formData, setFormData, setActivePanel }) => {
   const dispatch = useDispatch();
   const { loader, resultReg } = useSelector((state) => state.user);
-  const [isValid, setIsValid] = useState(false);
+  const [isValid, setIsValid] = useState(true);
+  const [avatarSrc, setAvatarSrc] = useState();
   const navigate = useNavigate();
 
   const uploadAvatar = (e) => {
     const file = e.target.files[0];
+    setFormData({
+      ...formData,
+      external: { ...formData.external, avatar: file },
+    });
+    const fr = new FileReader();
+    fr.onload = function () {
+      setAvatarSrc(fr.result);
+    };
+    fr.readAsDataURL(file);
   };
 
-  const handlerSubmit = async (e) => {
+  const handlerSubmit = (e) => {
     e.preventDefault();
     if (formData.external.name === "") {
-      setIsValid(true);
+      setIsValid(false);
     } else {
       console.log(formData);
-      await dispatch(postRegister(formData));
-      if (resultReg.error === "") {
-        navigate("/auth");
-      }
+      dispatch(postRegister(formData));
+      // if (resultReg.error === "") {
+      //   navigate("/auth");
+      // }
     }
   };
 
@@ -72,7 +82,7 @@ const ProfileSetup = ({ formData, setFormData, setActivePanel }) => {
                 paddingTop: "16px",
               }}
             >
-              <Avatar size={104} />
+              <Avatar src={avatarSrc} size={104} />
               <FormItem>
                 <File
                   onChange={uploadAvatar}
@@ -83,8 +93,10 @@ const ProfileSetup = ({ formData, setFormData, setActivePanel }) => {
             </FormLayoutGroup>
             <FormItem
               htmlFor="name"
-              status={isValid && formData.external.name === "" && "error"}
-              bottom={isValid && formData.external.name === "" && "Введите имя"}
+              status={!isValid && formData.external.name === "" && "error"}
+              bottom={
+                !isValid && formData.external.name === "" && "Введите имя"
+              }
             >
               <Input
                 id="name"
@@ -93,7 +105,7 @@ const ProfileSetup = ({ formData, setFormData, setActivePanel }) => {
                 onChange={(e) =>
                   setFormData({
                     ...formData,
-                    external: { name: e.target.value },
+                    external: { ...formData.external, name: e.target.value },
                   })
                 }
                 value={formData.external.name}

@@ -15,6 +15,7 @@ import {
   Icon28VoiceOutline,
   Icon24VoiceOutline,
 } from "@vkontakte/icons";
+import { useState, useCallback } from "react";
 
 const CustomWriteBar = ({ onSendMessage, user }) => {
   const platform = usePlatform();
@@ -23,54 +24,52 @@ const CustomWriteBar = ({ onSendMessage, user }) => {
   const sendMessage = () => {
     onSendMessage({ text, user });
     setText("");
+    writeBarRef.focus();
   };
 
   const SmileOutlineIcon = (
     <AdaptiveIconRenderer
-      IconCompact={
-        platform === Platform.IOS ? Icon28SmileOutline : Icon24SmileOutline
-      }
+      IconCompact={platform === Platform.IOS ? Icon28SmileOutline : Icon24SmileOutline}
       IconRegular={Icon28SmileOutline}
     />
   );
 
   const VoiceOutlineIcon = (
     <AdaptiveIconRenderer
-      IconCompact={
-        platform === Platform.IOS ? Icon28VoiceOutline : Icon24VoiceOutline
-      }
+      IconCompact={platform === Platform.IOS ? Icon28VoiceOutline : Icon24VoiceOutline}
       IconRegular={Icon28VoiceOutline}
     />
   );
+
+  const [writeBarRef, setWriteBarRef] = useState();
+
+  const handleGetRef = useCallback((ref) => {
+    setWriteBarRef(ref);
+  }, []);
 
   return (
     <FixedLayout vertical="bottom" filled>
       <div>
         <Separator wide />
         <WriteBar
+          getRef={handleGetRef}
           before={<WriteBarIcon mode="attach" />}
           inlineAfter={
             text.length > 0 && (
-              <WriteBarIcon aria-label="Смайлы и стикеры">
-                {SmileOutlineIcon}
-              </WriteBarIcon>
+              <WriteBarIcon aria-label="Смайлы и стикеры">{SmileOutlineIcon}</WriteBarIcon>
             )
           }
           after={
             <>
               {text.length === 0 && (
-                <WriteBarIcon aria-label="Смайлы и стикеры">
-                  {SmileOutlineIcon}
-                </WriteBarIcon>
+                <WriteBarIcon aria-label="Смайлы и стикеры">{SmileOutlineIcon}</WriteBarIcon>
               )}
               {text.length === 0 && (
                 <WriteBarIcon aria-label="Записать голосовое сообщение">
                   {VoiceOutlineIcon}
                 </WriteBarIcon>
               )}
-              {text.length > 0 && (
-                <WriteBarIcon onClick={sendMessage} mode="send" />
-              )}
+              {text.length > 0 && <WriteBarIcon onClick={sendMessage} mode="send" />}
             </>
           }
           value={text}

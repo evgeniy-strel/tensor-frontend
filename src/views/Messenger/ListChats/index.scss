@@ -4,8 +4,7 @@
   }
 
   .fixed-layout {
-    box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.06),
-      0px 0px 2px 0px rgba(0, 0, 0, 0.03);
+    box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.06), 0px 0px 2px 0px rgba(0, 0, 0, 0.03);
     background-color: #fff;
   }
 
@@ -20,6 +19,18 @@
 
   .vkuiPanelHeader__after {
     gap: 20px;
+  }
+
+  @media screen and (min-width: 768px) {
+    > .vkuiFixedLayout {
+      top: 72px !important;
+      border-start-start-radius: var(--vkui--size_border_radius_paper--regular);
+      border-start-end-radius: var(--vkui--size_border_radius_paper--regular);
+    }
+
+    > .vkuiGroup {
+      top: 16px !important;
+    }
   }
 
   .chat-item {

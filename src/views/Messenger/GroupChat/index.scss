@@ -98,7 +98,10 @@
           margin-bottom: 4px;
         }
 
-        .last-message {
+        .user-avatar {
+          .vkuiAvatar__initials {
+            letter-spacing: 1px;
+          }
         }
       }
     }
@@ -106,9 +109,8 @@
 
   // нормальное отображение fixedLayout tabs на ПК
   @media screen and (min-width: 768px) {
-    > .vkuiFixedLayout {
-      top: 0 !important;
-      position: relative !important;
+    > .group-chat__fixed-layout {
+      position: static !important;
       border-start-start-radius: var(--vkui--size_border_radius_paper--regular);
       border-start-end-radius: var(--vkui--size_border_radius_paper--regular);
       .group-chat__fixed-layout__separator {
@@ -117,12 +119,9 @@
     }
 
     .messages-container-group .messages-container {
-      margin-top: 0;
-      height: calc(100vh - var(--vkui--size_panel_header_height--regular) - 52 - 16px);
-    }
-
-    .vkuiTabsItem {
-      cursor: pointer;
+      margin: 0 !important;
+      height: calc(100vh - var(--vkui--size_panel_header_height--regular) - 16px - 52.5px - 52.5px);
+      box-sizing: border-box;
     }
 
     .vkuiGroup {

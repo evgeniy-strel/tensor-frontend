@@ -20,13 +20,20 @@ const MessageItem = ({ messages, currentUser, counter = 100 }) => {
           isLastMessage = user.username != nextMessage?.user?.username;
         }
 
+        const initials = user.username
+          .split(" ")
+          .slice(0, 2)
+          .map((symbol) => (symbol.length ? symbol[0] : ""))
+          .join("")
+          .toUpperCase();
+
         return (
           <div
             key={i}
             className={`message-block ${isFirstMessage ? "first-message" : ""} ${
               isLastMessage ? "last-message" : ""
             } ${isMine ? "mine" : ""}`}>
-            <Avatar size={32} initials="ИБ" src={user.img} className="user-avatar" />
+            <Avatar size={32} initials={initials} src={user.img} className="user-avatar" />
             <div className="message">
               <div className="username">{user.username}</div>
               <div className="text">{text}</div>

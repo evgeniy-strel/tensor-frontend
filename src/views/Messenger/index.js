@@ -1,19 +1,24 @@
 import React from "react";
 import { View, Panel } from "@vkontakte/vkui";
-import { useLocation } from "react-router-dom";
+import { useLocation, matchRoutes } from "react-router-dom";
 import Chat from "./Chat";
 import ListChats from "./ListChats";
+import ListSubChats from "./ListSubChats";
 
 const panels = [
-  { id: "listChats", element: <ListChats /> },
-  { id: "chat", element: <Chat /> },
+  { id: "subChats", path: "/messenger/subchats/:id", element: <ListSubChats /> },
+  { id: "chat", path: "/messenger/:id", element: <Chat /> },
+  { id: "listChats", path: "/messenger", element: <ListChats /> },
 ];
+const routes = panels.map(({ path }) => ({ path }));
 
 // компонент необходим для плавной анимации
 
 const Messenger = () => {
   const location = useLocation();
-  const activePanel = location.pathname === "/messenger" ? "listChats" : "chat";
+
+  const [{ route }] = matchRoutes(routes, location);
+  const activePanel = panels.find((panel) => panel.path == route.path)?.id;
 
   return (
     <>

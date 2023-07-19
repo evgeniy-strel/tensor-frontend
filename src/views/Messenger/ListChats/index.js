@@ -1,20 +1,9 @@
 import { useState, useEffect } from "react";
-import {
-  PanelHeader,
-  Group,
-  List,
-  Tabs,
-  TabsItem,
-  FixedLayout,
-} from "@vkontakte/vkui";
+import { PanelHeader, Group, List, Tabs, TabsItem, FixedLayout } from "@vkontakte/vkui";
 import { allChats, myChats } from "../../../mocks/chats";
 import "./index.scss";
-import {
-  Icon28AddOutline,
-  Icon28SlidersOutline,
-  Icon28Search,
-} from "@vkontakte/icons";
-import ChatItem from "./ChatItem";
+import { Icon28AddOutline, Icon28SlidersOutline, Icon28Search } from "@vkontakte/icons";
+import ChatItem from "../ChatItem";
 
 const tabs = [
   {
@@ -89,11 +78,9 @@ const ListChats = () => {
       <Group>
         <List className="list-chats">
           {chats
-            .filter((chat) =>
-              chat.name.toLowerCase().includes(inputSearch.toLowerCase())
-            )
+            .filter((chat) => chat.name.toLowerCase().includes(inputSearch.toLowerCase()))
             .map((chat) => {
-              return <ChatItem {...chat} />;
+              return <ChatItem key={chat.id} {...chat} />;
             })}
         </List>
       </Group>

@@ -1,4 +1,5 @@
 import React from "react";
+import "./ChatItem.scss";
 import { Cell, Avatar, Headline } from "@vkontakte/vkui";
 import { Link } from "react-router-dom";
 
@@ -26,8 +27,10 @@ const SubtitlePM = ({ lastMessage }) => (
 );
 
 const ChatItem = ({ id, name, img, isGroup, lastMessage, subChats }) => {
+  const url = subChats?.length ? `/messenger/subchats/${id}` : `/messenger/${id}`;
+
   return (
-    <Link to={`${id}`} key={id}>
+    <Link to={url} key={id}>
       <Cell
         className={`chat-item ${isGroup ? "group-item" : ""} ${subChats ? "with-subchats" : ""}`}
         before={<Avatar size={56} src={img} className="avatar" />}

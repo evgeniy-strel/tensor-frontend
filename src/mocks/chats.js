@@ -225,26 +225,10 @@ export const myChats = [
 
 export const subChats = [
   {
-    id: 12,
-    name: "Общий чат",
-    img: "/img/ls-avatar.png",
-    isGroup: false,
-    subChats: null,
-    subChats: null,
-    lastMessage: {
-      user: {
-        img: null,
-        username: "Алексей",
-      },
-      text: "Привет!",
-    },
-  },
-  {
-    id: 13,
-    name: "Встреча 1",
-    img: "/img/ls-avatar.png",
-    isGroup: false,
-    subChats: null,
+    id: 8,
+    name: "Орегона",
+    img: "/img/group-avatar.png",
+    isGroup: true,
     subChats: null,
     lastMessage: {
       user: {
@@ -255,11 +239,24 @@ export const subChats = [
     },
   },
   {
-    id: 14,
-    name: "Встреча 2",
-    img: "/img/ls-avatar.png",
-    isGroup: false,
+    id: 1,
+    name: "Орегона",
+    img: "/img/group-avatar.png",
+    isGroup: true,
     subChats: null,
+    lastMessage: {
+      user: {
+        img: null,
+        username: "Алексей",
+      },
+      text: "Слишком много слов чтобы влезть",
+    },
+  },
+  {
+    id: 5,
+    name: "Орегона",
+    img: "/img/group-avatar.png",
+    isGroup: true,
     subChats: null,
     lastMessage: {
       user: {

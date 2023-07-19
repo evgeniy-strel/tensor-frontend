@@ -4,7 +4,7 @@ import Event from "../views/Event";
 import Messenger from "../views/Messenger";
 import Profile from "../views/Profile";
 import Auth from "../views/Auth";
-import Login from "../views/Auth/Login"
+import Login from "../views/Auth/Login";
 import ForgotPassword from "../views/Auth/ForgotPassword";
 import Register from "../views/Register";
 
@@ -16,6 +16,7 @@ const Rout = () => {
       <Route path="/messenger/">
         <Route path="" element={<Messenger />} />
         <Route path=":id" element={<Messenger />} />
+        <Route path="subchats/:id" element={<Messenger />} />
       </Route>
       <Route path="/profile/:username" element={<Profile />} />
       <Route path="/auth/*" element={<Auth />}>

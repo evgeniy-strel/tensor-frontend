@@ -1,4 +1,4 @@
-export const messages = [
+export const messagesGroup = [
   {
     user: {
       username: "Евгений",
@@ -86,7 +86,7 @@ export const messagesPM = [
     text: "Сообщение Двуа",
     user: {
       username: "Карина Ноготок",
-      img: "/img/ls-avatar-chat.png",
+      img: "/img/ls-avatar.png",
     },
   },
   {
@@ -100,14 +100,14 @@ export const messagesPM = [
     text: "Сообщенаыаыаыаыаие Двуа очень и очень длинное сообщение!",
     user: {
       username: "Карина Ноготок",
-      img: "/img/ls-avatar-chat.png",
+      img: "/img/ls-avatar.png",
     },
   },
   {
     text: "Сообщение Двуа",
     user: {
       username: "Карина Ноготок",
-      img: "/img/ls-avatar-chat.png",
+      img: "/img/ls-avatar.png",
     },
   },
   {
@@ -121,7 +121,7 @@ export const messagesPM = [
     text: "Сообщенаыаыаыаыаие Двуа",
     user: {
       username: "Карина Ноготок",
-      img: "/img/ls-avatar-chat.png",
+      img: "/img/ls-avatar.png",
     },
   },
   {
@@ -135,7 +135,7 @@ export const messagesPM = [
     text: "Сообщение Двуа",
     user: {
       username: "Карина Ноготок",
-      img: "/img/ls-avatar-chat.png",
+      img: "/img/ls-avatar.png",
     },
   },
   {
@@ -156,7 +156,28 @@ export const messagesPM = [
     text: "Сообщенаыаыаыаыаие Двуа",
     user: {
       username: "Карина Ноготок",
-      img: "/img/ls-avatar-chat.png",
+      img: "/img/ls-avatar.png",
+    },
+  },
+  {
+    text: "Сообщенаыаыаыаыаие Двуа",
+    user: {
+      username: "Карина Ноготок",
+      img: "/img/ls-avatar.png",
+    },
+  },
+  {
+    text: "Сообщенаыаыаыаыаие Двуа",
+    user: {
+      username: "Карина Ноготок",
+      img: "/img/ls-avatar.png",
+    },
+  },
+  {
+    text: "Сообщенаыаыаыаыаие Двуа",
+    user: {
+      username: "Карина Ноготок",
+      img: "/img/ls-avatar.png",
     },
   },
   {
@@ -170,7 +191,7 @@ export const messagesPM = [
     text: "Сообщение Двуа",
     user: {
       username: "Карина Ноготок",
-      img: "/img/ls-avatar-chat.png",
+      img: "/img/ls-avatar.png",
     },
   },
   {
@@ -191,7 +212,7 @@ export const messagesPM = [
     text: "Сообщенаыаыаыаыаие Двуа",
     user: {
       username: "Карина Ноготок",
-      img: "/img/ls-avatar-chat.png",
+      img: "/img/ls-avatar.png",
     },
   },
   {
@@ -205,7 +226,7 @@ export const messagesPM = [
     text: "Очень длинное сообщение очень длинное сообщение очень длинное сообщение очень длинное сообщение очень длинное сообщение очень длинное сообщение очень длинное сообщение очень длинное сообщение.\n\nОчень длинное сообщение очень длинное сообщение очень длинное сообщение очень длинное сообщение очень длинное сообщение очень длинное сообщение очень длинное сообщение очень длинное сообщение",
     user: {
       username: "Карина Ноготок",
-      img: "/img/ls-avatar-chat.png",
+      img: "/img/ls-avatar.png",
     },
   },
   {
@@ -226,7 +247,7 @@ export const messagesPM = [
     text: "Сообщенаыаыаыаыаие Двуа",
     user: {
       username: "Карина Ноготок",
-      img: "/img/ls-avatar-chat.png",
+      img: "/img/ls-avatar.png",
     },
   },
   {
@@ -240,7 +261,7 @@ export const messagesPM = [
     text: "Сообщение Двуа",
     user: {
       username: "Карина Ноготок",
-      img: "/img/ls-avatar-chat.png",
+      img: "/img/ls-avatar.png",
     },
   },
   {

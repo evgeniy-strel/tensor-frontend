@@ -1,21 +1,26 @@
-import React from "react";
-import styles from "./index.module.scss";
+import { useState } from "react";
+import "./index.scss";
 import {
   PanelHeader,
-  Group,
   PanelHeaderBack,
   Avatar,
-  Div,
+  PanelHeaderContent,
+  Title,
+  FixedLayout,
+  Separator,
 } from "@vkontakte/vkui";
 import { useNavigate } from "react-router-dom";
-import { messages } from "../../../mocks/messages";
+import { messagesPM } from "../../../mocks/messages";
 import CustomWriteBar from "../CustomWriteBar";
 import JoinToChat from "./JoinToChat";
+import LayoutMessages from "../LayoutMessages";
+import Messages from "./Messages";
 
 const GroupChat = ({ chat, isUserJoined }) => {
-  const [randomMessages, setRandomMessages] = React.useState(
-    messages.filter((m) => Math.random() > 0.5)
-  );
+  const currentUser = {
+    username: "Евгений",
+    img: null,
+  };
 
   const navigate = useNavigate();
 
@@ -23,45 +28,63 @@ const GroupChat = ({ chat, isUserJoined }) => {
     navigate("/messenger");
   };
 
+  const [messages, setMessages] = useState(messagesPM);
+  const [counter, setCounter] = useState(99);
+
+  if (counter < messages.length) {
+    setTimeout(() => {
+      setCounter((prev) => prev + 1);
+    }, 500);
+  }
+
+  const addMessage = (message) => {
+    setMessages((prev) => [...prev, message]);
+  };
+
   return (
-    <>
+    <div className="group-chat">
       <PanelHeader
-        before={<PanelHeaderBack onClick={onClickBack} />}
-        after={
-          <Avatar
-            size={40}
-            src={chat?.img}
-            initials={chat?.img ? "" : chat?.name[0]}
-            gradientColor="blue"
-          />
-        }>
-        {chat?.name}
+        className="group-chat__panel-header"
+        before={<PanelHeaderBack onClick={onClickBack} />}>
+        <PanelHeaderContent
+          className="group-chat__panel-header__content"
+          status={
+            <span className="group-chat__panel-header__content__status">1,5к участников</span>
+          }
+          before={
+            <Avatar
+              size={36}
+              src={chat?.img}
+              initials={chat?.img ? "" : chat?.name[0]}
+              gradientColor="blue"
+            />
+          }>
+          <Title level="3" className="group-chat__panel-header__content__chat-name">
+            Беседа
+          </Title>
+        </PanelHeaderContent>
       </PanelHeader>
-      <Group className={styles.messages}>
-        {randomMessages.map(({ user, text, date }, i) => {
-          return (
-            <Div size="xs" key={i}>
-              <div className={styles.messageBlock}>
-                <Avatar
-                  size={36}
-                  src={user.img}
-                  initials={user.img ? "" : user.username[0]}
-                  gradientColor={2}
-                />
-                <div className={styles.message}>
-                  <div className={styles.userName}>{user.username}</div>
-                  <div className={styles.textDate}>
-                    <span className={styles.text}>{text}</span>
-                    <span className={styles.date}> 12 июля 19:29</span>
-                  </div>
-                </div>
-              </div>
-            </Div>
-          );
-        })}
-      </Group>
-      {isUserJoined ? <CustomWriteBar /> : <JoinToChat />}
-    </>
+      <FixedLayout vertical="top" className="group-chat__fixed-layout">
+        <Separator wide className="group-chat__fixed-layout__separator" />
+        <Title level="3" className="group-chat__fixed-layout__title">
+          Прогулка гуляш
+        </Title>
+        <div className="group-chat__fixed-layout__description">
+          <span>29 февраля, 31:99</span>
+          <span>Ельцин центр</span>
+        </div>
+      </FixedLayout>
+      <div className="messages-container-group">
+        <LayoutMessages>
+          <Messages messages={messages} currentUser={currentUser} />
+        </LayoutMessages>
+      </div>
+      {isUserJoined ? (
+        <CustomWriteBar onSendMessage={addMessage} user={currentUser} />
+      ) : (
+        <JoinToChat />
+      )}
+    </div>
   );
 };
 

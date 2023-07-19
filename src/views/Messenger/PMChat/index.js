@@ -1,14 +1,14 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import "./index.scss";
-import { PanelHeader, Group, PanelHeaderBack, Avatar, PanelHeaderContent } from "@vkontakte/vkui";
+import { PanelHeader, PanelHeaderBack, Avatar, PanelHeaderContent } from "@vkontakte/vkui";
 import { useNavigate } from "react-router-dom";
 import { messagesPM } from "../../../mocks/messages";
 import CustomWriteBar from "../CustomWriteBar";
-import ScrollableFeed from "react-scrollable-feed";
-import { addBounceEffect, removeBounceEffect } from "../../../utils/bounceEffect";
+import LayoutMessages from "../LayoutMessages";
 
 const PMChat = ({ chat }) => {
   const navigate = useNavigate();
+
   const currentUser = {
     username: "Евгений",
     img: null,
@@ -18,14 +18,9 @@ const PMChat = ({ chat }) => {
     navigate("/messenger");
   };
 
-  const [counter, setCounter] = useState(0);
   const [messages, setMessages] = useState(messagesPM);
 
-  const addMessage = (message) => {
-    setMessages((prev) => [...prev, message]);
-    setCounter((prev) => prev + 1);
-    scrollBottom();
-  };
+  const [counter, setCounter] = useState(99);
 
   if (counter < messages.length) {
     setTimeout(() => {
@@ -33,19 +28,10 @@ const PMChat = ({ chat }) => {
     }, 500);
   }
 
-  const scrollableRef = useRef();
-
-  const scrollBottom = () => scrollableRef.current.scrollToBottom();
-
-  useEffect(() => {
-    scrollBottom();
-  }, []);
-
-  useEffect(() => {
-    removeBounceEffect();
-
-    return () => addBounceEffect();
-  }, []);
+  const addMessage = (message) => {
+    setMessages((prev) => [...prev, message]);
+    setCounter((prev) => prev + 1);
+  };
 
   return (
     <div className="pm-chat-container">
@@ -63,30 +49,17 @@ const PMChat = ({ chat }) => {
           <div className="chat-name">{chat?.name}</div>
         </PanelHeaderContent>
       </PanelHeader>
-      <div className="messages-container">
-        <Group className="messages">
-          <ScrollableFeed ref={scrollableRef}>
-            <table className="table-messages">
-              <tr>
-                <td valign="bottom">
-                  {messages.slice(0, counter).map(({ text, user }, i) => {
-                    return (
-                      <div key={i} className="message-block">
-                        <div
-                          className={`message ${
-                            currentUser.username == user.username ? "mine" : ""
-                          }`}>
-                          {text}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </td>
-              </tr>
-            </table>
-          </ScrollableFeed>
-        </Group>
-      </div>
+      <LayoutMessages>
+        {messages.slice(0, counter).map(({ text, user }, i) => {
+          return (
+            <div
+              key={i}
+              className={`message-block ${currentUser.username == user.username ? "mine" : ""}`}>
+              <div className="message">{text}</div>
+            </div>
+          );
+        })}
+      </LayoutMessages>
       <div>
         <CustomWriteBar onSendMessage={addMessage} user={currentUser} />
       </div>

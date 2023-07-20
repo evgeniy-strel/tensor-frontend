@@ -7,27 +7,29 @@ import {
   Card,
   Avatar,
   Title,
+  Button,
 } from "@vkontakte/vkui";
 import {
-  Icon28EditOutline,
   Icon28MenuOutline,
   Icon28FavoriteCircleFillGreen,
 } from "@vkontakte/icons";
 
 const Profile = () => {
+  const isMy = true;
+
   return (
     <View id="profile" activePanel="profile">
       <Panel id="profile">
         <PanelHeader
           after={
-            <>
-              <PanelHeaderButton onClick={() => console.log("settings")} aria-label="settings">
-                <Icon28EditOutline />
-              </PanelHeaderButton>
-              <PanelHeaderButton onClick={() => console.log("menu")} aria-label="menu">
+            isMy && (
+              <PanelHeaderButton
+                onClick={() => console.log("menu")}
+                aria-label="menu"
+              >
                 <Icon28MenuOutline />
               </PanelHeaderButton>
-            </>
+            )
           }
         >
           Профиль
@@ -39,8 +41,8 @@ const Profile = () => {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              padding: "36px 0 53px 0",
-              gap: "13px",
+              padding: "36px 16px 53px",
+              gap: "16px",
               background: "var(--vkui--color_background_content)",
             }}
           >
@@ -50,6 +52,15 @@ const Profile = () => {
               </Avatar.Badge>
             </Avatar>
             <Title level="2">User User</Title>
+            {isMy ? (
+              <Button size="l" stretched>
+                Редактировать
+              </Button>
+            ) : (
+              <Button size="l" stretched>
+                Написать
+              </Button>
+            )}
           </Card>
         </Group>
       </Panel>

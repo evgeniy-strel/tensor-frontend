@@ -26,16 +26,10 @@ export default class RequestAPI {
   }
 
   static async register(formData) {
-    const external = JSON.stringify({
-      ...formData.external,
-      username: formData.username,
-      fullname: `${formData.firstName} ${formData.lastName}`,
-      dateBirth: formData.dateBirth,
-    });
     let formDataRegister = new FormData();
     formDataRegister.append("email", formData.email);
     formDataRegister.append("password", formData.password);
-    formDataRegister.append("external", external);
+    formDataRegister.append("external", JSON.stringify(formData.external));
     return axios.post("/auth1/register", formDataRegister);
   }
 

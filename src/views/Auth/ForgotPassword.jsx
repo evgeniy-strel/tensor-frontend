@@ -12,13 +12,10 @@ import {
 } from "@vkontakte/vkui";
 import { useSelector, useDispatch } from "react-redux";
 import { postForgot } from "../../store/reducers/userSlice";
-import { useNavigate, useOutletContext } from "react-router-dom";
 
-const ForgotPassword = () => {
-  const navigate = useNavigate();
-  const { loader, resultForgot } = useSelector((state) => state.user);
+const ForgotPassword = ({ setActivePanel, formData, setFormData }) => {
   const dispatch = useDispatch();
-  const [setActivePanel] = useOutletContext();
+  const { loader, resultForgot } = useSelector((state) => state.user);
   const [email, setEmail] = useState("");
   const [isValid, setIsValid] = useState(true);
   const EMAIL_REGEXP =
@@ -37,8 +34,7 @@ const ForgotPassword = () => {
       <PanelHeader
         before={
           <PanelHeaderBack
-            onClick={async () => {
-              await navigate("/auth");
+            onClick={() => {
               setActivePanel("login");
             }}
           />

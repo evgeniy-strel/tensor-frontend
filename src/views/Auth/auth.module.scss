@@ -1,0 +1,59 @@
+$margin: 16px;
+$default: #818c99;
+$active: #2688eb;
+
+.header_title {
+  text-align: center;
+  padding-top: $margin !important;
+}
+
+.header {
+  text-align: center;
+  padding-top: $margin !important;
+
+  h2 {
+    margin-bottom: $margin;
+  }
+
+  > span {
+    font-size: 15px;
+  }
+}
+
+.card_container {
+  margin: $margin - 4px 0 $margin + 8px;
+}
+
+.card {
+  aspect-ratio: 1.13;
+  color: $default;
+  transition: 0.3s color;
+
+  > span {
+    font-size: 13px;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.selected {
+  color: $active;
+
+  &:after {
+    border-color: $active !important;
+    transition: 0.3s border-color;
+  }
+}
+
+.button_group {
+  padding: 0 8px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 767.9px) {
+  .button_group {
+    padding: 0 var(--vkui--size_base_padding_horizontal--regular);
+  }
+}

@@ -1,26 +1,68 @@
+import { useState } from "react";
 import { View, Panel } from "@vkontakte/vkui";
-import { Outlet } from "react-router-dom";
 import AuthSelector from "./AuthSelector";
-import useStory from "../../hooks/useStory";
-
-const panels = [
-  { id: "login", title: "Вход" },
-  { id: "forgot", title: "Восстановления пароля" },
-];
+import Login from "./Login";
+import ForgotPassword from "./ForgotPassword";
+import Register from "./Register";
+import ProfileSetup from "./ProfileSetup";
+import Interests from "./Interests";
 
 const Auth = () => {
-  const [activePanel, setActivePanel] = useStory("/auth", "selector", 2);
+  const [activePanel, setActivePanel] = useState("interests"); // заменить потом на selector
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    external: {
+      name: "",
+      avatar: null,
+      tags: []
+    },
+  });
 
   return (
     <View id="auth" activePanel={activePanel}>
       <Panel id="selector">
-        <AuthSelector setActivePanel={setActivePanel} />
+        <AuthSelector
+          setActivePanel={setActivePanel}
+          formData={formData}
+          setFormData={setFormData}
+        />
       </Panel>
-      {panels.map((el) => (
-        <Panel id={el.id} key={el.id}>
-          <Outlet id={activePanel} context={[setActivePanel]} />
-        </Panel>
-      ))}
+      <Panel id="login">
+        <Login
+          setActivePanel={setActivePanel}
+          formData={formData}
+          setFormData={setFormData}
+        />
+      </Panel>
+      <Panel id="forgot">
+        <ForgotPassword
+          setActivePanel={setActivePanel}
+          formData={formData}
+          setFormData={setFormData}
+        />
+      </Panel>
+      <Panel id="register">
+        <Register
+          setActivePanel={setActivePanel}
+          formData={formData}
+          setFormData={setFormData}
+        />
+      </Panel>
+      <Panel id="profsetup">
+        <ProfileSetup
+          setActivePanel={setActivePanel}
+          formData={formData}
+          setFormData={setFormData}
+        />
+      </Panel>
+      <Panel id="interests">
+        <Interests
+          setActivePanel={setActivePanel}
+          formData={formData}
+          setFormData={setFormData}
+        />
+      </Panel>
     </View>
   );
 };

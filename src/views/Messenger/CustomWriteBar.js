@@ -47,11 +47,19 @@ const CustomWriteBar = ({ onSendMessage, user }) => {
     setWriteBarRef(ref);
   }, []);
 
+  const onKeyDown = (e) => {
+    if (e.code === "Enter") {
+      sendMessage();
+      e.preventDefault();
+    }
+  };
+
   return (
     <FixedLayout vertical="bottom" filled>
       <div>
         <Separator wide />
         <WriteBar
+          onKeyDown={onKeyDown}
           getRef={handleGetRef}
           before={<WriteBarIcon mode="attach" />}
           inlineAfter={

@@ -25,7 +25,7 @@ const GroupChat = ({ chat, isUserJoined }) => {
   const navigate = useNavigate();
 
   const onClickBack = () => {
-    navigate("/messenger");
+    navigate(-1);
   };
 
   const [messages, setMessages] = useState(messagesPM);
@@ -55,12 +55,12 @@ const GroupChat = ({ chat, isUserJoined }) => {
             <Avatar
               size={36}
               src={chat?.img}
-              initials={chat?.img ? "" : chat?.name[0]}
+              initials={chat?.img ? "" : chat?.name?.at(0)}
               gradientColor="blue"
             />
           }>
           <Title level="3" className="group-chat__panel-header__content__chat-name">
-            Беседа
+            {chat?.name}
           </Title>
         </PanelHeaderContent>
       </PanelHeader>

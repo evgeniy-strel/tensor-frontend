@@ -13,6 +13,7 @@ const Rout = () => {
       <Route path="/messenger/">
         <Route path="" element={<Messenger />} />
         <Route path=":id" element={<Messenger />} />
+        <Route path="subchats/:id" element={<Messenger />} />
       </Route>
       <Route path="/profile/:username" element={<Profile />} />
       <Route path="/auth/*" element={<Auth />} />

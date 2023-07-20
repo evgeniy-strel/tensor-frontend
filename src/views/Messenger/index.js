@@ -4,10 +4,12 @@ import { useLocation, matchRoutes } from "react-router-dom";
 import Chat from "./Chat";
 import ListChats from "./ListChats";
 import ListSubChats from "./ListSubChats";
+import DescriptionChat from "./DescriptionChat";
 
 const panels = [
   { id: "subChats", path: "/messenger/subchats/:id", element: <ListSubChats /> },
-  { id: "chat", path: "/messenger/:id", element: <Chat /> },
+  { id: "chat", path: "/messenger/chat/:id", element: <Chat /> },
+  { id: "descriptionChat", path: "/messenger/description/:id", element: <DescriptionChat /> },
   { id: "listChats", path: "/messenger", element: <ListChats /> },
 ];
 const routes = panels.map(({ path }) => ({ path }));

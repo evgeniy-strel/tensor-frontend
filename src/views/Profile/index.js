@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   View,
   Panel,
@@ -9,30 +9,32 @@ import {
   Avatar,
   Title,
   Button,
+  Text,
+  PanelHeaderClose,
 } from "@vkontakte/vkui";
 import {
   Icon28MenuOutline,
   Icon28FavoriteCircleFillGreen,
 } from "@vkontakte/icons";
 import { useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { postLogout, postVerify } from "../../store/reducers/userSlice";
+import { useDispatch } from "react-redux";
+import { postLogout, getUserInfo } from "../../store/reducers/userSlice";
 
 const Profile = () => {
   const dispatch = useDispatch();
-  const token = useSelector((state) => state.user.token);
+  const [activePanel, setActivePanel] = useState("profile");
   const params = useParams();
 
   const isMy = true;
 
   useEffect(() => {
     if (params.username === ":username") {
-      // dispatch(postVerify(token));
+      dispatch(getUserInfo());
     }
   });
 
   return (
-    <View id="profile" activePanel="profile">
+    <View id="profile" activePanel={activePanel}>
       <Panel id="profile">
         <PanelHeader
           after={
@@ -67,7 +69,7 @@ const Profile = () => {
             </Avatar>
             <Title level="2">User User</Title>
             {isMy ? (
-              <Button size="l" stretched>
+              <Button onClick={() => setActivePanel("edit")} size="l" stretched>
                 Редактировать
               </Button>
             ) : (
@@ -75,7 +77,32 @@ const Profile = () => {
                 Написать
               </Button>
             )}
+            <Text style={{ lineHeight: "20px", letterSpacing: "0.2px" }}>
+              Описание себя любимой тридцать раз подряд, чтоб слов побольше
+              было. Описание себя любимой тридцать раз подряд, чтоб слов
+              побольше было. Описание себя любимой тридцать раз подряд, чтоб
+              слов побольше было.
+            </Text>
           </Card>
+        </Group>
+      </Panel>
+      <Panel id="edit">
+        <PanelHeader
+          before={
+            <PanelHeaderClose onClick={() => setActivePanel("profile")} />
+          }
+        >
+          Редактировать
+        </PanelHeader>
+        <Group
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            padding: "24px 16px",
+          }}
+        >
+          <Avatar size={96} initials="UU" />
         </Group>
       </Panel>
     </View>

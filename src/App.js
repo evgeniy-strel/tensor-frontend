@@ -9,7 +9,6 @@ import {
   useAdaptivityConditionalRender,
 } from "@vkontakte/vkui";
 import {
-  Icon28DoorArrowLeftOutline,
   Icon28MessageOutline,
   Icon28Profile,
   Icon28CalendarOutline,
@@ -41,12 +40,6 @@ const pages = [
     icon: <Icon28Profile />,
     path: "/profile/:username",
   },
-  // {
-  //   id: "auth",
-  //   name: "Войти",
-  //   icon: <Icon28DoorArrowLeftOutline />,
-  //   path: "/auth",
-  // },
 ];
 
 function App() {

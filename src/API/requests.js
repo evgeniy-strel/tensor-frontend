@@ -19,17 +19,21 @@ export default class RequestAPI {
     formDataLogin.append("username", username);
     formDataLogin.append("password", password);
     const res = axios.post("/auth/jwt/login", formDataLogin);
-    res.then((res) => {
-      const token = res.data.access_token;
-      localStorage.setItem("token", token);
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    });
+    res
+      .then((res) => {
+        const token = res.data.access_token;
+        localStorage.setItem("token", token);
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      })
+      .catch((rej) => null);
     return res;
   }
 
   static async logout() {
     const res = axios.post("/auth/jwt/logout");
-    res.then((res) => RequestAPI.tokenExpired());
+    res
+      .then((res) => RequestAPI.tokenExpired())
+      .catch((rej) => RequestAPI.tokenExpired());
     return res;
   }
 
@@ -69,18 +73,14 @@ export default class RequestAPI {
 
   // ---------- USERS
   // Получние текущего пользователя
-  static async info() {
-    // Функция получения информации о текущем пользователе.
-    // TODO: В будущем адрес должен изменитьс, этот не подходящий
-    return axios
-      .get("/users/me")
+  static async currentUser() {
+    const res = axios.get("/current-user");
+    res
       .then((res) => {
-        console.log("/users/me", res.data);
         localStorage.setItem("user", res.data);
       })
-      .catch((rej) => {
-        localStorage.removeItem("user");
-      });
+      .catch((rej) => RequestAPI.tokenExpired());
+    return res;
   }
 
   // Обновление информации пользователя

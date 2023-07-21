@@ -31,9 +31,7 @@ export default class RequestAPI {
 
   static async logout() {
     const res = axios.post("/auth/jwt/logout");
-    res
-      .then((res) => RequestAPI.tokenExpired())
-      .catch((rej) => RequestAPI.tokenExpired());
+    res.then((res) => RequestAPI.tokenExpired()).catch((rej) => RequestAPI.tokenExpired());
     return res;
   }
 
@@ -103,7 +101,11 @@ export default class RequestAPI {
     return axios.patch(`/users/${id}`);
   }
 
-  // ---------- CHATS
+  // ---------- CHAT
+  // Создание чата
+  static async createNewChat() {
+    return axios.post("/new_chat");
+  }
 
   // ---------- MESSAGES
 

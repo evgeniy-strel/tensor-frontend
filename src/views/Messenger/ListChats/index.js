@@ -1,9 +1,13 @@
 import { useState, useEffect } from "react";
 import { PanelHeader, Group, List, Tabs, TabsItem, FixedLayout } from "@vkontakte/vkui";
-import { allChats, myChats } from "../../../mocks/chats";
+import { othersChats, myChats } from "../../../mocks/chats";
 import "./index.scss";
 import { Icon28AddOutline, Icon28SlidersOutline, Icon28Search } from "@vkontakte/icons";
 import ChatItem from "../ChatItem";
+import { useNavigate } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import { setActiveTab } from "../../../store/reducers/chatSlice";
+import { activeTabChatSelector } from "../../../store/selectors/chatSelectors";
 
 const tabs = [
   {
@@ -11,7 +15,7 @@ const tabs = [
     text: "Мои чаты",
   },
   {
-    id: "all_chats",
+    id: "others_chats",
     text: "Все чаты",
   },
 ];
@@ -46,8 +50,11 @@ const TabsHeader = ({ selected, setSelected }) => {
 };
 
 const ListChats = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [chats, setChats] = useState(myChats);
-  const [selected, setSelected] = useState("my_chats");
+  const selected = useSelector(activeTabChatSelector);
   const [inputSearch, setInputSearch] = useState("");
 
   const onChangeInputSearch = (e) => {
@@ -56,8 +63,12 @@ const ListChats = () => {
 
   useEffect(() => {
     if (selected === "my_chats") setChats(myChats);
-    else setChats(allChats);
+    else setChats(othersChats);
   }, [selected]);
+
+  const createChatFunc = () => {
+    navigate("/messenger/create_chat");
+  };
 
   return (
     <div className="list-chats-container">
@@ -65,7 +76,7 @@ const ListChats = () => {
         separator={false}
         after={
           <>
-            <Icon28AddOutline />
+            <Icon28AddOutline onClick={createChatFunc} />
             <Icon28SlidersOutline />
             <Icon28Search />
           </>
@@ -73,7 +84,7 @@ const ListChats = () => {
         <span>Сообщения</span>
       </PanelHeader>
       <FixedLayout vertical="top" className="fixed-layout">
-        <TabsHeader selected={selected} setSelected={setSelected} />
+        <TabsHeader selected={selected} setSelected={(value) => dispatch(setActiveTab(value))} />
       </FixedLayout>
       <Group>
         <List className="list-chats">

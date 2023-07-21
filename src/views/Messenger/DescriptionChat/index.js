@@ -10,7 +10,7 @@ const DescriptionChat = () => {
   const navigate = useNavigate();
 
   const onClickBack = () => {
-    navigate("/messenger");
+    navigate(-1);
   };
 
   return (

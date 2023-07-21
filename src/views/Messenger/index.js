@@ -5,11 +5,13 @@ import Chat from "./Chat";
 import ListChats from "./ListChats";
 import ListSubChats from "./ListSubChats";
 import DescriptionChat from "./DescriptionChat";
+import CreateChat from "./CreateChat";
 
 const panels = [
   { id: "subChats", path: "/messenger/subchats/:id", element: <ListSubChats /> },
   { id: "chat", path: "/messenger/chat/:id", element: <Chat /> },
   { id: "descriptionChat", path: "/messenger/description/:id", element: <DescriptionChat /> },
+  { id: "createChat", path: "/messenger/create_chat", element: <CreateChat /> },
   { id: "listChats", path: "/messenger", element: <ListChats /> },
 ];
 const routes = panels.map(({ path }) => ({ path }));

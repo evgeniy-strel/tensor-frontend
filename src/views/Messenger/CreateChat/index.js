@@ -72,13 +72,7 @@ const CreateChat = () => {
 
     setData((prev) => ({ ...prev, img }));
 
-    const testFormData = new FormData();
-
-    setFormData((prev) => prev.append("img", img));
-    testFormData.append("img", img, "img.png");
-    console.log(testFormData);
-
-    RequestAPI.createNewChat(testFormData);
+    // RequestAPI.createNewChat(testFormData);
 
     handlerImgBase64(img);
   };
@@ -87,11 +81,11 @@ const CreateChat = () => {
     e.preventDefault();
     setIsSubmited(true);
 
-    const basicChat = {
-      type: "group",
-      parent_id: null,
-      external: { ...data },
-    };
+    // const basicChat = {
+    //   type: "group",
+    //   parent_id: null,
+    //   external: { ...data },
+    // };
 
     if (Object.values(rules).filter((rule) => rule).length !== 0) return;
 
@@ -105,7 +99,7 @@ const CreateChat = () => {
     //   formData.set(key, JSON.stringify(data[key]));
     // });
 
-    RequestAPI.createNewChat(formData);
+    // RequestAPI.createNewChat(formData);
   };
 
   const rules = {

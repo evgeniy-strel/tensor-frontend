@@ -20,7 +20,7 @@
   }
 
   &__fixed-layout {
-    background-color: #fff;
+    background-color: var(--vkui--color_background_content);
     padding: 0 16px 8px 16px !important;
     box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.06);
 

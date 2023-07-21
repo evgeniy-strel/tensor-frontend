@@ -24,7 +24,7 @@ export const postForgot = createAsyncThunk(
 
 export const postLogout = createAsyncThunk(
   "auth/logout",
-  async (formData, { rejectWithValue }) => {
+  async (nothing, { rejectWithValue }) => {
     const res = await RequestAPI.logout()
       .then((res) => res.data)
       .catch((err) => rejectWithValue(err.message));
@@ -42,11 +42,21 @@ export const postRegister = createAsyncThunk(
   }
 );
 
-// Получние информации о текущем пользователе - удалить 
+// Получние информации о текущем пользователе - удалить
 export const postVerify = createAsyncThunk(
   "auth/verify",
   async (token, { rejectWithValue }) => {
     const res = await RequestAPI.verify(token)
+      .then((res) => res.data)
+      .catch((err) => rejectWithValue(err.message));
+    return res;
+  }
+);
+
+export const getUserInfo = createAsyncThunk(
+  "user/info",
+  async (nothing, { rejectWithValue }) => {
+    const res = RequestAPI.currentUser()
       .then((res) => res.data)
       .catch((err) => rejectWithValue(err.message));
     return res;
@@ -63,6 +73,7 @@ const userSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    // AUTH
     builder
       .addCase(postLogin.pending, (state, action) => {
         state.loader = true;
@@ -73,7 +84,11 @@ const userSlice = createSlice({
       })
       .addCase(postLogin.rejected, (state, action) => {
         state.loader = false;
-        state.resultLogin.error = action.payload;
+        if (action.payload === "Request failed with status code 400") {
+          state.resultLogin.error = "Неправильный пароль";
+        } else {
+          state.resultLogin.error = action.payload;
+        }
       });
     builder
       .addCase(postForgot.pending, (state, action) => {
@@ -99,7 +114,7 @@ const userSlice = createSlice({
         state.token = "";
       })
       .addCase(postLogout.rejected, (state, action) => {
-        console.log(action);
+        state.token = "";
       });
     builder
       .addCase(postRegister.pending, (state, action) => {
@@ -111,6 +126,15 @@ const userSlice = createSlice({
       .addCase(postRegister.rejected, (state, action) => {
         state.loader = false;
         state.resultReg.error = action.payload;
+      });
+
+    // USERS
+    builder
+      .addCase(getUserInfo.fulfilled, (state, action) => {
+        console.log(action.payload);
+      })
+      .addCase(getUserInfo.rejected, (state, action) => {
+        state.token = "";
       });
   },
 });

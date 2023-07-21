@@ -22,7 +22,8 @@ const Interests = ({ setActivePanel, formData, setFormData }) => {
   const handleSubmit = () => {
     if (formData.external.tags.length >= 3) {
       dispatch(postRegister(formData));
-      setActivePanel("selector")
+      setActivePanel("selector");
+      setFormData({ ...formData, password: "" });
     }
   };
 

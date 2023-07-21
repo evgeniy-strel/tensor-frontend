@@ -56,6 +56,7 @@ const FormLogin = ({ setActivePanel, formData, setFormData }) => {
           type="password"
           autoComplete="on"
           placeholder="Пароль"
+          autoFocus
           onChange={(e) =>
             setFormData({
               ...formData,

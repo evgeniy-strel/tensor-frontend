@@ -18,9 +18,17 @@ const AuthSelector = ({ setActivePanel, formData, setFormData }) => {
   const EMAIL_REGEXP =
     /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
 
+  const TEL_REGEXP =
+    // eslint-disable-next-line no-useless-escape
+    /^((8|\+374|\+994|\+995|\+375|\+7|\+380|\+38|\+996|\+998|\+993)[\- ]?)?\(?\d{3,5}\)?[\- ]?\d{1}[\- ]?\d{1}[\- ]?\d{1}[\- ]?\d{1}[\- ]?\d{1}(([\- ]?\d{1})?[\- ]?\d{1})?$/;
+
   const handlerNext = (e) => {
     e.preventDefault();
-    if (formData.email === "" || !EMAIL_REGEXP.test(formData.email)) {
+    if (
+      formData.email === "" ||
+      (formData.email.includes("@") && !EMAIL_REGEXP.test(formData.email)) ||
+      (!formData.email.includes("@") && !TEL_REGEXP.test(formData.email))
+    ) {
       setIsValid(false);
     } else {
       // проверка на наличие пользователя в базе
@@ -47,19 +55,28 @@ const AuthSelector = ({ setActivePanel, formData, setFormData }) => {
             htmlFor="email"
             status={
               !isValid &&
-              (formData.email === "" || !EMAIL_REGEXP.test(formData.email)) &&
+              (formData.email === "" ||
+                (formData.email.includes("@") &&
+                  !EMAIL_REGEXP.test(formData.email)) ||
+                (!formData.email.includes("@") &&
+                  !TEL_REGEXP.test(formData.email))) &&
               "error"
             }
             bottom={
-              (!EMAIL_REGEXP.test(formData.email) &&
+              (formData.email.includes("@") &&
+                !EMAIL_REGEXP.test(formData.email) &&
                 formData.email !== "" &&
                 "Некорректная почта!") ||
+              (!formData.email.includes("@") &&
+                !TEL_REGEXP.test(formData.email) &&
+                formData.email !== "" &&
+                "Некорректный телефон!") ||
               (!isValid && formData.email === "" && "Введите данные")
             }
           >
             <Input
               id="email"
-              type="email"
+              type="text"
               placeholder="Телефон или почта"
               maxLength={40}
               onChange={(e) =>

@@ -1,11 +1,17 @@
 import axios from "./axios";
 
 export default class RequestAPI {
-  // ---------- AUTH
+  // Сброс токена
   static tokenExpired() {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     axios.defaults.headers.common["Authorization"] = null;
+  }
+
+  // ---------- AUTH
+  // Проверка на наличие пользователя
+  static async loginFind(email) {
+    return axios.post("/auth/find", { email: email });
   }
 
   static async login({ username, password }) {
@@ -22,46 +28,46 @@ export default class RequestAPI {
   }
 
   static async logout() {
-    this.tokenExpired();
+    const res = axios.post("/auth/jwt/logout");
+    res.then((res) => RequestAPI.tokenExpired());
+    return res;
   }
 
   static async register(formData) {
-    let formDataRegister = new FormData();
-    formDataRegister.append("email", formData.email);
-    formDataRegister.append("password", formData.password);
-    formDataRegister.append("external", JSON.stringify(formData.external));
-    return axios.post("/auth1/register", formDataRegister);
+    return axios.post("/auth/register", {
+      ...formData,
+      is_active: true,
+      is_superuser: false,
+      is_verified: false,
+    });
   }
 
-  // Подтверждение почты
+  // ???
   static async requestVerifyToken(email) {
-    return axios.post(
-      "/auth2/request-verify-token",
-      JSON.stringify({ email: email })
-    );
+    return axios.post("/auth/request-verify-token", { email: email });
   }
 
-  // Подтверждение почты
+  // Получние информации о текущем пользователе - удалить
   static async verify(token) {
-    return axios.post("/auth2/verify", JSON.stringify({ token: token }));
+    const res = axios.post("/auth/verify", { token: token });
+    res.catch((rej) => RequestAPI.tokenExpired());
+    return res;
   }
 
   // Восстановление пароля
   static async forgotPassword(email) {
-    return axios.post(
-      "/auth3/forgot-password",
-      JSON.stringify({ email: email })
-    );
+    return axios.post("/auth/forgot-password", { email: email });
   }
 
   // Сброс пароля
   static async resetPassword(token, password) {
-    return axios.post(
-      "/auth3/reset-password",
-      JSON.stringify({ token: token, password: password })
-    );
+    return axios.post("/auth/reset-password", {
+      token: token,
+      password: password,
+    });
   }
 
+  // ---------- USERS
   // Получние текущего пользователя
   static async info() {
     // Функция получения информации о текущем пользователе.
@@ -97,65 +103,11 @@ export default class RequestAPI {
     return axios.patch(`/users/${id}`);
   }
 
-  // ---------- CHAT
-  // Создание чата
-  static async createNewChat() {
-    return axios.post("/new_chat");
-  }
+  // ---------- CHATS
 
-  // Добавление пользоватлей в чат
-  static async addChatUsers() {
-    return axios.post("/add_chat_users");
-  }
+  // ---------- MESSAGES
 
-  // Обновление чата
-  static async updateChat() {
-    return axios.post("/chat_delete");
-  }
+  // ---------- CATEGORIES
 
-  // Удаление чата
-  static async deleteChat() {
-    return axios.post("/chat_delete");
-  }
-
-  // Получение чата
-  static async getChat() {
-    return axios.get("/chat");
-  }
-
-  // Получение пользоватлей чата
-  static async getChatUsers() {
-    return axios.get("/chat_users");
-  }
-
-  // Получание тегов чата
-  static async getChatTags() {
-    return axios.get("/chat_tags");
-  }
-
-  // Получение сообщений чата
-  static async getChatMessages() {
-    return axios.get("/chat_messages");
-  }
-
-  // Добавление нового сообщения
-  static async addNewMessage() {
-    return axios.post("/add_message");
-  }
-
-  // Получение чатов пользователя
-  static async getChatsCurrentUser() {
-    return axios.get("/user_chats");
-  }
-
-  // ---------- SEARCH
-  // Создание новой категории
-  static async postNewCategory() {
-    return axios.post("/new_category");
-  }
-
-  // Создание нового тега
-  static async postNewTag() {
-    return axios.post("/new_tag");
-  }
+  // ---------- TAGS
 }

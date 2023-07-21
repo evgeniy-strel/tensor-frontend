@@ -1,10 +1,12 @@
 import { useEffect } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const Redirect = () => {
+  const token = useSelector((state) => state.user.token);
   const navigate = useNavigate();
 
-  useEffect(() => true ? navigate("/event") : navigate("/auth"));
+  useEffect(() => (token !== "" ? navigate("/event") : navigate("/auth")));
 
   return;
 };

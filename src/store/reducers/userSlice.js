@@ -3,7 +3,7 @@ import RequestAPI from "../../API/requests";
 import initialStateUser from "../initialState";
 
 export const postLogin = createAsyncThunk(
-  "user/login",
+  "auth/login",
   async (formData, { rejectWithValue }) => {
     const res = await RequestAPI.login(formData)
       .then((res) => res.data)
@@ -13,7 +13,7 @@ export const postLogin = createAsyncThunk(
 );
 
 export const postForgot = createAsyncThunk(
-  "user/forgot",
+  "auth/forgot",
   async (email, { rejectWithValue }) => {
     const res = await RequestAPI.forgotPassword(email)
       .then((res) => res.data)
@@ -22,10 +22,31 @@ export const postForgot = createAsyncThunk(
   }
 );
 
+export const postLogout = createAsyncThunk(
+  "auth/logout",
+  async (formData, { rejectWithValue }) => {
+    const res = await RequestAPI.logout()
+      .then((res) => res.data)
+      .catch((err) => rejectWithValue(err.message));
+    return res;
+  }
+);
+
 export const postRegister = createAsyncThunk(
-  "user/register",
+  "auth/register",
   async (formData, { rejectWithValue }) => {
     const res = await RequestAPI.register(formData)
+      .then((res) => res.data)
+      .catch((err) => rejectWithValue(err.message));
+    return res;
+  }
+);
+
+// Получние информации о текущем пользователе - удалить 
+export const postVerify = createAsyncThunk(
+  "auth/verify",
+  async (token, { rejectWithValue }) => {
+    const res = await RequestAPI.verify(token)
       .then((res) => res.data)
       .catch((err) => rejectWithValue(err.message));
     return res;
@@ -47,6 +68,7 @@ const userSlice = createSlice({
         state.loader = true;
       })
       .addCase(postLogin.fulfilled, (state, action) => {
+        state.token = action.payload.access_token;
         state.loader = false;
       })
       .addCase(postLogin.rejected, (state, action) => {
@@ -63,6 +85,21 @@ const userSlice = createSlice({
       .addCase(postForgot.rejected, (state, action) => {
         state.loader = false;
         state.resultForgot.error = action.payload;
+      });
+    builder
+      .addCase(postVerify.fulfilled, (state, action) => {
+        console.log(action);
+      })
+      .addCase(postVerify.rejected, (state, action) => {
+        console.log(action);
+        // state.token = "";
+      });
+    builder
+      .addCase(postLogout.fulfilled, (state, action) => {
+        state.token = "";
+      })
+      .addCase(postLogout.rejected, (state, action) => {
+        console.log(action);
       });
     builder
       .addCase(postRegister.pending, (state, action) => {

@@ -11,6 +11,7 @@ import {
   Button,
 } from "@vkontakte/vkui";
 import classes from "./auth.module.scss";
+import RequestAPI from "../../API/requests";
 
 const AuthSelector = ({ setActivePanel, formData, setFormData }) => {
   const [isValid, setIsValid] = useState(true);
@@ -23,8 +24,9 @@ const AuthSelector = ({ setActivePanel, formData, setFormData }) => {
       setIsValid(false);
     } else {
       // проверка на наличие пользователя в базе
-      if (false) setActivePanel("login");
-      else setActivePanel("register");
+      RequestAPI.loginFind(formData.email)
+        .then((res) => setActivePanel("login"))
+        .catch((rej) => setActivePanel("register"));
     }
   };
 

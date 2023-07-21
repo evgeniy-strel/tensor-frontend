@@ -4,19 +4,27 @@ import Event from "../views/Event";
 import Messenger from "../views/Messenger";
 import Profile from "../views/Profile";
 import Auth from "../views/Auth";
+import { useSelector } from "react-redux";
 
 const Rout = () => {
+  const token = useSelector((state) => state.user.token);
+
   return (
     <Routes>
       <Route path="/*" element={<Redirect />} />
-      <Route path="/event" element={<Event />} />
-      <Route path="/messenger/">
-        <Route path="" element={<Messenger />} />
-        <Route path=":id" element={<Messenger />} />
-        <Route path="subchats/:id" element={<Messenger />} />
-      </Route>
-      <Route path="/profile/:username" element={<Profile />} />
-      <Route path="/auth/*" element={<Auth />} />
+      {token !== "" ? (
+        <>
+          <Route path="/event" element={<Event />} />
+          <Route path="/messenger/">
+            <Route path="" element={<Messenger />} />
+            <Route path=":id" element={<Messenger />} />
+            <Route path="subchats/:id" element={<Messenger />} />
+          </Route>
+          <Route path="/profile/:username" element={<Profile />} />{" "}
+        </>
+      ) : (
+        <Route path="/auth/*" element={<Auth />} />
+      )}
     </Routes>
   );
 };

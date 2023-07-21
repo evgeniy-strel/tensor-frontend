@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
   View,
   Panel,
@@ -13,9 +14,22 @@ import {
   Icon28MenuOutline,
   Icon28FavoriteCircleFillGreen,
 } from "@vkontakte/icons";
+import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { postLogout, postVerify } from "../../store/reducers/userSlice";
 
 const Profile = () => {
+  const dispatch = useDispatch();
+  const token = useSelector((state) => state.user.token);
+  const params = useParams();
+
   const isMy = true;
+
+  useEffect(() => {
+    if (params.username === ":username") {
+      // dispatch(postVerify(token));
+    }
+  });
 
   return (
     <View id="profile" activePanel="profile">
@@ -24,7 +38,7 @@ const Profile = () => {
           after={
             isMy && (
               <PanelHeaderButton
-                onClick={() => console.log("menu")}
+                onClick={() => dispatch(postLogout())}
                 aria-label="menu"
               >
                 <Icon28MenuOutline />

@@ -20,6 +20,7 @@ import { useLocation } from "react-router-dom";
 import Rout from "./router/Rout";
 import useStory from "./hooks/useStory";
 import calculateAppHeight from "./utils/calculateAppHeight";
+import { useSelector } from "react-redux";
 
 const pages = [
   {
@@ -40,15 +41,16 @@ const pages = [
     icon: <Icon28Profile />,
     path: "/profile/:username",
   },
-  {
-    id: "auth",
-    name: "Войти",
-    icon: <Icon28DoorArrowLeftOutline />,
-    path: "/auth",
-  },
+  // {
+  //   id: "auth",
+  //   name: "Войти",
+  //   icon: <Icon28DoorArrowLeftOutline />,
+  //   path: "/auth",
+  // },
 ];
 
 function App() {
+  const token = useSelector((state) => state.user.token);
   const platform = usePlatform();
   const isVKCOM = platform !== Platform.VKCOM;
   const { viewWidth } = useAdaptivityConditionalRender();
@@ -61,8 +63,9 @@ function App() {
   return (
     <SplitLayout
       header={isVKCOM && <PanelHeader separator={false} />}
-      style={{ justifyContent: "center" }}>
-      {viewWidth.tabletPlus && (
+      style={{ justifyContent: "center" }}
+    >
+      {viewWidth.tabletPlus && token !== "" && (
         <Desktop
           isVKCOM={isVKCOM}
           viewWidth={viewWidth}
@@ -76,7 +79,8 @@ function App() {
           activeStory={activeStory}
           tabbar={
             viewWidth.tabletMinus &&
-            isNeedTabbar && (
+            isNeedTabbar &&
+            token !== "" && (
               <Mobile
                 viewWidth={viewWidth}
                 pages={pages}
@@ -84,7 +88,8 @@ function App() {
                 setActiveStory={setActiveStory}
               />
             )
-          }>
+          }
+        >
           <Rout id={activeStory} />
         </Epic>
       </SplitCol>

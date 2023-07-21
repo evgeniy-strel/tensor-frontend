@@ -3,7 +3,6 @@ const initialStateUser = {
   user: {},
   loader: false,
   resultLogin: {
-    data: {},
     error: "",
   },
   resultForgot: {

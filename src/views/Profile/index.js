@@ -29,8 +29,9 @@ const Profile = () => {
   const [activePanel, setActivePanel] = useState("profile");
 
   useEffect(() => {
-    if (isMy) {
-      dispatch(getUserInfo());
+    if (!isMy) {
+      // Получение информации о другом пользователе
+      // dispatch(getUserInfo());
     }
   }, []);
 

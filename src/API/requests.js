@@ -31,21 +31,18 @@ export default class RequestAPI {
 
   static async logout() {
     const res = axios.post("/auth/jwt/logout");
-    res.then((res) => RequestAPI.tokenExpired()).catch((rej) => RequestAPI.tokenExpired());
+    res
+      .then((res) => RequestAPI.tokenExpired())
+      .catch((rej) => RequestAPI.tokenExpired());
     return res;
   }
 
   static async register(formData) {
-    const image = new FormData();
-    image.append("avatar", formData.external.avatar);
     return axios.post("/auth/register", {
       ...formData,
       is_active: true,
       is_superuser: false,
       is_verified: false,
-      external: {
-        avatar: image
-      }
     });
   }
 
@@ -73,7 +70,18 @@ export default class RequestAPI {
     const res = axios.get("/current");
     res
       .then((res) => {
-        localStorage.setItem("user", res.data);
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            id: res.data.id,
+            email: res.data.email,
+            is_active: res.data.is_active,
+            is_verified: res.data.is_verified,
+            name: res.data.external.name,
+            tags: res.data.external.tags,
+            avatar: res.data.external.avatar,
+          })
+        );
       })
       .catch((rej) => RequestAPI.tokenExpired());
     return res;

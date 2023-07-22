@@ -15,7 +15,7 @@ import { postForgot } from "../../store/reducers/userSlice";
 
 const ForgotPassword = ({ setActivePanel, formData, setFormData }) => {
   const dispatch = useDispatch();
-  const { loader, resultForgot } = useSelector((state) => state.user);
+  const forgotState = useSelector((state) => state.user.forgotState);
   const [email, setEmail] = useState("");
   const [isValid, setIsValid] = useState(true);
   const EMAIL_REGEXP =
@@ -43,13 +43,13 @@ const ForgotPassword = ({ setActivePanel, formData, setFormData }) => {
         Восстановление пароля
       </PanelHeader>
       <Group>
-        {loader ? (
+        {forgotState.loader ? (
           <PanelSpinner size="medium" />
         ) : (
           <FormLayout onSubmit={handlerSubmit}>
-            {resultForgot.error !== "" && (
+            {forgotState.error !== "" && (
               <FormStatus header="Ошибка" mode="error">
-                {resultForgot.error}
+                {forgotState.error}
               </FormStatus>
             )}
             <FormItem

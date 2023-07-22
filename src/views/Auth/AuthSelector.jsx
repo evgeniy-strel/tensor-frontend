@@ -12,8 +12,11 @@ import {
 } from "@vkontakte/vkui";
 import classes from "./auth.module.scss";
 import RequestAPI from "../../API/requests";
+import { useDispatch } from "react-redux";
+import { resetState } from "../../store/reducers/userSlice";
 
 const AuthSelector = ({ setActivePanel, formData, setFormData }) => {
+  const dispatch = useDispatch();
   const [isValid, setIsValid] = useState(true);
   const EMAIL_REGEXP =
     /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
@@ -31,6 +34,7 @@ const AuthSelector = ({ setActivePanel, formData, setFormData }) => {
     ) {
       setIsValid(false);
     } else {
+      dispatch(resetState());
       // проверка на наличие пользователя в базе
       RequestAPI.loginFind(formData.email)
         .then((res) => setActivePanel("login"))

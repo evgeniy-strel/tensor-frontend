@@ -8,11 +8,11 @@ import {
   ButtonGroup,
 } from "@vkontakte/vkui";
 import { useDispatch, useSelector } from "react-redux";
-import { postLogin } from "../../../store/reducers/userSlice";
+import { postLogin, getUserInfo } from "../../../store/reducers/userSlice";
 
 const FormLogin = ({ setActivePanel, formData, setFormData }) => {
   const dispatch = useDispatch();
-  const resultLogin = useSelector((state) => state.user.resultLogin);
+  const loginState = useSelector((state) => state.user.loginState);
   const [isValid, setIsValid] = useState(true);
 
   const handlerSubmit = (e) => {
@@ -28,14 +28,15 @@ const FormLogin = ({ setActivePanel, formData, setFormData }) => {
           password: formData.password,
         })
       );
+      dispatch(getUserInfo());
     }
   };
 
   return (
     <FormLayout onSubmit={handlerSubmit}>
-      {resultLogin.error !== "" && (
+      {loginState.error !== "" && (
         <FormStatus header="Ошибка" mode="error">
-          {resultLogin.error}
+          {loginState.error}
         </FormStatus>
       )}
       <FormItem

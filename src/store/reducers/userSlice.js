@@ -56,39 +56,39 @@ const userSlice = createSlice({
   name: "user",
   initialState: initialStateUser,
   reducers: {
-    logout(state) {
-      RequestAPI.logout();
-      state.token = "";
+    resetState(state, action) {
+      state.loginState = { loader: false, error: "" };
+      state.registerState = { loader: false, error: "" };
+      state.forgotState = { loader: false, error: "" };
     },
   },
   extraReducers: (builder) => {
     // AUTH
     builder
       .addCase(postLogin.pending, (state, action) => {
-        state.loader = true;
+        state.loginState.loader = true;
       })
       .addCase(postLogin.fulfilled, (state, action) => {
         state.token = action.payload.access_token;
-        state.loader = false;
+        state.loginState.loader = false;
       })
       .addCase(postLogin.rejected, (state, action) => {
-        state.loader = false;
-        if (action.payload === "Request failed with status code 400") {
-          state.resultLogin.error = "Неправильный пароль";
-        } else {
-          state.resultLogin.error = action.payload;
-        }
+        state.loginState.loader = false;
+        state.loginState.error =
+          action.payload === "Request failed with status code 400"
+            ? "Неправильный пароль"
+            : action.payload;
       });
     builder
       .addCase(postForgot.pending, (state, action) => {
-        state.loader = true;
+        state.forgotState.loader = true;
       })
       .addCase(postForgot.fulfilled, (state, action) => {
-        state.loader = false;
+        state.forgotState.loader = false;
       })
       .addCase(postForgot.rejected, (state, action) => {
-        state.loader = false;
-        state.resultForgot.error = action.payload;
+        state.forgotState.loader = false;
+        state.forgotState.error = action.payload;
       });
     builder
       .addCase(postLogout.fulfilled, (state, action) => {
@@ -99,21 +99,18 @@ const userSlice = createSlice({
       });
     builder
       .addCase(postRegister.pending, (state, action) => {
-        state.loader = true;
+        state.registerState.loader = true;
       })
       .addCase(postRegister.fulfilled, (state, action) => {
-        state.loader = false;
+        state.registerState.loader = false;
       })
       .addCase(postRegister.rejected, (state, action) => {
-        state.loader = false;
-        state.resultReg.error = action.payload;
+        state.registerState.loader = false;
+        state.registerState.error = action.payload;
       });
 
     // USERS
     builder
-      .addCase(getUserInfo.pending, (state, action) => {
-        state.loaderUserInfo = true;
-      })
       .addCase(getUserInfo.fulfilled, (state, action) => {
         state.user = {
           id: action.payload.id,
@@ -124,14 +121,12 @@ const userSlice = createSlice({
           tags: action.payload.external.tags,
           avatar: action.payload.external.avatar,
         };
-        state.loaderUserInfo = false;
       })
       .addCase(getUserInfo.rejected, (state, action) => {
         state.token = "";
-        state.loaderUserInfo = false;
       });
   },
 });
 
 export default userSlice.reducer;
-export const { logout } = userSlice.actions;
+export const { resetState } = userSlice.actions;

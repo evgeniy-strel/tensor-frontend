@@ -1,0 +1,40 @@
+$default: #818c99;
+$active: #2688eb;
+
+.card {
+  aspect-ratio: 1.13;
+  color: $default;
+  transition: 0.3s color;
+
+  > span {
+    font-size: 13px;
+    padding: 8px;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.selected {
+  color: $active;
+
+  &:after {
+    border-color: $active !important;
+    transition: 0.3s border-color;
+  }
+}
+
+.button_group {
+  position: sticky;
+  bottom: 0;
+  padding: 9px 16px !important;
+  box-sizing: border-box;
+  background-color: var(--vkui--color_background_modal);
+}
+
+@media (max-width: 767.9px) {
+  .button_group {
+    padding: 0 var(--vkui--size_base_padding_horizontal--regular);
+  }
+}

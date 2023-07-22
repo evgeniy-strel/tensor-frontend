@@ -14,16 +14,16 @@ export default class RequestAPI {
     return axios.post("/auth/find", { email: email });
   }
 
-  static async login({ username, password }) {
+  static async login({ email, password }) {
     let formDataLogin = new FormData();
-    formDataLogin.append("username", username);
+    formDataLogin.append("username", email);
     formDataLogin.append("password", password);
     const res = axios.post("/auth/jwt/login", formDataLogin);
     res
       .then((res) => {
         const token = res.data.access_token;
         localStorage.setItem("token", token);
-        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        axios.defaults.headers["Authorization"] = `Bearer ${token}`;
       })
       .catch((rej) => null);
     return res;
@@ -31,7 +31,9 @@ export default class RequestAPI {
 
   static async logout() {
     const res = axios.post("/auth/jwt/logout");
-    res.then((res) => RequestAPI.tokenExpired()).catch((rej) => RequestAPI.tokenExpired());
+    res
+      .then((res) => RequestAPI.tokenExpired())
+      .catch((rej) => RequestAPI.tokenExpired());
     return res;
   }
 
@@ -47,13 +49,6 @@ export default class RequestAPI {
   // ???
   static async requestVerifyToken(email) {
     return axios.post("/auth/request-verify-token", { email: email });
-  }
-
-  // Получние информации о текущем пользователе - удалить
-  static async verify(token) {
-    const res = axios.post("/auth/verify", { token: token });
-    res.catch((rej) => RequestAPI.tokenExpired());
-    return res;
   }
 
   // Восстановление пароля
@@ -72,10 +67,21 @@ export default class RequestAPI {
   // ---------- USERS
   // Получние текущего пользователя
   static async currentUser() {
-    const res = axios.get("/current-user");
+    const res = axios.get("/current");
     res
       .then((res) => {
-        localStorage.setItem("user", res.data);
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            id: res.data.id,
+            email: res.data.email,
+            is_active: res.data.is_active,
+            is_verified: res.data.is_verified,
+            name: res.data.external.name,
+            tags: res.data.external.tags,
+            avatar: res.data.external.avatar,
+          })
+        );
       })
       .catch((rej) => RequestAPI.tokenExpired());
     return res;

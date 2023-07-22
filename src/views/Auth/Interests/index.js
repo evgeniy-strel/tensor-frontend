@@ -17,7 +17,7 @@ import Cards from "./Cards";
 
 const Interests = ({ setActivePanel, formData, setFormData }) => {
   const dispatch = useDispatch();
-  const { loader, resultReg } = useSelector((state) => state.user);
+  const registerState = useSelector((state) => state.user.registerState);
 
   const handleSubmit = () => {
     if (formData.external.tags.length >= 3) {
@@ -47,13 +47,13 @@ const Interests = ({ setActivePanel, formData, setFormData }) => {
           </Title>
           <Text>Выберите минимум 3 увлечений</Text>
         </Div>
-        {loader ? (
+        {registerState.loader ? (
           <PanelSpinner size="medium" />
         ) : (
           <>
-            {resultReg.error !== "" && (
+            {registerState.error !== "" && (
               <FormStatus header="Ошибка" mode="error">
-                {resultReg.error}
+                {registerState.error}
               </FormStatus>
             )}
             <Cards formData={formData} setFormData={setFormData} />

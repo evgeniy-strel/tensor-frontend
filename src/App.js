@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   SplitLayout,
   SplitCol,
@@ -7,6 +7,7 @@ import {
   Platform,
   usePlatform,
   useAdaptivityConditionalRender,
+  ModalRoot,
 } from "@vkontakte/vkui";
 import {
   Icon28MessageOutline,
@@ -19,7 +20,11 @@ import { useLocation } from "react-router-dom";
 import Rout from "./router/Rout";
 import useStory from "./hooks/useStory";
 import calculateAppHeight from "./utils/calculateAppHeight";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { modalBack } from "./store/reducers/modalSlice";
+import SettingsModalPage from "./modals/SettingsModalPage";
+import HobbiesModalPage from "./modals/HobbiesModalPage";
+import EditProfile from "./modals/EditProfile";
 
 const pages = [
   {
@@ -38,12 +43,14 @@ const pages = [
     id: "profile",
     name: "Профиль",
     icon: <Icon28Profile />,
-    path: "/profile/:username",
+    path: "/profile/me",
   },
 ];
 
 function App() {
+  const dispatch = useDispatch();
   const token = useSelector((state) => state.user.token);
+  const activeModal = useSelector((state) => state.modal.activeModal);
   const platform = usePlatform();
   const isVKCOM = platform !== Platform.VKCOM;
   const { viewWidth } = useAdaptivityConditionalRender();
@@ -51,12 +58,21 @@ function App() {
   const [activeStory, setActiveStory] = useStory("/", "home", 1);
   const isNeedTabbar = !location.pathname.includes("/messenger/");
 
+  const modal = (
+    <ModalRoot activeModal={activeModal} onClose={() => dispatch(modalBack())}>
+      <SettingsModalPage id="settings" />
+      <HobbiesModalPage id="hobbies" />
+      <EditProfile id="editprofile" />
+    </ModalRoot>
+  );
+
   useEffect(() => calculateAppHeight(), []);
 
   return (
     <SplitLayout
       header={isVKCOM && <PanelHeader separator={false} />}
       style={{ justifyContent: "center" }}
+      modal={modal}
     >
       {viewWidth.tabletPlus && token !== "" && (
         <Desktop

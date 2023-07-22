@@ -12,7 +12,7 @@ import FormLogin from "./FormLogin";
 import classes from "../auth.module.scss";
 
 const Login = ({ setActivePanel, formData, setFormData }) => {
-  const loader = useSelector((state) => state.user.loader);
+  const loginState = useSelector((state) => state.user.loginState);
 
   return (
     <>
@@ -28,7 +28,7 @@ const Login = ({ setActivePanel, formData, setFormData }) => {
           </Title>
           <Text>Введите пароль от аккаунта</Text>
         </Div>
-        {loader ? (
+        {loginState.loader ? (
           <PanelSpinner size="medium" />
         ) : (
           <FormLogin

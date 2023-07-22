@@ -24,7 +24,7 @@ const FormLogin = ({ setActivePanel, formData, setFormData }) => {
       // изменить запрос: username --> email/number
       dispatch(
         postLogin({
-          username: formData.email,
+          email: formData.email,
           password: formData.password,
         })
       );

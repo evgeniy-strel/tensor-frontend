@@ -1,5 +1,6 @@
 const initialStateUser = {
   token: localStorage.getItem("token") || "",
+  loaderUserInfo: false,
   user: {},
   loader: false,
   resultLogin: {

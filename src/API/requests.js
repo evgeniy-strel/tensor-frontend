@@ -14,16 +14,16 @@ export default class RequestAPI {
     return axios.post("/auth/find", { email: email });
   }
 
-  static async login({ username, password }) {
+  static async login({ email, password }) {
     let formDataLogin = new FormData();
-    formDataLogin.append("username", username);
+    formDataLogin.append("username", email);
     formDataLogin.append("password", password);
     const res = axios.post("/auth/jwt/login", formDataLogin);
     res
       .then((res) => {
         const token = res.data.access_token;
         localStorage.setItem("token", token);
-        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        axios.defaults.headers["Authorization"] = `Bearer ${token}`;
       })
       .catch((rej) => null);
     return res;
@@ -38,24 +38,22 @@ export default class RequestAPI {
   }
 
   static async register(formData) {
+    const image = new FormData();
+    image.append("avatar", formData.external.avatar);
     return axios.post("/auth/register", {
       ...formData,
       is_active: true,
       is_superuser: false,
       is_verified: false,
+      external: {
+        avatar: image
+      }
     });
   }
 
   // ???
   static async requestVerifyToken(email) {
     return axios.post("/auth/request-verify-token", { email: email });
-  }
-
-  // Получние информации о текущем пользователе - удалить
-  static async verify(token) {
-    const res = axios.post("/auth/verify", { token: token });
-    res.catch((rej) => RequestAPI.tokenExpired());
-    return res;
   }
 
   // Восстановление пароля
@@ -74,7 +72,7 @@ export default class RequestAPI {
   // ---------- USERS
   // Получние текущего пользователя
   static async currentUser() {
-    const res = axios.get("/current-user");
+    const res = axios.get("/current");
     res
       .then((res) => {
         localStorage.setItem("user", res.data);

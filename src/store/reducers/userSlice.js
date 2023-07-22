@@ -42,17 +42,6 @@ export const postRegister = createAsyncThunk(
   }
 );
 
-// Получние информации о текущем пользователе - удалить
-export const postVerify = createAsyncThunk(
-  "auth/verify",
-  async (token, { rejectWithValue }) => {
-    const res = await RequestAPI.verify(token)
-      .then((res) => res.data)
-      .catch((err) => rejectWithValue(err.message));
-    return res;
-  }
-);
-
 export const getUserInfo = createAsyncThunk(
   "user/info",
   async (nothing, { rejectWithValue }) => {
@@ -102,14 +91,6 @@ const userSlice = createSlice({
         state.resultForgot.error = action.payload;
       });
     builder
-      .addCase(postVerify.fulfilled, (state, action) => {
-        console.log(action);
-      })
-      .addCase(postVerify.rejected, (state, action) => {
-        console.log(action);
-        // state.token = "";
-      });
-    builder
       .addCase(postLogout.fulfilled, (state, action) => {
         state.token = "";
       })
@@ -130,11 +111,24 @@ const userSlice = createSlice({
 
     // USERS
     builder
+      .addCase(getUserInfo.pending, (state, action) => {
+        state.loaderUserInfo = true;
+      })
       .addCase(getUserInfo.fulfilled, (state, action) => {
-        console.log(action.payload);
+        state.user = {
+          id: action.payload.id,
+          email: action.payload.email,
+          is_active: action.payload.is_active,
+          is_verified: action.payload.is_verified,
+          name: action.payload.external.name,
+          tags: action.payload.external.tags,
+          avatar: action.payload.external.avatar,
+        };
+        state.loaderUserInfo = false;
       })
       .addCase(getUserInfo.rejected, (state, action) => {
         state.token = "";
+        state.loaderUserInfo = false;
       });
   },
 });

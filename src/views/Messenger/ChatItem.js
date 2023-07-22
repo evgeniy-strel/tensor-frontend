@@ -1,6 +1,7 @@
 import React from "react";
 import "./ChatItem.scss";
 import { Cell, Avatar, Headline } from "@vkontakte/vkui";
+import { myChats } from "../../mocks/chats";
 import { Link } from "react-router-dom";
 
 const SubtitleGroup = ({ lastMessage, subChats }) => {
@@ -27,7 +28,12 @@ const SubtitlePM = ({ lastMessage }) => (
 );
 
 const ChatItem = ({ id, name, img, isGroup, lastMessage, subChats }) => {
-  const url = subChats?.length ? `/messenger/subchats/${id}` : `/messenger/${id}`;
+  const isUserJoined = Boolean(myChats.find((chat) => chat.id === id));
+  let url;
+
+  if (isUserJoined && !subChats?.length) url = `/messenger/chat/${id}`;
+  else if (isUserJoined && subChats?.length) url = `/messenger/subchats/${id}`;
+  else url = `/messenger/description/${id}`;
 
   return (
     <Link to={url} key={id}>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import { allChats, myChats } from "../../mocks/chats";
+import { othersChats, myChats } from "../../mocks/chats";
 import GroupChat from "./GroupChat";
 import PMChat from "./PMChat";
 
@@ -9,6 +9,8 @@ const Chat = () => {
 
   // стейт нужен, чтобы при кнопке вернуться назад не сбрасывались все данные чата
   const [chatId, setChatId] = useState(id);
+
+  const allChats = [...othersChats, ...myChats];
 
   const findChat = (chats, id) => {
     return chats.find((chat) => chat.id == chatId);

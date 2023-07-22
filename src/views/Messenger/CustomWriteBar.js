@@ -62,21 +62,13 @@ const CustomWriteBar = ({ onSendMessage, user }) => {
           onKeyDown={onKeyDown}
           getRef={handleGetRef}
           before={<WriteBarIcon mode="attach" />}
-          inlineAfter={
-            text.length > 0 && (
-              <WriteBarIcon aria-label="Смайлы и стикеры">{SmileOutlineIcon}</WriteBarIcon>
-            )
-          }
           after={
             <>
-              {text.length === 0 && (
-                <WriteBarIcon aria-label="Смайлы и стикеры">{SmileOutlineIcon}</WriteBarIcon>
-              )}
-              {text.length === 0 && (
+              {/* {text.length === 0 && (
                 <WriteBarIcon aria-label="Записать голосовое сообщение">
                   {VoiceOutlineIcon}
                 </WriteBarIcon>
-              )}
+              )} */}
               {text.length > 0 && <WriteBarIcon onClick={sendMessage} mode="send" />}
             </>
           }

@@ -1,7 +1,7 @@
 import React from "react";
 import "./index.scss";
 import { Icon16Muted } from "@vkontakte/icons";
-import { allChats, subChats } from "../../../mocks/chats";
+import { myChats, othersChats, subChats } from "../../../mocks/chats";
 import {
   Avatar,
   Group,
@@ -17,12 +17,13 @@ import ChatItem from "../ChatItem";
 
 const ListSubChats = () => {
   const { id } = useParams();
+  const allChats = [...othersChats, ...myChats];
   const chat = allChats.find((chat) => chat.id == id);
 
   const navigate = useNavigate();
 
   const onClickBack = () => {
-    navigate("/messenger");
+    navigate(-1);
   };
 
   return (

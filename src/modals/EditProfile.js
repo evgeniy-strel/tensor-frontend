@@ -11,14 +11,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { modalBack } from "../store/reducers/modalSlice";
 import classes from "./HobbiesModalPage/index.module.scss";
 
-const EditProfile = ({ id }) => {
+const EditProfile = ({ id, ...props }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
 
   const handleSubmit = () => {};
 
   return (
-    <ModalPage id={id} onClose={() => dispatch(modalBack())} hideCloseButton>
+    <ModalPage id={id} onClose={() => dispatch(modalBack())} hideCloseButton {...props}>
       <ModalPageHeader
         before={<PanelHeaderClose onClick={() => dispatch(modalBack())} />}
       >

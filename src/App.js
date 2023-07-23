@@ -62,21 +62,22 @@ function App() {
   const modal = (
     <ModalRoot activeModal={activeModal} onClose={() => dispatch(modalBack())}>
       <SettingsModalPage id="settings" />
-      <HobbiesModalPage id="hobbies" />
-      <EditProfile id="editprofile" />
+      <HobbiesModalPage id="hobbies" settlingHeight={100} />
+      <EditProfile id="editprofile" settlingHeight={100} />
     </ModalRoot>
   );
 
   useEffect(() => {
     dispatch(fetchCategories());
     calculateAppHeight();
-  }, [token]);
+  }, []);
 
   return (
     <SplitLayout
       header={isVKCOM && <PanelHeader separator={false} />}
       style={{ justifyContent: "center" }}
-      modal={modal}>
+      modal={modal}
+    >
       {viewWidth.tabletPlus && token !== "" && (
         <Desktop
           isVKCOM={isVKCOM}
@@ -100,7 +101,8 @@ function App() {
                 setActiveStory={setActiveStory}
               />
             )
-          }>
+          }
+        >
           <Rout id={activeStory} />
         </Epic>
       </SplitCol>

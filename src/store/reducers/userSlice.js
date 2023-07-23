@@ -52,6 +52,16 @@ export const getUserInfo = createAsyncThunk(
   }
 );
 
+export const updateUser = createAsyncThunk(
+  "user/update",
+  async (formData, { rejectWithValue }) => {
+    const res = RequestAPI.updateCurrentUser(formData)
+      .then((res) => res.data)
+      .catch((err) => rejectWithValue(err.message));
+    return res;
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState: initialStateUser,
@@ -123,6 +133,21 @@ const userSlice = createSlice({
         };
       })
       .addCase(getUserInfo.rejected, (state, action) => {
+        state.token = "";
+      });
+    builder
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.user = {
+          id: action.payload.id,
+          email: action.payload.email,
+          is_active: action.payload.is_active,
+          is_verified: action.payload.is_verified,
+          name: action.payload.external.name,
+          tags: action.payload.external.tags,
+          avatar: action.payload.external.avatar,
+        };
+      })
+      .addCase(updateUser.rejected, (state, action) => {
         state.token = "";
       });
   },

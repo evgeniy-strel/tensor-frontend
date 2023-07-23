@@ -12,7 +12,7 @@ import { changeActiveModal, modalBack } from "../../store/reducers/modalSlice";
 import Tags from "./Tags";
 import classes from "./index.module.scss";
 
-const HobbiesModalPage = ({ id }) => {
+const HobbiesModalPage = ({ id, ...props }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
   const [tags, setTags] = useState(user.tags);
@@ -25,7 +25,7 @@ const HobbiesModalPage = ({ id }) => {
   };
 
   return (
-    <ModalPage id={id} onClose={() => dispatch(modalBack())} hideCloseButton>
+    <ModalPage id={id} onClose={() => dispatch(modalBack())} hideCloseButton {...props}>
       <ModalPageHeader
         before={
           <PanelHeaderBack

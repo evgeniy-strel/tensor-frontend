@@ -11,9 +11,14 @@ import {
   Button,
 } from "@vkontakte/vkui";
 import { useSelector, useDispatch } from "react-redux";
-import { postRegister } from "../../../store/reducers/userSlice";
+import {
+  postRegister,
+  postLogin,
+  updateUser,
+} from "../../../store/reducers/userSlice";
 import classes from "../auth.module.scss";
 import Cards from "./Cards";
+import RequestAPI from "../../../API/requests";
 
 const Interests = ({ setActivePanel, formData, setFormData }) => {
   const dispatch = useDispatch();
@@ -21,9 +26,31 @@ const Interests = ({ setActivePanel, formData, setFormData }) => {
 
   const handleSubmit = () => {
     if (formData.external.tags.length >= 3) {
-      dispatch(postRegister(formData));
-      setActivePanel("selector");
-      setFormData({ ...formData, password: "" });
+      if (formData.external.avatar) {
+        const file = new FormData();
+        file.append("files", formData.external.avatar);
+        // регестрация -> вход -> загрузка картинки -> обновление пользователя
+        dispatch(postRegister(formData))
+          .then((res) =>
+            dispatch(
+              postLogin({
+                email: formData.email,
+                password: formData.password,
+              })
+            )
+          )
+          .then((res) => RequestAPI.uploadFiles(file))
+          .then((res) => res[0])
+          .then((res) => {
+            return {
+              ...formData,
+              external: { ...formData.external, avatar: res.link },
+            };
+          })
+          .then((res) => {
+            dispatch(updateUser(res));
+          });
+      }
     }
   };
 

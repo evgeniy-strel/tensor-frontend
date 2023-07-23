@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   PanelHeader,
   PanelHeaderBack,
@@ -31,6 +31,10 @@ const Register = ({ setActivePanel, formData, setFormData }) => {
       setActivePanel("profsetup");
     }
   };
+
+  useEffect(() => {
+    setFormData({ ...formData, password: "" });
+  }, []);
 
   return (
     <>

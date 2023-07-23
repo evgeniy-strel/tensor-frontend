@@ -67,7 +67,21 @@ const Profile = () => {
                 background: "var(--vkui--color_background_content)",
               }}
             >
-              <Avatar size={96} initials="UU">
+              <Avatar
+                size={96}
+                initials={
+                  !user.avatar
+                    ? user.name
+                        .split(" ")
+                        .map((el) => el.substring(0, 1))
+                        .join("")
+                    : null
+                }
+                src={
+                  user.avatar &&
+                  process.env.REACT_APP_URL_API + "/" + user.avatar
+                }
+              >
                 <Avatar.Badge>
                   <Icon28FavoriteCircleFillGreen />
                 </Avatar.Badge>

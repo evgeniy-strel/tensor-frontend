@@ -8,14 +8,14 @@ import ProfileSetup from "./ProfileSetup";
 import Interests from "./Interests";
 
 const Auth = () => {
-  const [activePanel, setActivePanel] = useState("selector"); 
+  const [activePanel, setActivePanel] = useState("selector");
   const [formData, setFormData] = useState({
     email: "",
     password: "",
     external: {
       name: "",
       avatar: null,
-      tags: []
+      tags: [],
     },
   });
 

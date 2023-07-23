@@ -5,7 +5,7 @@ export default class RequestAPI {
   static tokenExpired() {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    axios.defaults.headers.common["Authorization"] = null;
+    axios.defaults.headers["Authorization"] = null;
   }
 
   // ---------- AUTH
@@ -107,15 +107,59 @@ export default class RequestAPI {
     return axios.patch(`/users/${id}`);
   }
 
-  // ---------- CHAT
-  // Создание чата
-  static async createNewChat() {
-    return axios.post("/new_chat");
+  // ---------- FILES
+  // Загрузка файлов(1 или более)
+  static async uploadFiles(files) {
+    try {
+      const { data } = await axios.post("/files", files);
+      return data.filter((file) => typeof file === "object");
+    } catch (error) {
+      if (error.response.status == 401) {
+        RequestAPI.tokenExpired();
+      }
+
+      console.log(error);
+      return error?.message;
+    }
   }
 
-  // ---------- MESSAGES
+  // ---------- CHAT
+  // Создание чата
+  static async createNewChat(chat) {
+    return axios.post("/chats", chat);
+  }
+
+  // Обновление тегов чата
+  static async updateChatTags(chatId, tags) {
+    return axios.post(`/chats/${chatId}/tags`, tags);
+  }
+
+  // Получение чатов пользователя
+  static async fetchUserChats() {
+    return axios.get("/chats");
+  }
+
+  // Получение конкретного чата
+  static async fetchChatById(id) {
+    return axios.get(`/chats/${id}`);
+  }
+
+  // Получение пользователей чата
+  static async fetchUsersByChatId(id) {
+    return axios.get(`/chats/${id}/users`);
+  }
+
+  // Получение истории сообщений чата
+  static async fetchMessagesByChatId(id) {
+    return axios.get(`/chats/${id}/messages`);
+  }
 
   // ---------- CATEGORIES
+
+  // Получение списка категорий
+  static async fetchCategories() {
+    return axios.get("/categories");
+  }
 
   // ---------- TAGS
 }

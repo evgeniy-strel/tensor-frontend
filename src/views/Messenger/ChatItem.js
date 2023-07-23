@@ -1,8 +1,9 @@
 import React from "react";
 import "./ChatItem.scss";
 import { Cell, Avatar, Headline } from "@vkontakte/vkui";
-import { myChats } from "../../mocks/chats";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { activeTabChatSelector } from "./../../store/selectors/chatSelectors";
 
 const SubtitleGroup = ({ lastMessage, subChats }) => {
   const subChatsFormated = subChats ? subChats.join(", ") : "";
@@ -15,7 +16,9 @@ const SubtitleGroup = ({ lastMessage, subChats }) => {
         </Headline>
       )}
       <Headline level="1" className="last-message">
-        <span className="username">{lastMessage?.user.username}</span>: {lastMessage?.text}
+        <span className="username">{lastMessage?.user.username}</span>
+        {lastMessage?.text && ": "}
+        {lastMessage?.text || "Напишите первое сообщение!"}
       </Headline>
     </>
   );
@@ -23,12 +26,17 @@ const SubtitleGroup = ({ lastMessage, subChats }) => {
 
 const SubtitlePM = ({ lastMessage }) => (
   <Headline level="1" className="last-message">
-    {lastMessage.text}
+    {lastMessage?.text || "Напишите первое сообщение!"}
   </Headline>
 );
 
-const ChatItem = ({ id, name, img, isGroup, lastMessage, subChats }) => {
-  const isUserJoined = Boolean(myChats.find((chat) => chat.id === id));
+const ChatItem = ({
+  id,
+  type,
+  external: { title, avatar, isMuted, description, subChats, lastMessage },
+}) => {
+  const activeTab = useSelector(activeTabChatSelector);
+  const isUserJoined = activeTab == "my_chats";
   let url;
 
   if (isUserJoined && !subChats?.length) url = `/messenger/chat/${id}`;
@@ -38,13 +46,21 @@ const ChatItem = ({ id, name, img, isGroup, lastMessage, subChats }) => {
   return (
     <Link to={url} key={id}>
       <Cell
-        className={`chat-item ${isGroup ? "group-item" : ""} ${subChats ? "with-subchats" : ""}`}
-        before={<Avatar size={56} src={img} className="avatar" />}
+        className={`chat-item ${type == "private" ? "" : "group-item"} ${
+          subChats ? "with-subchats" : ""
+        }`}
+        before={
+          <Avatar
+            size={56}
+            src={`${process.env.REACT_APP_URL_API}/${avatar}`}
+            className="avatar"
+          />
+        }
         subtitle={
-          isGroup ? (
-            <SubtitleGroup lastMessage={lastMessage} subChats={subChats} />
-          ) : (
+          type == "private" ? (
             <SubtitlePM lastMessage={lastMessage} />
+          ) : (
+            <SubtitleGroup lastMessage={lastMessage} subChats={subChats} />
           )
         }
         indicator={
@@ -53,7 +69,7 @@ const ChatItem = ({ id, name, img, isGroup, lastMessage, subChats }) => {
           </Headline>
         }>
         <Headline level="1" className="name-chat">
-          {name}
+          {title}
         </Headline>
       </Cell>
     </Link>

@@ -1,8 +1,15 @@
 import { Avatar } from "@vkontakte/vkui";
+import "./Messages.scss";
 import React from "react";
 
 const MessageItem = ({ messages, currentUser }) => {
-  return <></>;
+  if (messages.length == 0)
+    return (
+      <div className="empty-block-messages">
+        <div className="empty-block-messages__emojy">👋</div>
+        <div>Напишите первое сообщение!</div>
+      </div>
+    );
 
   return (
     <>

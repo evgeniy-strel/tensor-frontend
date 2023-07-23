@@ -1,7 +1,6 @@
 import React from "react";
 import "./index.scss";
 import { Icon16Muted } from "@vkontakte/icons";
-import { myChats, othersChats, subChats } from "../../../mocks/chats";
 import {
   Avatar,
   Group,
@@ -14,17 +13,23 @@ import {
 
 import { useNavigate, useParams } from "react-router-dom";
 import ChatItem from "../ChatItem";
+import {
+  getFirstDigitGuid,
+  getFullUrlImg,
+} from "./../../../utils/helpersMethods";
 
-const ListSubChats = () => {
-  const { id } = useParams();
-  const allChats = [...othersChats, ...myChats];
-  const chat = allChats.find((chat) => chat.id == id);
-
+const ListSubChats = ({
+  id,
+  external: { title, avatar, subChats, lastMessage },
+  users,
+}) => {
   const navigate = useNavigate();
 
   const onClickBack = () => {
     navigate(-1);
   };
+
+  // TO DO: пока нет subChats, добавить их обработку
 
   return (
     <div className="subchats-container">
@@ -36,16 +41,21 @@ const ListSubChats = () => {
           before={
             <Avatar
               size={36}
-              src={chat?.img}
-              initials={chat?.img ? "" : chat?.name?.at(0)}
-              gradientColor="blue"
+              src={getFullUrlImg(avatar)}
+              initials={title?.at(0)}
+              gradientColor={getFirstDigitGuid(id)}
             />
           }>
           <div className="subchats-container__panel-header__title-icon">
-            <Title level="3" className="subchats-container__panel-header__title">
-              {chat?.name}
+            <Title
+              level="3"
+              className="subchats-container__panel-header__title">
+              {title}
             </Title>
-            <Icon16Muted fill="#B8C1CC" className="subchats-container__panel-header__icon" />
+            <Icon16Muted
+              fill="#B8C1CC"
+              className="subchats-container__panel-header__icon"
+            />
           </div>
         </PanelHeaderContent>
       </PanelHeader>

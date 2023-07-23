@@ -8,7 +8,8 @@ export const fetchChatById = createAsyncThunk(
       const { data: info } = await RequestAPI.fetchChatById(id);
       const { data: users } = await RequestAPI.fetchUsersByChatId(id);
       const { data: messages } = await RequestAPI.fetchMessagesByChatId(id);
-      const chat = { ...info, users, messages };
+      const { data: tags } = await RequestAPI.fetchTagsByChatId(id);
+      const chat = { ...info, users, messages, tags };
 
       dispatch(setActiveChat(chat));
     } catch (error) {

@@ -4,12 +4,34 @@
   }
 
   .fixed-layout {
-    box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.06), 0px 0px 2px 0px rgba(0, 0, 0, 0.03);
+    box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.06),
+      0px 0px 2px 0px rgba(0, 0, 0, 0.03);
     background-color: var(--vkui--color_background_content);
+    &__search {
+      height: 0;
+      padding: 0;
+      visibility: hidden;
+      opacity: 0;
+      transition: 0.2s;
+    }
   }
 
   .list-chats {
     padding-top: 48px;
+    transition: 0.2s;
+  }
+
+  &.search-active {
+    .list-chats {
+      padding-top: 100px;
+    }
+    .fixed-layout__search {
+      height: var(--vkui--size_search_height--regular);
+      padding: 8px var(--vkui--size_base_padding_horizontal--regular);
+      position: relative;
+      visibility: visible;
+      opacity: 1;
+    }
   }
 
   .vkuiPanelHeader__before {

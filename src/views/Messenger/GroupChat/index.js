@@ -15,8 +15,17 @@ import LayoutMessages from "../LayoutMessages";
 import Messages from "./Messages";
 import { useSelector } from "react-redux";
 import { calcInitialsAvatarColor } from "@vkontakte/vkui";
+import {
+  getFirstDigitGuid,
+  getFullUrlImg,
+} from "./../../../utils/helpersMethods";
 
-const GroupChat = ({ chat }) => {
+const GroupChat = ({
+  id,
+  external: { title, avatar },
+  users,
+  messages: historyMessages,
+}) => {
   const currentUser = useSelector((state) => state.user.user);
 
   const navigate = useNavigate();
@@ -25,21 +34,14 @@ const GroupChat = ({ chat }) => {
     navigate(-1);
   };
 
-  const [messages, setMessages] = useState(chat?.messages);
-
-  console.log("messages", messages);
+  const [messages, setMessages] = useState(historyMessages);
 
   const addMessage = (message) => {
     setMessages((prev) => [...prev, message]);
   };
 
-  const getFirstDigitGuid = (guid) => {
-    return guid.split("").find((s) => !isNaN(s));
-  };
-
   const getCaseOfWord = () => {
-    console.log("getCaseOfWord");
-    const countUsers = chat?.users.length;
+    const countUsers = users.length;
     let word = "участник";
 
     if (
@@ -64,23 +66,21 @@ const GroupChat = ({ chat }) => {
           className="group-chat__panel-header__content"
           status={
             <span className="group-chat__panel-header__content__status">
-              {chat?.users?.length} {getCaseOfWord()}
+              {users?.length} {getCaseOfWord()}
             </span>
           }
           before={
             <Avatar
               size={36}
-              src={`${process.env.REACT_APP_URL_API}/${chat?.external?.avatar}`}
-              initials={chat?.external?.title?.at(0)}
-              gradientColor={calcInitialsAvatarColor(
-                getFirstDigitGuid(chat?.id)
-              )}
+              src={getFullUrlImg(avatar)}
+              initials={title?.at(0)}
+              gradientColor={calcInitialsAvatarColor(getFirstDigitGuid(id))}
             />
           }>
           <Title
             level="3"
             className="group-chat__panel-header__content__chat-name">
-            {chat?.external?.title}
+            {title}
           </Title>
         </PanelHeaderContent>
       </PanelHeader>

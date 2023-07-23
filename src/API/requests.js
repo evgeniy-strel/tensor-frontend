@@ -160,6 +160,11 @@ export default class RequestAPI {
     return axios.get(`chats/${id}/messages`);
   }
 
+  // Получение тегов чата
+  static async fetchTagsByChatId(id) {
+    return axios.get(`/chats/${id}/tags`);
+  }
+
   // ---------- CATEGORIES
 
   // Получение списка категорий

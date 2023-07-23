@@ -4,6 +4,7 @@ import { Cell, Avatar, Headline } from "@vkontakte/vkui";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { activeTabChatSelector } from "./../../store/selectors/chatSelectors";
+import { getFullUrlImg } from "../../utils/helpersMethods";
 
 const SubtitleGroup = ({ lastMessage, subChats }) => {
   const subChatsFormated = subChats ? subChats.join(", ") : "";
@@ -33,7 +34,7 @@ const SubtitlePM = ({ lastMessage }) => (
 const ChatItem = ({
   id,
   type,
-  external: { title, avatar, isMuted, description, subChats, lastMessage },
+  external: { title, avatar, subChats, lastMessage },
 }) => {
   const activeTab = useSelector(activeTabChatSelector);
   const isUserJoined = activeTab == "my_chats";
@@ -50,11 +51,7 @@ const ChatItem = ({
           subChats ? "with-subchats" : ""
         }`}
         before={
-          <Avatar
-            size={56}
-            src={`${process.env.REACT_APP_URL_API}/${avatar}`}
-            className="avatar"
-          />
+          <Avatar size={56} src={getFullUrlImg(avatar)} className="avatar" />
         }
         subtitle={
           type == "private" ? (

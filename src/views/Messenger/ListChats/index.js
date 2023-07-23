@@ -6,6 +6,7 @@ import {
   Tabs,
   TabsItem,
   FixedLayout,
+  Search,
 } from "@vkontakte/vkui";
 import "./index.scss";
 import {
@@ -69,11 +70,7 @@ const ListChats = () => {
 
   const chats = useSelector(chatsSelector);
   const selected = useSelector(activeTabChatSelector);
-  const [inputSearch, setInputSearch] = useState("");
-
-  const onChangeInputSearch = (e) => {
-    setInputSearch(e.target.value);
-  };
+  const [search, setSearch] = useState({ isActive: false, text: "" });
 
   useEffect(() => {
     dispatch(fetchChats());
@@ -83,15 +80,31 @@ const ListChats = () => {
     navigate("/messenger/create_chat");
   };
 
+  // TO DO: Изменить последнее сообщение и его дату
+  // TO DO: Сделать анимацию загрузки чатов
+  // TO DO: Фильтры(если все пойдет очень хорошо)
+
   return (
-    <div className="list-chats-container">
+    <div
+      className={`list-chats-container ${
+        search.isActive ? "search-active" : ""
+      }`}>
       <PanelHeader
         separator={false}
         after={
           <>
             <Icon28AddOutline onClick={createChatFunc} />
             <Icon28SlidersOutline />
-            <Icon28Search />
+            {search.isActive ? (
+              <img
+                src="/icons/search-close.svg"
+                onClick={() => setSearch((s) => ({ ...s, isActive: false }))}
+              />
+            ) : (
+              <Icon28Search
+                onClick={() => setSearch((s) => ({ ...s, isActive: true }))}
+              />
+            )}
           </>
         }>
         <span>Сообщения</span>
@@ -101,6 +114,12 @@ const ListChats = () => {
           selected={selected}
           setSelected={(value) => dispatch(setActiveTab(value))}
         />
+        <Search
+          className="fixed-layout__search"
+          value={search.text}
+          onChange={(e) => setSearch((s) => ({ ...s, text: e.target.value }))}
+          after={null}
+        />
       </FixedLayout>
       <Group>
         <List className="list-chats">
@@ -108,7 +127,7 @@ const ListChats = () => {
             .filter((chat) =>
               chat.external.title
                 .toLowerCase()
-                .includes(inputSearch.toLowerCase())
+                .includes(search.text.toLowerCase())
             )
             .map((chat) => {
               return <ChatItem key={chat.id} {...chat} />;

@@ -10,17 +10,14 @@ import {
   Separator,
 } from "@vkontakte/vkui";
 import { useNavigate } from "react-router-dom";
-import { messagesPM } from "../../../mocks/messages";
 import CustomWriteBar from "../CustomWriteBar";
-import JoinToChat from "./JoinToChat";
 import LayoutMessages from "../LayoutMessages";
 import Messages from "./Messages";
+import { useSelector } from "react-redux";
+import { calcInitialsAvatarColor } from "@vkontakte/vkui";
 
-const GroupChat = ({ chat, isUserJoined }) => {
-  const currentUser = {
-    username: "Евгений",
-    img: null,
-  };
+const GroupChat = ({ chat }) => {
+  const currentUser = useSelector((state) => state.user.user);
 
   const navigate = useNavigate();
 
@@ -28,17 +25,34 @@ const GroupChat = ({ chat, isUserJoined }) => {
     navigate(-1);
   };
 
-  const [messages, setMessages] = useState(messagesPM);
-  const [counter, setCounter] = useState(99);
+  const [messages, setMessages] = useState(chat?.messages);
 
-  if (counter < messages.length) {
-    setTimeout(() => {
-      setCounter((prev) => prev + 1);
-    }, 500);
-  }
+  console.log("messages", messages);
 
   const addMessage = (message) => {
     setMessages((prev) => [...prev, message]);
+  };
+
+  const getFirstDigitGuid = (guid) => {
+    return guid.split("").find((s) => !isNaN(s));
+  };
+
+  const getCaseOfWord = () => {
+    console.log("getCaseOfWord");
+    const countUsers = chat?.users.length;
+    let word = "участник";
+
+    if (
+      (5 <= countUsers && countUsers <= 9) ||
+      (11 <= countUsers && countUsers <= 20) ||
+      countUsers == 0
+    ) {
+      word += "ов";
+    } else if (2 <= countUsers && countUsers <= 4) {
+      word += "а";
+    }
+
+    return word;
   };
 
   return (
@@ -49,18 +63,24 @@ const GroupChat = ({ chat, isUserJoined }) => {
         <PanelHeaderContent
           className="group-chat__panel-header__content"
           status={
-            <span className="group-chat__panel-header__content__status">1,5к участников</span>
+            <span className="group-chat__panel-header__content__status">
+              {chat?.users?.length} {getCaseOfWord()}
+            </span>
           }
           before={
             <Avatar
               size={36}
-              src={chat?.img}
-              initials={chat?.img ? "" : chat?.name?.at(0)}
-              gradientColor="blue"
+              src={`${process.env.REACT_APP_URL_API}/${chat?.external?.avatar}`}
+              initials={chat?.external?.title?.at(0)}
+              gradientColor={calcInitialsAvatarColor(
+                getFirstDigitGuid(chat?.id)
+              )}
             />
           }>
-          <Title level="3" className="group-chat__panel-header__content__chat-name">
-            {chat?.name}
+          <Title
+            level="3"
+            className="group-chat__panel-header__content__chat-name">
+            {chat?.external?.title}
           </Title>
         </PanelHeaderContent>
       </PanelHeader>
@@ -79,11 +99,7 @@ const GroupChat = ({ chat, isUserJoined }) => {
           <Messages messages={messages} currentUser={currentUser} />
         </LayoutMessages>
       </div>
-      {isUserJoined ? (
-        <CustomWriteBar onSendMessage={addMessage} user={currentUser} />
-      ) : (
-        <JoinToChat />
-      )}
+      <CustomWriteBar onSendMessage={addMessage} user={currentUser} />
     </div>
   );
 };

@@ -25,6 +25,7 @@ import { modalBack } from "./store/reducers/modalSlice";
 import SettingsModalPage from "./modals/SettingsModalPage";
 import HobbiesModalPage from "./modals/HobbiesModalPage";
 import EditProfile from "./modals/EditProfile";
+import { fetchCategories } from "./store/reducers/categoriesSlice";
 
 const pages = [
   {
@@ -66,14 +67,16 @@ function App() {
     </ModalRoot>
   );
 
-  useEffect(() => calculateAppHeight(), []);
+  useEffect(() => {
+    dispatch(fetchCategories());
+    calculateAppHeight();
+  }, [token]);
 
   return (
     <SplitLayout
       header={isVKCOM && <PanelHeader separator={false} />}
       style={{ justifyContent: "center" }}
-      modal={modal}
-    >
+      modal={modal}>
       {viewWidth.tabletPlus && token !== "" && (
         <Desktop
           isVKCOM={isVKCOM}
@@ -97,8 +100,7 @@ function App() {
                 setActiveStory={setActiveStory}
               />
             )
-          }
-        >
+          }>
           <Rout id={activeStory} />
         </Epic>
       </SplitCol>

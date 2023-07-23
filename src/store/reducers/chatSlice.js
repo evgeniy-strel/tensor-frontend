@@ -1,7 +1,60 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import RequestAPI from "./../../API/requests";
+
+export const fetchChatById = createAsyncThunk(
+  "chat/fetchChatById",
+  async (id, { rejectWithValue, dispatch }) => {
+    try {
+      const { data: info } = await RequestAPI.fetchChatById(id);
+      const { data: users } = await RequestAPI.fetchUsersByChatId(id);
+      const { data: messages } = await RequestAPI.fetchMessagesByChatId(id);
+      const chat = { ...info, users, messages };
+
+      dispatch(setActiveChat(chat));
+    } catch (error) {
+      return rejectWithValue(error?.message);
+    }
+  }
+);
+
+export const fetchChats = createAsyncThunk(
+  "chat/fetchChats",
+  async (_, { rejectWithValue, getState, dispatch }) => {
+    const state = getState();
+    const activeTab = state.chat.activeTab;
+    let chats = [];
+
+    try {
+      if (activeTab == "my_chats") {
+        chats = (await RequestAPI.fetchUserChats()).data;
+      } else {
+        // chats = await ... TO DO
+      }
+
+      dispatch(setChats(chats));
+    } catch (error) {
+      return rejectWithValue(error?.message);
+    }
+  }
+);
+
+export const createNewChat = createAsyncThunk(
+  "chat/create",
+  async ({ chat, tags }, { rejectWithValue }) => {
+    try {
+      const { data: chatInfo } = await RequestAPI.createNewChat(chat);
+      // await RequestAPI.updateChatTags(chatInfo.id, tags);
+      return chatInfo;
+    } catch (error) {
+      return rejectWithValue(error?.message);
+    }
+  }
+);
 
 const initialState = {
   activeTab: "my_chats",
+  chats: [],
+  activeChat: null,
 };
 
 const chatSlice = createSlice({
@@ -11,8 +64,14 @@ const chatSlice = createSlice({
     setActiveTab(state, action) {
       state.activeTab = action.payload;
     },
+    setChats(state, action) {
+      state.chats = action.payload;
+    },
+    setActiveChat(state, action) {
+      state.activeChat = action.payload;
+    },
   },
 });
 
 export default chatSlice.reducer;
-export const { setActiveTab } = chatSlice.actions;
+export const { setActiveTab, setChats, setActiveChat } = chatSlice.actions;

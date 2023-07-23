@@ -16,39 +16,34 @@ import { useNavigate } from "react-router";
 import { Icon28AddOutline, Icon28CancelOutline } from "@vkontakte/icons";
 import { useState } from "react";
 import RequestAPI from "../../../API/requests";
+import { useSelector, useDispatch } from "react-redux";
+import { createNewChat } from "./../../../store/reducers/chatSlice";
+import { categoriesSelector } from "./../../../store/selectors/categoriesSelector";
 
 const initialData = {
-  img: "",
+  avatar: "",
   title: "",
-  tags: [],
   description: "",
+  subChats: [],
+  lastMessage: null,
+  admins: [],
+  isMuted: false,
 };
-
-const tags = [
-  { value: "Музыка", label: "Музыка" },
-  { value: "Поесть", label: "Поесть" },
-  { value: "Фотография", label: "Фотография" },
-  { value: "Игры", label: "Игры" },
-  { value: "Путешествия", label: "Путешествия" },
-  { value: "Одежда", label: "Одежда" },
-  { value: "Животные", label: "Животные" },
-  { value: "Иностранные языки", label: "Иностранные языки" },
-  { value: "Чтение", label: "Чтение" },
-];
 
 const CreateChat = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const user = useSelector((state) => state.user.user);
+  const categories = useSelector(categoriesSelector);
   const [data, setData] = useState(initialData);
-  const [imgBase64, setImgBase64] = useState();
-
-  const [formData, setFormData] = useState(new FormData());
-
+  const [tags, setTags] = useState([]);
   const [isSubmited, setIsSubmited] = useState(false);
 
   const tagsChipsProps = {
-    value: data.tags,
-    onChange: (tags) => setData((prev) => ({ ...prev, tags })),
-    options: tags,
+    value: tags,
+    onChange: setTags,
+    options: categories.map(({ title }) => ({ label: title, value: title })),
     placeholder: "Выберите тэги",
     emptyText: "Ничего не найдено",
   };
@@ -57,54 +52,39 @@ const CreateChat = () => {
     navigate(-1);
   };
 
-  const handlerImgBase64 = (img) => {
-    const reader = new FileReader();
-    reader.onload = function () {
-      const img64 = reader.result;
-      setImgBase64(img64);
-    };
-    reader.readAsDataURL(img);
-  };
-
-  const fileOnChange = (e) => {
+  // обработка фотографии
+  const fileOnChange = async (e) => {
     const img = e.target.files[0];
     if (!img) return;
 
-    setData((prev) => ({ ...prev, img }));
-
-    // RequestAPI.createNewChat(testFormData);
-
-    handlerImgBase64(img);
+    const formData = new FormData();
+    formData.append("files", img);
+    const dataImg = (await RequestAPI.uploadFiles(formData))[0];
+    setData((prev) => ({ ...prev, avatar: dataImg.link }));
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     setIsSubmited(true);
 
-    // const basicChat = {
-    //   type: "group",
-    //   parent_id: null,
-    //   external: { ...data },
-    // };
-
     if (Object.values(rules).filter((rule) => rule).length !== 0) return;
 
-    // const usersId = ["123-44"];
+    const chat = {
+      chat: {
+        type: "group",
+        parent_id: null,
+        external: { ...data, admins: [user.id] },
+      },
+      users_id: [user.id],
+    };
 
-    // formData.set("type", "group");
-    // formData.set("parent_id", null);
-    // formData.set("img", data.img);
-
-    // Object.keys(data).forEach((key) => {
-    //   formData.set(key, JSON.stringify(data[key]));
-    // });
-
-    // RequestAPI.createNewChat(formData);
+    const chatInfo = (await dispatch(createNewChat({ chat, tags }))).payload;
+    navigate(`/messenger/chat/${chatInfo.id}`);
   };
 
   const rules = {
     title: data.title.length < 4,
-    tags: data.tags.length == 0,
+    tags: tags.length == 0,
     description: data.description.length < 10,
   };
 
@@ -112,7 +92,12 @@ const CreateChat = () => {
     <div className="create-chat">
       <PanelHeader
         className="panel-header"
-        before={<Icon28CancelOutline className="panel-header__icon" onClick={onClickBack} />}>
+        before={
+          <Icon28CancelOutline
+            className="panel-header__icon"
+            onClick={onClickBack}
+          />
+        }>
         <span className="panel-header__title">Создание чата</span>
       </PanelHeader>
       <Group className="create-chat__group">
@@ -125,7 +110,7 @@ const CreateChat = () => {
                     size={96}
                     borderRadius="s"
                     fallbackIcon={<Icon28AddOutline />}
-                    src={imgBase64}
+                    src={`${process.env.REACT_APP_URL_API}/${data.avatar}`}
                   />
                 </File>
               </FormItem>
@@ -133,7 +118,11 @@ const CreateChat = () => {
                 htmlFor="title"
                 className="form-layout__title"
                 status={isSubmited && rules.title ? "error" : "default"}
-                bottom={isSubmited && rules.title && "Введите название от 4-х символов"}>
+                bottom={
+                  isSubmited &&
+                  rules.title &&
+                  "Введите название от 4-х символов"
+                }>
                 <Input
                   name="title"
                   id="form-layout__title"
@@ -142,7 +131,9 @@ const CreateChat = () => {
                   minLength={4}
                   value={data.title}
                   maxLength={40}
-                  onChange={(e) => setData((prev) => ({ ...prev, title: e.target.value }))}
+                  onChange={(e) =>
+                    setData((prev) => ({ ...prev, title: e.target.value }))
+                  }
                   placeholder="Название чата"
                 />
               </FormItem>
@@ -159,11 +150,20 @@ const CreateChat = () => {
               </FormItem>
               <FormItem
                 status={isSubmited && rules.description ? "error" : "default"}
-                bottom={isSubmited && rules.description && "Опишите чат от 10 символов"}>
+                bottom={
+                  isSubmited &&
+                  rules.description &&
+                  "Опишите чат от 10 символов"
+                }>
                 <Textarea
                   placeholder="Описание чата"
                   value={data.description}
-                  onChange={(e) => setData((prev) => ({ ...prev, description: e.target.value }))}
+                  onChange={(e) =>
+                    setData((prev) => ({
+                      ...prev,
+                      description: e.target.value,
+                    }))
+                  }
                 />
               </FormItem>
               <FormItem className="main__join">

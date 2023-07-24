@@ -24,7 +24,7 @@ export const postForgot = createAsyncThunk(
 
 export const postLogout = createAsyncThunk(
   "auth/logout",
-  async (nothing, { rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     const res = await RequestAPI.logout()
       .then((res) => res.data)
       .catch((err) => rejectWithValue(err.message));
@@ -44,7 +44,7 @@ export const postRegister = createAsyncThunk(
 
 export const getUserInfo = createAsyncThunk(
   "user/info",
-  async (nothing, { rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     const res = RequestAPI.currentUser()
       .then((res) => res.data)
       .catch((err) => rejectWithValue(err.message));
@@ -56,6 +56,16 @@ export const updateUser = createAsyncThunk(
   "user/update",
   async (formData, { rejectWithValue }) => {
     const res = RequestAPI.updateCurrentUser(formData)
+      .then((res) => res.data)
+      .catch((err) => rejectWithValue(err.message));
+    return res;
+  }
+);
+
+export const userTags = createAsyncThunk(
+  "user/tags",
+  async (_, { rejectWithValue }) => {
+    const res = RequestAPI.getUserTags()
       .then((res) => res.data)
       .catch((err) => rejectWithValue(err.message));
     return res;
@@ -127,8 +137,9 @@ const userSlice = createSlice({
           email: action.payload.email,
           is_active: action.payload.is_active,
           is_verified: action.payload.is_verified,
-          name: action.payload.external.name,
-          tags: action.payload.external.tags,
+          firstName: action.payload.external.firstName,
+          lastName: action.payload.external.lastName,
+          categories: action.payload.external.categories,
           avatar: action.payload.external.avatar,
         };
       })
@@ -142,13 +153,22 @@ const userSlice = createSlice({
           email: action.payload.email,
           is_active: action.payload.is_active,
           is_verified: action.payload.is_verified,
-          name: action.payload.external.name,
-          tags: action.payload.external.tags,
+          firstName: action.payload.external.firstName,
+          lastName: action.payload.external.lastName,
+          categories: action.payload.external.categories,
           avatar: action.payload.external.avatar,
         };
       })
       .addCase(updateUser.rejected, (state, action) => {
         state.token = "";
+      });
+    builder
+      .addCase(userTags.fulfilled, (state, action) => {
+        state.tags = action.payload;
+      })
+      .addCase(userTags.rejected, (state, action) => {
+        console.log(action.payload);
+        // state.token = "";
       });
   },
 });

@@ -13,9 +13,10 @@ const Auth = () => {
     email: "",
     password: "",
     external: {
-      name: "",
+      firstName: "",
+      lastName: "",
       avatar: null,
-      tags: [],
+      categories: [],
     },
   });
 

@@ -67,15 +67,16 @@ const AuthSelector = ({ setActivePanel, formData, setFormData }) => {
               "error"
             }
             bottom={
-              (formData.email.includes("@") &&
+              !isValid &&
+              ((formData.email.includes("@") &&
                 !EMAIL_REGEXP.test(formData.email) &&
                 formData.email !== "" &&
                 "Некорректная почта!") ||
-              (!formData.email.includes("@") &&
-                !TEL_REGEXP.test(formData.email) &&
-                formData.email !== "" &&
-                "Некорректный телефон!") ||
-              (!isValid && formData.email === "" && "Введите данные")
+                (!formData.email.includes("@") &&
+                  !TEL_REGEXP.test(formData.email) &&
+                  formData.email !== "" &&
+                  "Некорректный телефон!") ||
+                (!isValid && formData.email === "" && "Введите данные"))
             }
           >
             <Input

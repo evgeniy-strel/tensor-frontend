@@ -44,7 +44,7 @@ $active: #2688eb;
 
   &:after {
     border-color: $active !important;
-    transition: 0.3s border-color;
+    transition: 0.2s border-color;
   }
 }
 
@@ -54,10 +54,7 @@ $active: #2688eb;
   padding: 9px 16px !important;
   box-sizing: border-box;
   background: var(--vkui--color_background_content);
-}
-
-@media (max-width: 767.9px) {
-  .button_group {
+  @media (max-width: 767.9px) {
     padding: 0 var(--vkui--size_base_padding_horizontal--regular);
   }
 }

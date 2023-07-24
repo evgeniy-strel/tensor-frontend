@@ -52,7 +52,7 @@ const Register = ({ setActivePanel, formData, setFormData }) => {
         <FormLayout onSubmit={handlerNext}>
           {!isValid && (
             <FormStatus header="Ошибка" mode="error">
-              Введите данные
+              Введите корректные данные
             </FormStatus>
           )}
           <FormLayoutGroup>
@@ -64,6 +64,7 @@ const Register = ({ setActivePanel, formData, setFormData }) => {
                 "error"
               }
               bottom={
+                !isValid &&
                 formData.password !== "" &&
                 formData.password.length < 8 &&
                 "Длина пароля должна быть больше 8 символов"
@@ -75,6 +76,7 @@ const Register = ({ setActivePanel, formData, setFormData }) => {
                 autoComplete="on"
                 placeholder="Пароль"
                 maxLength={32}
+                autoFocus
                 onChange={(e) =>
                   setFormData({ ...formData, password: e.target.value })
                 }

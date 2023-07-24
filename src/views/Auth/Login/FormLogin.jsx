@@ -46,10 +46,12 @@ const FormLogin = ({ setActivePanel, formData, setFormData }) => {
           "error"
         }
         bottom={
+          !isValid &&
           formData.password !== "" &&
           formData.password.length < 8 &&
           "Длина пароля должна быть больше 8 символов"
-        }>
+        }
+      >
         <Input
           id="password"
           type="password"
@@ -74,7 +76,8 @@ const FormLogin = ({ setActivePanel, formData, setFormData }) => {
             onClick={() => setActivePanel("forgot")}
             size="l"
             stretched
-            mode="secondary">
+            mode="secondary"
+          >
             Восстановить пароль
           </Button>
         </ButtonGroup>

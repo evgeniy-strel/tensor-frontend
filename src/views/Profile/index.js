@@ -71,10 +71,7 @@ const Profile = () => {
                 size={96}
                 initials={
                   !user.avatar
-                    ? user.name
-                        .split(" ")
-                        .map((el) => el.substring(0, 1))
-                        .join("")
+                    ? user.firstName.substr(0, 1) + user.lastName.substr(0, 1)
                     : null
                 }
                 src={
@@ -86,7 +83,9 @@ const Profile = () => {
                   <Icon28FavoriteCircleFillGreen />
                 </Avatar.Badge>
               </Avatar>
-              <Title level="2">{user.name}</Title>
+              <Title level="2">
+                {`${user.firstName} ${user.lastName}`}
+              </Title>
               {isMy ? (
                 <Button
                   onClick={() => dispatch(changeActiveModal("editprofile"))}

@@ -15,6 +15,7 @@ import {
   postRegister,
   postLogin,
   updateUser,
+  getUserInfo,
 } from "../../../store/reducers/userSlice";
 import classes from "../auth.module.scss";
 import Cards from "./Cards";
@@ -25,7 +26,7 @@ const Interests = ({ setActivePanel, formData, setFormData }) => {
   const registerState = useSelector((state) => state.user.registerState);
 
   const handleSubmit = () => {
-    if (formData.external.tags.length >= 3) {
+    if (formData.external.categories.length >= 3) {
       if (formData.external.avatar) {
         const file = new FormData();
         file.append("files", formData.external.avatar);
@@ -50,6 +51,18 @@ const Interests = ({ setActivePanel, formData, setFormData }) => {
           .then((res) => {
             dispatch(updateUser(res));
           });
+      } else {
+        // регестрация -> вход -> загрузка информации о пользователе
+        dispatch(postRegister(formData))
+          .then((res) =>
+            dispatch(
+              postLogin({
+                email: formData.email,
+                password: formData.password,
+              })
+            )
+          )
+          .then((res) => dispatch(getUserInfo()));
       }
     }
   };
@@ -88,7 +101,7 @@ const Interests = ({ setActivePanel, formData, setFormData }) => {
               <Button
                 onClick={handleSubmit}
                 size="l"
-                disabled={formData.external.tags.length < 3}
+                disabled={formData.external.categories.length < 3}
                 stretched
               >
                 Зарегистрироваться

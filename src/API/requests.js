@@ -16,8 +16,9 @@ export default class RequestAPI {
         email: res.data.email,
         is_active: res.data.is_active,
         is_verified: res.data.is_verified,
-        name: res.data.external.name,
-        tags: res.data.external.tags,
+        firstName: res.data.external.firstName,
+        lastName: res.data.external.lastName,
+        categories: res.data.external.categories,
         avatar: res.data.external.avatar,
       })
     );
@@ -113,9 +114,10 @@ export default class RequestAPI {
     return axios.delete(`/users/${id}`);
   }
 
-  // Обновление пользователя по id
-  static async patchUserById(id) {
-    return axios.patch(`/users/${id}`);
+  static async getUserTags() {
+    const res = axios.get("/current/tags");
+    res.then((res) => null).catch((rej) => RequestAPI.tokenExpired());
+    return res;
   }
 
   // ---------- FILES
@@ -171,6 +173,4 @@ export default class RequestAPI {
   static async fetchCategories() {
     return axios.get("/categories");
   }
-
-  // ---------- TAGS
 }

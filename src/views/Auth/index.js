@@ -12,12 +12,10 @@ const Auth = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-    external: {
-      firstName: "",
-      lastName: "",
-      avatar: null,
-      categories: [],
-    },
+    firstName: "",
+    lastName: "",
+    avatar: null,
+    categories: [],
   });
 
   return (

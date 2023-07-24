@@ -21,7 +21,7 @@ const Register = ({ setActivePanel, formData, setFormData }) => {
   const handlerNext = (e) => {
     e.preventDefault();
     if (
-      Object.values(formData).includes("") ||
+      formData.password === "" ||
       pass2 === "" ||
       pass2 !== formData.password ||
       formData.password.length < 8

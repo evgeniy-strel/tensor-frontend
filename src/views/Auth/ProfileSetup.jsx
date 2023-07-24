@@ -33,7 +33,7 @@ const ProfileSetup = ({ setActivePanel, formData, setFormData }) => {
     const file = e.target.files[0];
     setFormData({
       ...formData,
-      external: { ...formData.external, avatar: file },
+      avatar: file,
     });
     uploadAvatar(file);
   };
@@ -45,19 +45,16 @@ const ProfileSetup = ({ setActivePanel, formData, setFormData }) => {
     } else {
       setFormData({
         ...formData,
-        external: {
-          ...formData.external,
-          firstName: name.first,
-          lastName: name.last,
-        },
+        firstName: name.first,
+        lastName: name.last,
       });
       setActivePanel("interests");
     }
   };
 
   useEffect(() => {
-    if (formData.external.avatar) {
-      uploadAvatar(formData.external.avatar);
+    if (formData.avatar) {
+      uploadAvatar(formData.avatar);
     }
   }, []);
 
@@ -89,7 +86,7 @@ const ProfileSetup = ({ setActivePanel, formData, setFormData }) => {
               htmlFor="first"
               status={!isValid && name.first === "" && "error"}
               bottom={!isValid && name.first === "" && "Введите имя"}
-              style={{padding: "12px 16px 8px"}}
+              style={{ padding: "12px 16px 8px" }}
             >
               <Input
                 id="first"
@@ -109,7 +106,7 @@ const ProfileSetup = ({ setActivePanel, formData, setFormData }) => {
               htmlFor="last"
               status={!isValid && name.last === "" && "error"}
               bottom={!isValid && name.last === "" && "Введите фамилию"}
-              style={{padding: "8px 16px 12px"}}
+              style={{ padding: "8px 16px 12px" }}
             >
               <Input
                 id="last"

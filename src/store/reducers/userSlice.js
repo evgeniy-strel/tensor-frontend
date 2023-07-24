@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import RequestAPI from "../../API/requests";
+import Helper from "../../API/helper";
 import initialStateUser from "../initialState";
 
 export const postLogin = createAsyncThunk(
@@ -34,11 +35,43 @@ export const postLogout = createAsyncThunk(
 
 export const postRegister = createAsyncThunk(
   "auth/register",
-  async (formData, { rejectWithValue }) => {
-    const res = await RequestAPI.register(formData)
+  async ([formData, file], { rejectWithValue }) => {
+    await RequestAPI.register(formData)
       .then((res) => res.data)
       .catch((err) => rejectWithValue(err.message));
-    return res;
+
+    const token = await RequestAPI.login({
+      email: formData.email,
+      password: formData.password,
+    })
+      .then((res) => res.data)
+      .catch((err) => rejectWithValue(err.message));
+
+    // регестрация -> вход -> загрузка картинки -> обновление пользователя
+    if (file) {
+      const newFormData = await RequestAPI.uploadFiles(file)
+        .then((res) => res[0])
+        .then((res) => {
+          return {
+            ...formData,
+            avatar: res.link,
+          };
+        })
+        .catch((err) => rejectWithValue(err.message));
+
+      // регестрация -> вход -> загрузка информации о пользователе
+      const userData = await RequestAPI.updateCurrentUser(newFormData)
+        .then((res) => res.data)
+        .catch((err) => rejectWithValue(err.message));
+
+      return [token.access_token, userData];
+    }
+
+    const userData = await RequestAPI.currentUser()
+      .then((res) => res.data)
+      .catch((err) => rejectWithValue(err.message));
+
+    return [token.access_token, userData];
   }
 );
 
@@ -54,8 +87,21 @@ export const getUserInfo = createAsyncThunk(
 
 export const updateUser = createAsyncThunk(
   "user/update",
-  async (formData, { rejectWithValue }) => {
-    const res = RequestAPI.updateCurrentUser(formData)
+  async ([formData, file], { rejectWithValue }) => {
+    let newData;
+    if (file) {
+      newData = await RequestAPI.uploadFiles(file)
+        .then((res) => res[0])
+        .then((res) => {
+          return {
+            ...formData,
+            avatar: res.link,
+          };
+        })
+        .catch((err) => rejectWithValue(err.message));
+    }
+
+    const res = RequestAPI.updateCurrentUser(file ? newData : formData)
       .then((res) => res.data)
       .catch((err) => rejectWithValue(err.message));
     return res;
@@ -123,6 +169,8 @@ const userSlice = createSlice({
       })
       .addCase(postRegister.fulfilled, (state, action) => {
         state.registerState.loader = false;
+        state.token = action.payload[0];
+        state.user = Helper.transformUserForUsage(action.payload[1]);
       })
       .addCase(postRegister.rejected, (state, action) => {
         state.registerState.loader = false;
@@ -132,32 +180,14 @@ const userSlice = createSlice({
     // USERS
     builder
       .addCase(getUserInfo.fulfilled, (state, action) => {
-        state.user = {
-          id: action.payload.id,
-          email: action.payload.email,
-          is_active: action.payload.is_active,
-          is_verified: action.payload.is_verified,
-          firstName: action.payload.external.firstName,
-          lastName: action.payload.external.lastName,
-          categories: action.payload.external.categories,
-          avatar: action.payload.external.avatar,
-        };
+        state.user = Helper.transformUserForUsage(action.payload);
       })
       .addCase(getUserInfo.rejected, (state, action) => {
         state.token = "";
       });
     builder
       .addCase(updateUser.fulfilled, (state, action) => {
-        state.user = {
-          id: action.payload.id,
-          email: action.payload.email,
-          is_active: action.payload.is_active,
-          is_verified: action.payload.is_verified,
-          firstName: action.payload.external.firstName,
-          lastName: action.payload.external.lastName,
-          categories: action.payload.external.categories,
-          avatar: action.payload.external.avatar,
-        };
+        state.user = Helper.transformUserForUsage(action.payload);
       })
       .addCase(updateUser.rejected, (state, action) => {
         state.token = "";
@@ -167,8 +197,7 @@ const userSlice = createSlice({
         state.tags = action.payload;
       })
       .addCase(userTags.rejected, (state, action) => {
-        console.log(action.payload);
-        // state.token = "";
+        state.token = "";
       });
   },
 });

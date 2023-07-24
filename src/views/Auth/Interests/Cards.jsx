@@ -18,23 +18,19 @@ const Cards = ({ formData, setFormData }) => {
           className={
             classes.card +
             " " +
-            (formData.external.categories.includes(card.id) && classes.selected)
+            (formData.categories.includes(card.id) && classes.selected)
           }
           onClick={() =>
-            !formData.external.categories.includes(card.id)
+            !formData.categories.includes(card.id)
               ? setFormData({
                   ...formData,
-                  external: {
-                    ...formData.external,
-                    categories: [...formData.external.categories, card.id],
-                  },
+
+                  categories: [...formData.categories, card.id],
                 })
               : setFormData({
                   ...formData,
-                  external: {
-                    ...formData.external,
-                    categories: formData.external.categories.filter((i) => i !== card.id),
-                  },
+
+                  categories: formData.categories.filter((i) => i !== card.id),
                 })
           }
           mode="outline"

@@ -6,21 +6,12 @@ import {
   PanelHeaderClose,
   ButtonGroup,
   Button,
-  FormLayout,
-  FormItem,
-  File,
-  Avatar,
-  Input,
-  FormLayoutGroup,
-  Textarea,
 } from "@vkontakte/vkui";
-import { Icon28AddOutline } from "@vkontakte/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { modalBack } from "../../store/reducers/modalSlice";
-import RequestAPI from "../../API/requests";
 import { userTags, updateUser } from "../../store/reducers/userSlice";
+import Form from "./Form";
 import classes from "./index.module.scss";
-import { Icon36Users } from "@vkontakte/icons";
 
 const EditProfile = ({ id, ...props }) => {
   const dispatch = useDispatch();
@@ -56,25 +47,19 @@ const EditProfile = ({ id, ...props }) => {
     if (newData.firstName === "" || newData.lastName === "") {
       setIsValid(false);
     } else {
-      if (user.avatar !== newData.avatar) {
-        RequestAPI.uploadFiles(newData.avatar)
-          .then((res) => res[0])
-          .then((res) => {
-            return {
-              email: "",
-              external: {
-                firstName: newData.firstName,
-                lastName: newData.lastName,
-                avatar: res.link,
-                categories: user.categories,
-                description: newData.description,
-              },
-            };
-          })
-          .then((res) => {
-            dispatch(updateUser(res));
-          });
-      }
+      const formData = {
+        ...user,
+        firstName: newData.firstName,
+        lastName: newData.lastName,
+        description: newData.description,
+      };
+      const file = new FormData();
+      file.append("files", newData.avatar);
+
+      dispatch(
+        updateUser([formData, user.avatar !== newData.avatar ? file : null])
+      );
+      dispatch(modalBack());
     }
   };
 
@@ -95,78 +80,15 @@ const EditProfile = ({ id, ...props }) => {
         Редактирование
       </ModalPageHeader>
       <Group>
-        <FormLayout onSubmit={handlerSubmit}>
-          <FormItem className={classes.form_item_avatar}>
-            <File onChange={handlerChangeAvatar} mode="link">
-              <Avatar
-                src={avatarSrc}
-                size={104}
-                fallbackIcon={!avatarSrc || <Icon36Users />}
-                initials={
-                  !user.avatar
-                    ? user.firstName.substr(0, 1) + user.lastName.substr(0, 1)
-                    : null
-                }
-              >
-                {" "}
-                <Avatar.Overlay>
-                  <Icon28AddOutline />
-                </Avatar.Overlay>
-              </Avatar>
-            </File>
-          </FormItem>
-          <FormLayoutGroup>
-            <FormItem
-              className={classes.form_item}
-              htmlFor="first"
-              status={!isValid && newData.firstName === "" && "error"}
-              bottom={!isValid && newData.firstName === "" && "Введите имя"}
-            >
-              <Input
-                id="first"
-                type="text"
-                placeholder="Имя"
-                maxLength={32}
-                onChange={(e) =>
-                  setNewData({
-                    ...newData,
-                    firstName: e.target.value,
-                  })
-                }
-                value={newData.firstName}
-              />
-            </FormItem>
-            <FormItem
-              className={classes.form_item}
-              htmlFor="last"
-              status={!isValid && newData.lastName === "" && "error"}
-              bottom={!isValid && newData.lastName === "" && "Введите фамилию"}
-            >
-              <Input
-                id="last"
-                type="text"
-                placeholder="Фамилия"
-                maxLength={32}
-                onChange={(e) =>
-                  setNewData({
-                    ...newData,
-                    lastName: e.target.value,
-                  })
-                }
-                value={newData.lastName}
-              />
-            </FormItem>
-            <FormItem className={classes.form_item}>
-              <Textarea
-                placeholder="Описание"
-                onChange={(e) =>
-                  setNewData({ ...newData, description: e.target.value })
-                }
-                value={newData.description}
-              />
-            </FormItem>
-          </FormLayoutGroup>
-        </FormLayout>
+        <Form
+          user={user}
+          newData={newData}
+          setNewData={setNewData}
+          avatarSrc={avatarSrc}
+          isValid={isValid}
+          handlerChangeAvatar={handlerChangeAvatar}
+          handlerSubmit={handlerSubmit}
+        />
         <ButtonGroup className={classes.button_group} stretched>
           <Button onClick={handlerSubmit} size="l" stretched>
             Применить

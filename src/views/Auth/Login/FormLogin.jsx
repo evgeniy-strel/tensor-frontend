@@ -21,7 +21,6 @@ const FormLogin = ({ setActivePanel, formData, setFormData }) => {
     if (formData.password.length < 8) {
       setIsValid(false);
     } else {
-      // изменить запрос: username --> email/number
       dispatch(
         postLogin({
           email: formData.email,

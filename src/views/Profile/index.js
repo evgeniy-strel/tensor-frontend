@@ -18,7 +18,6 @@ import {
 } from "@vkontakte/icons";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserInfo } from "../../store/reducers/userSlice";
 import { changeActiveModal } from "../../store/reducers/modalSlice";
 
 const Profile = () => {
@@ -100,10 +99,7 @@ const Profile = () => {
                 </Button>
               )}
               <Text style={{ lineHeight: "20px", letterSpacing: "0.2px" }}>
-                Описание себя любимой тридцать раз подряд, чтоб слов побольше
-                было. Описание себя любимой тридцать раз подряд, чтоб слов
-                побольше было. Описание себя любимой тридцать раз подряд, чтоб
-                слов побольше было.
+                {user?.description}
               </Text>
             </Card>
           </Group>

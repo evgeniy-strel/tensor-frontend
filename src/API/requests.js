@@ -8,6 +8,21 @@ export default class RequestAPI {
     axios.defaults.headers["Authorization"] = null;
   }
 
+  static setUserInfo(res) {
+    localStorage.setItem(
+      "user",
+      JSON.stringify({
+        id: res.data.id,
+        email: res.data.email,
+        is_active: res.data.is_active,
+        is_verified: res.data.is_verified,
+        name: res.data.external.name,
+        tags: res.data.external.tags,
+        avatar: res.data.external.avatar,
+      })
+    );
+  }
+
   // ---------- AUTH
   // Проверка на наличие пользователя
   static async loginFind(email) {
@@ -69,27 +84,23 @@ export default class RequestAPI {
   static async currentUser() {
     const res = axios.get("/current");
     res
-      .then((res) => {
-        localStorage.setItem(
-          "user",
-          JSON.stringify({
-            id: res.data.id,
-            email: res.data.email,
-            is_active: res.data.is_active,
-            is_verified: res.data.is_verified,
-            name: res.data.external.name,
-            tags: res.data.external.tags,
-            avatar: res.data.external.avatar,
-          })
-        );
-      })
+      .then((res) => RequestAPI.setUserInfo(res))
       .catch((rej) => RequestAPI.tokenExpired());
     return res;
   }
 
   // Обновление информации пользователя
-  static async patchCurrentUser() {
-    return axios.patch("/users/me");
+  static async updateCurrentUser(formData) {
+    const res = axios.post("/current", {
+      ...formData,
+      is_active: true,
+      is_superuser: false,
+      is_verified: false,
+    });
+    res
+      .then((res) => RequestAPI.setUserInfo(res))
+      .catch((rej) => RequestAPI.tokenExpired());
+    return res;
   }
 
   // Получение пользователя по id

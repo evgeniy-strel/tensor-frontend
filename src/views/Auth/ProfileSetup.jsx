@@ -19,6 +19,7 @@ import classes from "./auth.module.scss";
 const ProfileSetup = ({ setActivePanel, formData, setFormData }) => {
   const [isValid, setIsValid] = useState(true);
   const [avatarSrc, setAvatarSrc] = useState("");
+  const [name, setName] = useState({ first: "", last: "" });
 
   const uploadAvatar = (file) => {
     const fr = new FileReader();
@@ -39,9 +40,16 @@ const ProfileSetup = ({ setActivePanel, formData, setFormData }) => {
 
   const handlerSubmit = (e) => {
     e.preventDefault();
-    if (formData.external.name === "") {
+    if (name.first === "" || name.last === "") {
       setIsValid(false);
     } else {
+      setFormData({
+        ...formData,
+        external: {
+          ...formData.external,
+          name: `${name.first} ${name.last}`,
+        },
+      });
       setActivePanel("interests");
     }
   };
@@ -84,22 +92,41 @@ const ProfileSetup = ({ setActivePanel, formData, setFormData }) => {
             </FormItem>
           </FormLayoutGroup>
           <FormItem
-            htmlFor="name"
-            status={!isValid && formData.external.name === "" && "error"}
-            bottom={!isValid && formData.external.name === "" && "Введите имя"}
+            htmlFor="first"
+            status={!isValid && name.first === "" && "error"}
+            bottom={!isValid && name.first === "" && "Введите имя"}
           >
             <Input
-              id="name"
+              id="first"
               type="text"
               placeholder="Имя"
               maxLength={32}
               onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  external: { ...formData.external, name: e.target.value },
+                setName({
+                  ...name,
+                  first: e.target.value,
                 })
               }
-              value={formData.external.name}
+              value={name.first}
+            />
+          </FormItem>
+          <FormItem
+            htmlFor="last"
+            status={!isValid && name.last === "" && "error"}
+            bottom={!isValid && name.last === "" && "Введите фамилию"}
+          >
+            <Input
+              id="last"
+              type="text"
+              placeholder="Фамилия"
+              maxLength={32}
+              onChange={(e) =>
+                setName({
+                  ...name,
+                  last: e.target.value,
+                })
+              }
+              value={name.last}
             />
           </FormItem>
           <FormItem>

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
   PanelHeader,
   PanelHeaderBack,
@@ -13,6 +14,10 @@ import classes from "../auth.module.scss";
 
 const Login = ({ setActivePanel, formData, setFormData }) => {
   const loginState = useSelector((state) => state.user.loginState);
+
+  useEffect(() => {
+    setFormData({ ...formData, password: "" });
+  }, []);
 
   return (
     <>

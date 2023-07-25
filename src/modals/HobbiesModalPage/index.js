@@ -15,7 +15,7 @@ import classes from "./index.module.scss";
 const HobbiesModalPage = ({ id, ...props }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
-  const [categories, setCategories] = useState(user.categories);
+  const [categories, setCategories] = useState(user.categories || []);
 
   const handleSubmit = () => {
     if (categories.length >= 3) {

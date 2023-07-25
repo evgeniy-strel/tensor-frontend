@@ -22,7 +22,7 @@ const Rout = () => {
             <Route path="description/:id" element={<Messenger />} />
             <Route path="create_chat" element={<Messenger />} />
           </Route>
-          <Route path="/profile/:username" element={<Profile />} />{" "}
+          <Route path="/profile/:id" element={<Profile />} />{" "}
         </>
       ) : (
         <Route path="/auth/*" element={<Auth />} />

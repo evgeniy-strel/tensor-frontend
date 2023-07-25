@@ -18,13 +18,13 @@ const EditProfile = ({ id, ...props }) => {
   const { user, tags } = useSelector((state) => state.user);
   const [newData, setNewData] = useState({
     avatar: user.avatar,
-    firstName: user.firstName,
-    lastName: user.lastName,
-    description: user?.description || "",
+    firstName: user?.firstName,
+    lastName: user?.lastName,
+    description: user?.description,
     tags: [],
   });
   const [avatarSrc, setAvatarSrc] = useState(
-    user.avatar ? `${process.env.REACT_APP_URL_API}/${user.avatar}` : ""
+    user.avatar ? `${process.env.REACT_APP_URL_API}${user.avatar}` : ""
   );
   const [isValid, setIsValid] = useState(true);
 

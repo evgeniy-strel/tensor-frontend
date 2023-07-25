@@ -71,8 +71,12 @@ const chatSlice = createSlice({
     setActiveChat(state, action) {
       state.activeChat = action.payload;
     },
+    addMessage(state, action) {
+      state.activeChat.messages.push(action.payload);
+    },
   },
 });
 
 export default chatSlice.reducer;
-export const { setActiveTab, setChats, setActiveChat } = chatSlice.actions;
+export const { setActiveTab, setChats, setActiveChat, addMessage } =
+  chatSlice.actions;

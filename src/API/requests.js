@@ -120,10 +120,6 @@ export default class RequestAPI {
       const { data } = await axios.post("files", files);
       return data.filter((file) => typeof file === "object");
     } catch (error) {
-      if (error.response.status == 401) {
-        RequestAPI.tokenExpired();
-      }
-
       console.log(error);
       return error?.message;
     }

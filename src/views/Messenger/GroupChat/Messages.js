@@ -1,8 +1,10 @@
-import { Avatar } from "@vkontakte/vkui";
 import "./Messages.scss";
-import React from "react";
+import { Avatar } from "@vkontakte/vkui";
+import { useSelector } from "react-redux";
 
-const MessageItem = ({ messages, currentUser }) => {
+const Messages = ({ messages }) => {
+  const currentUser = useSelector((state) => state.user.user);
+
   if (messages.length == 0)
     return (
       <div className="empty-block-messages">
@@ -13,23 +15,23 @@ const MessageItem = ({ messages, currentUser }) => {
 
   return (
     <>
-      {messages.map(({ text, user }, i) => {
-        const isMine = currentUser.username == user.username;
+      {messages.map(({ external: { message, user } }, i) => {
+        const isMine = currentUser?.name == user?.name;
 
         let isFirstMessage = true;
         let isLastMessage = true;
 
         if (i != 0) {
           const prevMessage = messages[i - 1];
-          isFirstMessage = user.username != prevMessage?.user.username;
+          isFirstMessage = user?.name != prevMessage?.external.user.name;
         }
 
         if (i != messages.length - 1) {
           const nextMessage = messages[i + 1];
-          isLastMessage = user.username != nextMessage?.user?.username;
+          isLastMessage = user?.name != nextMessage?.external.user?.name;
         }
 
-        const initials = user.username
+        const initials = user?.name
           .split(" ")
           .slice(0, 2)
           .map((symbol) => (symbol.length ? symbol[0] : ""))
@@ -49,8 +51,8 @@ const MessageItem = ({ messages, currentUser }) => {
               className="user-avatar"
             />
             <div className="message">
-              <div className="username">{user.username}</div>
-              <div className="text">{text}</div>
+              <div className="username">{user?.name}</div>
+              <div className="text">{message}</div>
             </div>
           </div>
         );
@@ -59,4 +61,4 @@ const MessageItem = ({ messages, currentUser }) => {
   );
 };
 
-export default MessageItem;
+export default Messages;

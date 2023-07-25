@@ -25,9 +25,6 @@ const initialData = {
   avatar: "",
   title: "",
   description: "",
-  lastMessage: null,
-  subChats: [],
-  admins: [],
   mutedUsers: [],
 };
 
@@ -74,7 +71,7 @@ const CreateChat = () => {
       chat: {
         type: "group",
         parent_id: null,
-        external: { ...data, admins: [user.id] },
+        external: { ...data },
       },
       users_id: [user.id],
     };

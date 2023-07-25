@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import {
-  PanelHeader,
   Group,
   List,
   Tabs,
@@ -9,13 +8,7 @@ import {
   Search,
 } from "@vkontakte/vkui";
 import "./index.scss";
-import {
-  Icon28AddOutline,
-  Icon28SlidersOutline,
-  Icon28Search,
-} from "@vkontakte/icons";
-import ChatItem from "../ChatItem";
-import { useNavigate } from "react-router";
+import ChatItem from "./ChatItem";
 import { useDispatch, useSelector } from "react-redux";
 import { setActiveTab } from "../../../store/reducers/chatSlice";
 import {
@@ -23,6 +16,13 @@ import {
   chatsSelector,
 } from "../../../store/selectors/chatSelectors";
 import { fetchChats } from "./../../../store/reducers/chatSlice";
+import {
+  addBounceEffect,
+  removeBounceEffect,
+} from "./../../../utils/bounceEffect";
+import cn from "classnames";
+import PanelHeader from "./PanelHeader";
+import ListSubChats from "./ListSubChats";
 
 const tabs = [
   {
@@ -35,93 +35,79 @@ const tabs = [
   },
 ];
 
-const TabsItemCustom = ({ selected, setSelected, id, text }) => (
-  <TabsItem
-    selected={selected === id}
-    onClick={() => {
-      setSelected(id);
-    }}
-    id={id}
-    aria-controls={id}>
-    {text}
-  </TabsItem>
-);
-
 const TabsHeader = ({ selected, setSelected }) => {
   return (
     <Tabs>
       {tabs.map(({ id, text }) => (
-        <TabsItemCustom
-          selected={selected}
-          setSelected={setSelected}
+        <TabsItem
+          selected={selected === id}
+          onClick={() => {
+            setSelected(id);
+          }}
+          key={id}
           id={id}
-          key={id}
-          text={text}
-          key={id}
-        />
+          aria-controls={id}>
+          {text}
+        </TabsItem>
       ))}
     </Tabs>
   );
 };
 
 const ListChats = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const chats = useSelector(chatsSelector);
   const selected = useSelector(activeTabChatSelector);
   const [search, setSearch] = useState({ isActive: false, text: "" });
+  const [selectedChat, setSelectedChat] = useState();
 
   useEffect(() => {
     dispatch(fetchChats());
   }, [selected]);
 
-  const createChatFunc = () => {
-    navigate("/messenger/create_chat");
-  };
+  useEffect(() => {
+    removeBounceEffect();
+
+    return () => addBounceEffect();
+  }, []);
 
   // TO DO: Изменить последнее сообщение и его дату
   // TO DO: Сделать анимацию загрузки чатов
   // TO DO: Фильтры(если все пойдет очень хорошо)
 
+  // TO DO: Изменить key={i} на key={id}
+
   return (
     <div
-      className={`list-chats-container ${
-        search.isActive ? "search-active" : ""
-      }`}>
+      className={cn("list-chats-container", {
+        "search-active": search.isActive,
+        "shown-subchats": Boolean(selectedChat),
+      })}>
       <PanelHeader
-        separator={false}
-        after={
-          <>
-            <Icon28AddOutline onClick={createChatFunc} />
-            <Icon28SlidersOutline />
-            {search.isActive ? (
-              <img
-                src="/icons/search-close.svg"
-                onClick={() => setSearch((s) => ({ ...s, isActive: false }))}
-              />
-            ) : (
-              <Icon28Search
-                onClick={() => setSearch((s) => ({ ...s, isActive: true }))}
-              />
-            )}
-          </>
-        }>
-        <span>Сообщения</span>
-      </PanelHeader>
-      <FixedLayout vertical="top" className="fixed-layout">
-        <TabsHeader
-          selected={selected}
-          setSelected={(value) => dispatch(setActiveTab(value))}
-        />
-        <Search
-          className="fixed-layout__search"
-          value={search.text}
-          onChange={(e) => setSearch((s) => ({ ...s, text: e.target.value }))}
-          after={null}
-        />
-      </FixedLayout>
-      <Group>
+        isShownSubchats={Boolean(selectedChat)}
+        hideSubChats={() => setSelectedChat(null)}
+        showSubChats={() => setSelectedChat(chats[1])}
+        title={selectedChat?.external?.title || "Тестовое название"}
+        avatar={selectedChat?.external?.avatar}
+        isSearchActive={search.isActive}
+        setSearch={setSearch}
+      />
+      {!selectedChat && (
+        <FixedLayout vertical="top" className="fixed-layout">
+          <TabsHeader
+            selected={selected}
+            setSelected={(value) => dispatch(setActiveTab(value))}
+          />
+          <Search
+            className="fixed-layout__search"
+            value={search.text}
+            onChange={(e) => setSearch((s) => ({ ...s, text: e.target.value }))}
+            after={null}
+          />
+        </FixedLayout>
+      )}
+      <Group separator="hide" className="group-list-chats">
         <List className="list-chats">
           {chats
             .filter((chat) =>
@@ -129,11 +115,18 @@ const ListChats = () => {
                 .toLowerCase()
                 .includes(search.text.toLowerCase())
             )
-            .map((chat) => {
-              return <ChatItem key={chat.id} {...chat} />;
+            .map((chat, i) => {
+              return (
+                <ChatItem
+                  isSelected={selectedChat?.id == chat?.id}
+                  key={i}
+                  {...chat}
+                />
+              );
             })}
         </List>
       </Group>
+      <ListSubChats subChats={chats} />
     </div>
   );
 };

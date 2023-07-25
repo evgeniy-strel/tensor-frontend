@@ -1,7 +1,9 @@
-.subchats-container {
+.subchats-header {
   &__panel-header {
     @media screen and (max-width: 767px) {
-      box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.06), 0px 0px 2px 0px rgba(0, 0, 0, 0.03);
+      box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.06),
+        0px 0px 2px 0px rgba(0, 0, 0, 0.03);
+      z-index: 11;
     }
 
     .vkuiAvatar {
@@ -24,5 +26,22 @@
         display: none;
       }
     }
+  }
+
+  .vkuiPanelHeader__in {
+    padding: 0 6px;
+  }
+
+  .vkuiPanelHeader__content > * {
+    padding-left: 6px !important;
+  }
+}
+
+.chats-header {
+  .vkuiPanelHeader__content {
+    padding-left: 8px !important;
+  }
+  .vkuiPanelHeader__in {
+    padding: 0 10px 0 8px;
   }
 }

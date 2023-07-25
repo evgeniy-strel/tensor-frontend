@@ -33,7 +33,7 @@ const ProfileSetup = ({ setActivePanel, formData, setFormData }) => {
     const file = e.target.files[0];
     setFormData({
       ...formData,
-      external: { ...formData.external, avatar: file },
+      avatar: file,
     });
     uploadAvatar(file);
   };
@@ -45,18 +45,16 @@ const ProfileSetup = ({ setActivePanel, formData, setFormData }) => {
     } else {
       setFormData({
         ...formData,
-        external: {
-          ...formData.external,
-          name: `${name.first} ${name.last}`,
-        },
+        firstName: name.first,
+        lastName: name.last,
       });
       setActivePanel("interests");
     }
   };
 
   useEffect(() => {
-    if (formData.external.avatar) {
-      uploadAvatar(formData.external.avatar);
+    if (formData.avatar) {
+      uploadAvatar(formData.avatar);
     }
   }, []);
 
@@ -74,61 +72,57 @@ const ProfileSetup = ({ setActivePanel, formData, setFormData }) => {
           </Title>
         </Div>
         <FormLayout onSubmit={handlerSubmit}>
-          <FormLayoutGroup
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <FormItem>
-              <File onChange={handlerChange} mode="link">
-                <Avatar
-                  src={avatarSrc}
-                  size={104}
-                  fallbackIcon={!avatarSrc && <Icon36Users />}
-                />
-              </File>
+          <FormItem style={{ textAlign: "center" }}>
+            <File onChange={handlerChange} mode="link">
+              <Avatar
+                src={avatarSrc}
+                size={104}
+                fallbackIcon={!avatarSrc && <Icon36Users />}
+              />
+            </File>
+          </FormItem>
+          <FormLayoutGroup>
+            <FormItem
+              htmlFor="first"
+              status={!isValid && name.first === "" && "error"}
+              bottom={!isValid && name.first === "" && "Введите имя"}
+              style={{ padding: "12px 16px 8px" }}
+            >
+              <Input
+                id="first"
+                type="text"
+                placeholder="Имя"
+                maxLength={32}
+                onChange={(e) =>
+                  setName({
+                    ...name,
+                    first: e.target.value,
+                  })
+                }
+                value={name.first}
+              />
+            </FormItem>
+            <FormItem
+              htmlFor="last"
+              status={!isValid && name.last === "" && "error"}
+              bottom={!isValid && name.last === "" && "Введите фамилию"}
+              style={{ padding: "8px 16px 12px" }}
+            >
+              <Input
+                id="last"
+                type="text"
+                placeholder="Фамилия"
+                maxLength={32}
+                onChange={(e) =>
+                  setName({
+                    ...name,
+                    last: e.target.value,
+                  })
+                }
+                value={name.last}
+              />
             </FormItem>
           </FormLayoutGroup>
-          <FormItem
-            htmlFor="first"
-            status={!isValid && name.first === "" && "error"}
-            bottom={!isValid && name.first === "" && "Введите имя"}
-          >
-            <Input
-              id="first"
-              type="text"
-              placeholder="Имя"
-              maxLength={32}
-              onChange={(e) =>
-                setName({
-                  ...name,
-                  first: e.target.value,
-                })
-              }
-              value={name.first}
-            />
-          </FormItem>
-          <FormItem
-            htmlFor="last"
-            status={!isValid && name.last === "" && "error"}
-            bottom={!isValid && name.last === "" && "Введите фамилию"}
-          >
-            <Input
-              id="last"
-              type="text"
-              placeholder="Фамилия"
-              maxLength={32}
-              onChange={(e) =>
-                setName({
-                  ...name,
-                  last: e.target.value,
-                })
-              }
-              value={name.last}
-            />
-          </FormItem>
           <FormItem>
             <Button onClick={handlerSubmit} size="l" stretched>
               Продолжить

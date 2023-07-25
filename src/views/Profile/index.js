@@ -18,7 +18,6 @@ import {
 } from "@vkontakte/icons";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserInfo } from "../../store/reducers/userSlice";
 import { changeActiveModal } from "../../store/reducers/modalSlice";
 
 const Profile = () => {
@@ -71,10 +70,7 @@ const Profile = () => {
                 size={96}
                 initials={
                   !user.avatar
-                    ? user.name
-                        .split(" ")
-                        .map((el) => el.substring(0, 1))
-                        .join("")
+                    ? user.firstName.substr(0, 1) + user.lastName.substr(0, 1)
                     : null
                 }
                 src={
@@ -86,7 +82,9 @@ const Profile = () => {
                   <Icon28FavoriteCircleFillGreen />
                 </Avatar.Badge>
               </Avatar>
-              <Title level="2">{user.name}</Title>
+              <Title level="2">
+                {`${user.firstName} ${user.lastName}`}
+              </Title>
               {isMy ? (
                 <Button
                   onClick={() => dispatch(changeActiveModal("editprofile"))}
@@ -101,10 +99,7 @@ const Profile = () => {
                 </Button>
               )}
               <Text style={{ lineHeight: "20px", letterSpacing: "0.2px" }}>
-                Описание себя любимой тридцать раз подряд, чтоб слов побольше
-                было. Описание себя любимой тридцать раз подряд, чтоб слов
-                побольше было. Описание себя любимой тридцать раз подряд, чтоб
-                слов побольше было.
+                {user?.description}
               </Text>
             </Card>
           </Group>

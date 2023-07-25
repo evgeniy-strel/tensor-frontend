@@ -1,4 +1,5 @@
 import axios from "./axios";
+import Helper from "./helper";
 
 export default class RequestAPI {
   // Сброс токена
@@ -11,15 +12,7 @@ export default class RequestAPI {
   static setUserInfo(res) {
     localStorage.setItem(
       "user",
-      JSON.stringify({
-        id: res.data.id,
-        email: res.data.email,
-        is_active: res.data.is_active,
-        is_verified: res.data.is_verified,
-        name: res.data.external.name,
-        tags: res.data.external.tags,
-        avatar: res.data.external.avatar,
-      })
+      JSON.stringify(Helper.transformUserForUsage(res.data))
     );
   }
 
@@ -53,17 +46,8 @@ export default class RequestAPI {
   }
 
   static async register(formData) {
-    return axios.post("/auth/register", {
-      ...formData,
-      is_active: true,
-      is_superuser: false,
-      is_verified: false,
-    });
-  }
-
-  // ???
-  static async requestVerifyToken(email) {
-    return axios.post("/auth/request-verify-token", { email: email });
+    const data = Helper.transformUserForFetch(formData);
+    return axios.post("/auth/register", data);
   }
 
   // Восстановление пароля
@@ -91,12 +75,7 @@ export default class RequestAPI {
 
   // Обновление информации пользователя
   static async updateCurrentUser(formData) {
-    const res = axios.post("/current", {
-      ...formData,
-      is_active: true,
-      is_superuser: false,
-      is_verified: false,
-    });
+    const res = axios.post("/current", Helper.transformUserForFetch(formData));
     res
       .then((res) => RequestAPI.setUserInfo(res))
       .catch((rej) => RequestAPI.tokenExpired());
@@ -105,17 +84,24 @@ export default class RequestAPI {
 
   // Получение пользователя по id
   static async getUserById(id) {
-    return axios.get(`/users/${id}`);
+    return axios.get(`/current/${id}`);
   }
 
   // Удаление пользователя
   static async deleteUser(id) {
-    return axios.delete(`/users/${id}`);
+    return axios.delete(`/current/${id}`);
   }
 
-  // Обновление пользователя по id
-  static async patchUserById(id) {
-    return axios.patch(`/users/${id}`);
+  // Получение тегов у текущего пользователя
+  static async getUserTags() {
+    const res = axios.get("/current/tags");
+    res.then((res) => null).catch((rej) => RequestAPI.tokenExpired());
+    return res;
+  }
+
+  // Обновление тегов у текущего пользователя
+  static async updateUserTags() {
+    const res = axios.post("/current/tags");
   }
 
   // ---------- FILES
@@ -171,6 +157,4 @@ export default class RequestAPI {
   static async fetchCategories() {
     return axios.get("/categories");
   }
-
-  // ---------- TAGS
 }

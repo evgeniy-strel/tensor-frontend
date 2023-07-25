@@ -10,22 +10,24 @@ const styleFlex = {
   textAlign: "center",
 };
 
-const Tags = ({ tags, setTags }) => {
+const Categories = ({ categories, setCategories }) => {
   return (
     <CardGrid className={classes.card_container} size="s">
       {cards.map((card) => (
         <Card
           className={
-            classes.card + " " + (tags.includes(card.tag) && classes.selected)
+            classes.card +
+            " " +
+            (categories.includes(card.id) && classes.selected)
           }
           onClick={() =>
-            !tags.includes(card.tag)
-              ? setTags([...tags, card.tag])
-              : setTags([...tags.filter((i) => i !== card.tag)])
+            !categories.includes(card.id)
+              ? setCategories([...categories, card.id])
+              : setCategories([...categories.filter((i) => i !== card.id)])
           }
           mode="outline"
           style={styleFlex}
-          key={card.tag}
+          key={card.id}
         >
           {card.icon}
           <Text>{card.title}</Text>
@@ -35,4 +37,4 @@ const Tags = ({ tags, setTags }) => {
   );
 };
 
-export default Tags;
+export default Categories;

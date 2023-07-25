@@ -14,16 +14,11 @@ import classes from "./auth.module.scss";
 import RequestAPI from "../../API/requests";
 import { useDispatch } from "react-redux";
 import { resetState } from "../../store/reducers/userSlice";
+import { TEL_REGEXP, EMAIL_REGEXP } from "./regexp";
 
 const AuthSelector = ({ setActivePanel, formData, setFormData }) => {
   const dispatch = useDispatch();
   const [isValid, setIsValid] = useState(true);
-  const EMAIL_REGEXP =
-    /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
-
-  const TEL_REGEXP =
-    // eslint-disable-next-line no-useless-escape
-    /^((8|\+374|\+994|\+995|\+375|\+7|\+380|\+38|\+996|\+998|\+993)[\- ]?)?\(?\d{3,5}\)?[\- ]?\d{1}[\- ]?\d{1}[\- ]?\d{1}[\- ]?\d{1}[\- ]?\d{1}(([\- ]?\d{1})?[\- ]?\d{1})?$/;
 
   const handlerNext = (e) => {
     e.preventDefault();
@@ -67,15 +62,16 @@ const AuthSelector = ({ setActivePanel, formData, setFormData }) => {
               "error"
             }
             bottom={
-              (formData.email.includes("@") &&
+              !isValid &&
+              ((formData.email.includes("@") &&
                 !EMAIL_REGEXP.test(formData.email) &&
                 formData.email !== "" &&
                 "Некорректная почта!") ||
-              (!formData.email.includes("@") &&
-                !TEL_REGEXP.test(formData.email) &&
-                formData.email !== "" &&
-                "Некорректный телефон!") ||
-              (!isValid && formData.email === "" && "Введите данные")
+                (!formData.email.includes("@") &&
+                  !TEL_REGEXP.test(formData.email) &&
+                  formData.email !== "" &&
+                  "Некорректный телефон!") ||
+                (!isValid && formData.email === "" && "Введите данные"))
             }
           >
             <Input

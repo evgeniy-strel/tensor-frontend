@@ -12,14 +12,13 @@ import {
 } from "@vkontakte/vkui";
 import { useSelector, useDispatch } from "react-redux";
 import { postForgot } from "../../store/reducers/userSlice";
+import { EMAIL_REGEXP } from "./regexp";
 
 const ForgotPassword = ({ setActivePanel, formData, setFormData }) => {
   const dispatch = useDispatch();
   const forgotState = useSelector((state) => state.user.forgotState);
   const [email, setEmail] = useState("");
   const [isValid, setIsValid] = useState(true);
-  const EMAIL_REGEXP =
-    /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
 
   const handlerSubmit = () => {
     if (EMAIL_REGEXP.test(email)) {

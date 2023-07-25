@@ -9,18 +9,17 @@ import {
 } from "@vkontakte/vkui";
 import { useDispatch, useSelector } from "react-redux";
 import { changeActiveModal, modalBack } from "../../store/reducers/modalSlice";
-import Tags from "./Tags";
+import Categories from "./Categories";
 import classes from "./index.module.scss";
 
 const HobbiesModalPage = ({ id, ...props }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
-  const [tags, setTags] = useState(user.tags);
+  const [categories, setCategories] = useState(user.categories);
 
   const handleSubmit = () => {
-    if (tags.length >= 3) {
+    if (categories.length >= 3) {
       dispatch(changeActiveModal("settings"));
-      console.log(tags);
     }
   };
 
@@ -36,12 +35,12 @@ const HobbiesModalPage = ({ id, ...props }) => {
         Увлечения
       </ModalPageHeader>
       <Group>
-        <Tags tags={tags} setTags={setTags} />
+        <Categories categories={categories} setCategories={setCategories} />
         <ButtonGroup className={classes.button_group} stretched>
           <Button
             onClick={handleSubmit}
             size="l"
-            disabled={tags.length < 3}
+            disabled={categories.length < 3}
             stretched
           >
             Готово

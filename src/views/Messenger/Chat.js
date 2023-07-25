@@ -8,7 +8,7 @@ import { activeChatSelector } from "./../../store/selectors/chatSelectors";
 import { PanelSpinner } from "@vkontakte/vkui";
 import { DESTINY_CHAT } from "./../../const/chat";
 import DescriptionChat from "./DescriptionChat";
-import ListSubChats from "./ListSubChats/index";
+import SettingsChat from "./SettingsChat/";
 
 const Chat = ({ destiny }) => {
   const dispatch = useDispatch();
@@ -28,7 +28,7 @@ const Chat = ({ destiny }) => {
 
   if (destiny == DESTINY_CHAT.description) return <DescriptionChat {...chat} />;
 
-  if (destiny == DESTINY_CHAT.subChats) return <ListSubChats {...chat} />;
+  if (destiny == DESTINY_CHAT.settings) return <SettingsChat {...chat} />;
 
   if (chat?.type == "private") return <PMChat {...chat} />;
 

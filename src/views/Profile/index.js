@@ -6,33 +6,21 @@ import {
   PanelHeaderButton,
   Group,
   Card,
-  Avatar,
-  Title,
-  Button,
-  Text,
   PanelSpinner,
 } from "@vkontakte/vkui";
-import {
-  Icon28MenuOutline,
-  Icon28FavoriteCircleFillGreen,
-} from "@vkontakte/icons";
+import { Icon28MenuOutline } from "@vkontakte/icons";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { changeActiveModal } from "../../store/reducers/modalSlice";
+import My from "./My";
+import Another from "./Another";
 
 const Profile = () => {
   const params = useParams();
-  const isMy = params.username === "me";
   const dispatch = useDispatch();
   const { loaderUserInfo, user } = useSelector((state) => state.user);
   const [activePanel, setActivePanel] = useState("profile");
-
-  useEffect(() => {
-    if (!isMy) {
-      // Получение информации о другом пользователе
-      // dispatch(getUserInfo());
-    }
-  }, []);
+  const isMy = params.id === "me" || user.id === params.id;
 
   return (
     <View id="profile" activePanel={activePanel}>
@@ -51,59 +39,21 @@ const Profile = () => {
         >
           Профиль
         </PanelHeader>
-        {loaderUserInfo ? (
-          <PanelSpinner size="medium" />
-        ) : (
-          <Group>
-            <Card
-              mode="tint"
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                padding: "36px 16px 53px",
-                gap: "16px",
-                background: "var(--vkui--color_background_content)",
-              }}
-            >
-              <Avatar
-                size={96}
-                initials={
-                  !user.avatar
-                    ? user.firstName.substr(0, 1) + user.lastName.substr(0, 1)
-                    : null
-                }
-                src={
-                  user.avatar &&
-                  process.env.REACT_APP_URL_API + "/" + user.avatar
-                }
-              >
-                <Avatar.Badge>
-                  <Icon28FavoriteCircleFillGreen />
-                </Avatar.Badge>
-              </Avatar>
-              <Title level="2">
-                {`${user.firstName} ${user.lastName}`}
-              </Title>
-              {isMy ? (
-                <Button
-                  onClick={() => dispatch(changeActiveModal("editprofile"))}
-                  size="l"
-                  stretched
-                >
-                  Редактировать
-                </Button>
-              ) : (
-                <Button size="l" stretched>
-                  Написать
-                </Button>
-              )}
-              <Text style={{ lineHeight: "20px", letterSpacing: "0.2px" }}>
-                {user?.description}
-              </Text>
-            </Card>
-          </Group>
-        )}
+        <Group>
+          <Card
+            mode="tint"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              padding: "36px 16px 53px",
+              gap: "16px",
+              background: "var(--vkui--color_background_content)",
+            }}
+          >
+            {isMy ? <My user={user} /> : <Another userId={params.id}/>}
+          </Card>
+        </Group>
       </Panel>
     </View>
   );

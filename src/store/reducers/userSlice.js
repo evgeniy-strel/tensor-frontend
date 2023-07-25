@@ -6,10 +6,16 @@ import initialStateUser from "../initialState";
 export const postLogin = createAsyncThunk(
   "auth/login",
   async (formData, { rejectWithValue }) => {
-    const res = await RequestAPI.login(formData)
+    const token = await RequestAPI.login(formData)
       .then((res) => res.data)
       .catch((err) => rejectWithValue(err.message));
-    return res;
+    const userInfo = RequestAPI.currentUser()
+      .then((res) => Helper.transformUserForUsage(res.data))
+      .catch((err) => rejectWithValue(err.message));
+    return {
+      token: token.access_token,
+      user: userInfo,
+    };
   }
 );
 
@@ -61,17 +67,20 @@ export const postRegister = createAsyncThunk(
 
       // регестрация -> вход -> загрузка информации о пользователе
       const userData = await RequestAPI.updateCurrentUser(newFormData)
-        .then((res) => res.data)
+        .then((res) => Helper.transformUserForUsage(res.data))
         .catch((err) => rejectWithValue(err.message));
 
       return [token.access_token, userData];
     }
 
     const userData = await RequestAPI.currentUser()
-      .then((res) => res.data)
+      .then((res) => Helper.transformUserForUsage(res.data))
       .catch((err) => rejectWithValue(err.message));
 
-    return [token.access_token, userData];
+    return {
+      token: token.access_token,
+      user: userData,
+    };
   }
 );
 
@@ -79,7 +88,7 @@ export const getUserInfo = createAsyncThunk(
   "user/info",
   async (_, { rejectWithValue }) => {
     const res = RequestAPI.currentUser()
-      .then((res) => res.data)
+      .then((res) => Helper.transformUserForUsage(res.data))
       .catch((err) => rejectWithValue(err.message));
     return res;
   }
@@ -102,7 +111,7 @@ export const updateUser = createAsyncThunk(
     }
 
     const res = RequestAPI.updateCurrentUser(file ? newData : formData)
-      .then((res) => res.data)
+      .then((res) => Helper.transformUserForUsage(res.data))
       .catch((err) => rejectWithValue(err.message));
     return res;
   }
@@ -113,6 +122,16 @@ export const userTags = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     const res = RequestAPI.getUserTags()
       .then((res) => res.data)
+      .catch((err) => rejectWithValue(err.message));
+    return res;
+  }
+);
+
+export const userInfoById = createAsyncThunk(
+  "user/another",
+  async (id, { rejectWithValue }) => {
+    const res = RequestAPI.getUserById(id)
+      .then((res) => Helper.transformUserForUsage(res.data))
       .catch((err) => rejectWithValue(err.message));
     return res;
   }
@@ -135,7 +154,8 @@ const userSlice = createSlice({
         state.loginState.loader = true;
       })
       .addCase(postLogin.fulfilled, (state, action) => {
-        state.token = action.payload.access_token;
+        state.token = action.payload.token;
+        state.user = action.payload.user;
         state.loginState.loader = false;
       })
       .addCase(postLogin.rejected, (state, action) => {
@@ -169,8 +189,8 @@ const userSlice = createSlice({
       })
       .addCase(postRegister.fulfilled, (state, action) => {
         state.registerState.loader = false;
-        state.token = action.payload[0];
-        state.user = Helper.transformUserForUsage(action.payload[1]);
+        state.token = action.payload.token;
+        state.user = action.payload.user;
       })
       .addCase(postRegister.rejected, (state, action) => {
         state.registerState.loader = false;
@@ -180,14 +200,14 @@ const userSlice = createSlice({
     // USERS
     builder
       .addCase(getUserInfo.fulfilled, (state, action) => {
-        state.user = Helper.transformUserForUsage(action.payload);
+        state.user = action.payload;
       })
       .addCase(getUserInfo.rejected, (state, action) => {
         state.token = "";
       });
     builder
       .addCase(updateUser.fulfilled, (state, action) => {
-        state.user = Helper.transformUserForUsage(action.payload);
+        state.user = action.payload;
       })
       .addCase(updateUser.rejected, (state, action) => {
         state.token = "";
@@ -198,6 +218,19 @@ const userSlice = createSlice({
       })
       .addCase(userTags.rejected, (state, action) => {
         state.token = "";
+      });
+    builder
+      .addCase(userInfoById.pending, (state, action) => {
+        state.loaderUserInfo = true;
+      })
+      .addCase(userInfoById.fulfilled, (state, action) => {
+        state.anothUser = action.payload;
+        state.loaderUserInfo = false;
+      })
+      .addCase(userInfoById.rejected, (state, action) => {
+        // state.token = "";
+        console.log(action);
+        state.loaderUserInfo = false;
       });
   },
 });

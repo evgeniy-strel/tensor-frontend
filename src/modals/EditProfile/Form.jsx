@@ -29,7 +29,7 @@ const Form = ({
             fallbackIcon={!avatarSrc || <Icon36Users />}
             initials={
               !user.avatar
-                ? user.firstName.substr(0, 1) + user.lastName.substr(0, 1)
+                ? user.firstName?.substr(0, 1) + user.lastName?.substr(0, 1)
                 : null
             }
           >

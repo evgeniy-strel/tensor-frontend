@@ -12,7 +12,7 @@ import {
   calcInitialsAvatarColor,
 } from "@vkontakte/vkui";
 import { Icon28SettingsOutline } from "@vkontakte/icons";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import CustomWriteBar from "../CustomWriteBar";
 import LayoutMessages from "../LayoutMessages";
 import Messages from "./Messages";
@@ -35,6 +35,10 @@ const GroupChat = ({ id, external: { title, avatar }, users, messages }) => {
   const handleSettingsIcon = () => {
     navigate(`/messenger/settings/${id}`);
   };
+
+  if (!users.find(({ user }) => user?.id == currentUser.id)) {
+    return <Navigate to={`/messenger/join/${id}`} />;
+  }
 
   return (
     <div className="group-chat">

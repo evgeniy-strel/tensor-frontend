@@ -10,7 +10,6 @@ export default class Helper {
         avatar: data.avatar,
         firstName: data.firstName,
         lastName: data.lastName,
-        categories: data.categories,
         description: data?.description || "",
       },
     };
@@ -26,7 +25,6 @@ export default class Helper {
       avatar: data.external.avatar,
       firstName: data.external.firstName,
       lastName: data.external.lastName,
-      categories: data?.external?.categories || [],
       description: data?.external.description || "",
     };
   }

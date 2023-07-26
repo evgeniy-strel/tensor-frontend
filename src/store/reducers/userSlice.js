@@ -10,7 +10,8 @@ export const postLogin = createAsyncThunk(
       const { data: token } = await RequestAPI.login(formData);
       let { data: userInfo } = await RequestAPI.currentUser();
       userInfo = Helper.transformUserForUsage(userInfo);
-      return [token.access_token, userInfo];
+      const { data: userTags } = await RequestAPI.getUserTags();
+      return [token.access_token, userInfo, userTags];
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -41,13 +42,15 @@ export const postLogout = createAsyncThunk(
 
 export const postRegister = createAsyncThunk(
   "auth/register",
-  async ([formData, file], { rejectWithValue }) => {
+  async ([formData, file, regTags], { rejectWithValue }) => {
     try {
       let { data: userInfo } = await RequestAPI.register(formData);
       const { data: token } = await RequestAPI.login({
         email: formData.email,
         password: formData.password,
       });
+
+      const { data: newTags } = await RequestAPI.updateUserTags(regTags);
       // регестрация -> вход -> загрузка картинки -> обновление пользователя
       if (file) {
         // регестрация -> вход -> загрузка информации о пользователе
@@ -65,11 +68,11 @@ export const postRegister = createAsyncThunk(
         );
 
         newUserInfo = Helper.transformUserForUsage(newUserInfo);
-        return [token.access_token, newUserInfo];
+        return [token.access_token, newUserInfo, newTags];
       }
 
       userInfo = Helper.transformUserForUsage(userInfo);
-      return [token.access_token, userInfo];
+      return [token.access_token, userInfo, newTags];
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -119,6 +122,16 @@ export const userTags = createAsyncThunk(
   }
 );
 
+export const updateUserTags = createAsyncThunk(
+  "user/tags/update",
+  async (editTags, { rejectWithValue }) => {
+    const res = RequestAPI.updateUserTags(editTags)
+      .then((res) => res.data)
+      .catch((err) => rejectWithValue(err.message));
+    return res;
+  }
+);
+
 export const userInfoById = createAsyncThunk(
   "user/another",
   async (id, { rejectWithValue }) => {
@@ -141,6 +154,22 @@ const userSlice = createSlice({
     resetStateLogout(state, action) {
       state.token = "";
       state.user = {};
+      state.tags = [];
+    },
+    setTag(state, action) {
+      if (state.tags.map((el) => el.title).includes(action.payload.title)) {
+        state.tags = [
+          ...state.tags.filter((el) => el.title !== action.payload.title),
+        ];
+      } else {
+        state.tags = [...state.tags, action.payload];
+      }
+    },
+    resetTags(state, action) {
+      state.tags = JSON.parse(localStorage.getItem("userTags"));
+    },
+    setCategoryModal(state, action) {
+      state.activeCategory = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -152,6 +181,7 @@ const userSlice = createSlice({
       .addCase(postLogin.fulfilled, (state, action) => {
         state.token = action.payload[0];
         state.user = action.payload[1];
+        state.tags = action.payload[2];
         state.loginState.loader = false;
       })
       .addCase(postLogin.rejected, (state, action) => {
@@ -198,6 +228,13 @@ const userSlice = createSlice({
       state.tags = action.payload;
     });
     builder
+      .addCase(updateUserTags.fulfilled, (state, action) => {
+        state.tags = action.payload;
+      })
+      .addCase(updateUserTags.rejected, (state, action) => {
+        console.log(action);
+      });
+    builder
       .addCase(userInfoById.pending, (state, action) => {
         state.loaderUserInfo = true;
       })
@@ -212,4 +249,10 @@ const userSlice = createSlice({
 });
 
 export default userSlice.reducer;
-export const { resetState, resetStateLogout } = userSlice.actions;
+export const {
+  resetState,
+  resetStateLogout,
+  setTag,
+  setCategoryModal,
+  resetTags,
+} = userSlice.actions;

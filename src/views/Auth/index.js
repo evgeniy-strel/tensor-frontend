@@ -14,7 +14,6 @@ const Auth = () => {
     firstName: "",
     lastName: "",
     avatar: null,
-    categories: [],
   });
 
   return (

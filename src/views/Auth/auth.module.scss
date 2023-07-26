@@ -31,7 +31,10 @@ $active: #2688eb;
 
   > span {
     font-size: 13px;
-    padding: 8px;
+    padding: 2px 12px;
+    @media (max-width: 360px) {
+      padding: 2px;
+    }
   }
 
   &:hover {

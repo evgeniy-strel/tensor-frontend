@@ -52,7 +52,7 @@ const ChatItem = ({
         before={
           <Avatar
             size={56}
-            src={`${process.env.REACT_APP_URL_API}/${avatar}`}
+            src={`${process.env.REACT_APP_URL_API}${avatar}`}
             className="avatar"
           />
         }

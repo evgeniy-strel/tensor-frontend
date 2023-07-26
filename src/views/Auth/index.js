@@ -2,7 +2,6 @@ import { useState } from "react";
 import { View, Panel } from "@vkontakte/vkui";
 import AuthSelector from "./AuthSelector";
 import Login from "./Login";
-import ForgotPassword from "./ForgotPassword";
 import Register from "./Register";
 import ProfileSetup from "./ProfileSetup";
 import Interests from "./Interests";
@@ -29,13 +28,6 @@ const Auth = () => {
       </Panel>
       <Panel id="login">
         <Login
-          setActivePanel={setActivePanel}
-          formData={formData}
-          setFormData={setFormData}
-        />
-      </Panel>
-      <Panel id="forgot">
-        <ForgotPassword
           setActivePanel={setActivePanel}
           formData={formData}
           setFormData={setFormData}

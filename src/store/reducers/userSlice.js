@@ -6,16 +6,14 @@ import initialStateUser from "../initialState";
 export const postLogin = createAsyncThunk(
   "auth/login",
   async (formData, { rejectWithValue }) => {
-    const token = await RequestAPI.login(formData)
-      .then((res) => res.data)
-      .catch((err) => rejectWithValue(err.message));
-    const userInfo = RequestAPI.currentUser()
-      .then((res) => Helper.transformUserForUsage(res.data))
-      .catch((err) => rejectWithValue(err.message));
-    return {
-      token: token.access_token,
-      user: userInfo,
-    };
+    try {
+      const { data: token } = await RequestAPI.login(formData);
+      let { data: userInfo } = await RequestAPI.currentUser();
+      userInfo = Helper.transformUserForUsage(userInfo);
+      return [token.access_token, userInfo];
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
   }
 );
 
@@ -31,9 +29,11 @@ export const postForgot = createAsyncThunk(
 
 export const postLogout = createAsyncThunk(
   "auth/logout",
-  async (_, { rejectWithValue }) => {
+  async (_, { rejectWithValue, dispatch }) => {
     const res = await RequestAPI.logout()
-      .then((res) => res.data)
+      .then((res) => {
+        dispatch(resetStateLogout());
+      })
       .catch((err) => rejectWithValue(err.message));
     return res;
   }
@@ -42,52 +42,44 @@ export const postLogout = createAsyncThunk(
 export const postRegister = createAsyncThunk(
   "auth/register",
   async ([formData, file], { rejectWithValue }) => {
-    await RequestAPI.register(formData)
-      .then((res) => res.data)
-      .catch((err) => rejectWithValue(err.message));
+    try {
+      let { data: userInfo } = await RequestAPI.register(formData);
+      const { data: token } = await RequestAPI.login({
+        email: formData.email,
+        password: formData.password,
+      });
+      // регестрация -> вход -> загрузка картинки -> обновление пользователя
+      if (file) {
+        // регестрация -> вход -> загрузка информации о пользователе
+        const newFormData = await RequestAPI.uploadFiles(file)
+          .then((res) => res[0])
+          .then((res) => {
+            return {
+              ...formData,
+              avatar: res.link,
+            };
+          });
 
-    const token = await RequestAPI.login({
-      email: formData.email,
-      password: formData.password,
-    })
-      .then((res) => res.data)
-      .catch((err) => rejectWithValue(err.message));
+        let { data: newUserInfo } = await RequestAPI.updateCurrentUser(
+          newFormData
+        );
 
-    // регестрация -> вход -> загрузка картинки -> обновление пользователя
-    if (file) {
-      const newFormData = await RequestAPI.uploadFiles(file)
-        .then((res) => res[0])
-        .then((res) => {
-          return {
-            ...formData,
-            avatar: res.link,
-          };
-        })
-        .catch((err) => rejectWithValue(err.message));
+        newUserInfo = Helper.transformUserForUsage(newUserInfo);
+        return [token.access_token, newUserInfo];
+      }
 
-      // регестрация -> вход -> загрузка информации о пользователе
-      const userData = await RequestAPI.updateCurrentUser(newFormData)
-        .then((res) => Helper.transformUserForUsage(res.data))
-        .catch((err) => rejectWithValue(err.message));
-
-      return [token.access_token, userData];
+      userInfo = Helper.transformUserForUsage(userInfo);
+      return [token.access_token, userInfo];
+    } catch (error) {
+      return rejectWithValue(error.message);
     }
-
-    const userData = await RequestAPI.currentUser()
-      .then((res) => Helper.transformUserForUsage(res.data))
-      .catch((err) => rejectWithValue(err.message));
-
-    return {
-      token: token.access_token,
-      user: userData,
-    };
   }
 );
 
 export const getUserInfo = createAsyncThunk(
   "user/info",
   async (_, { rejectWithValue }) => {
-    const res = RequestAPI.currentUser()
+    const res = await RequestAPI.currentUser()
       .then((res) => Helper.transformUserForUsage(res.data))
       .catch((err) => rejectWithValue(err.message));
     return res;
@@ -146,6 +138,10 @@ const userSlice = createSlice({
       state.registerState = { loader: false, error: "" };
       state.forgotState = { loader: false, error: "" };
     },
+    resetStateLogout(state, action) {
+      state.token = "";
+      state.user = {};
+    },
   },
   extraReducers: (builder) => {
     // AUTH
@@ -154,16 +150,16 @@ const userSlice = createSlice({
         state.loginState.loader = true;
       })
       .addCase(postLogin.fulfilled, (state, action) => {
-        state.token = action.payload.token;
-        state.user = action.payload.user;
+        state.token = action.payload[0];
+        state.user = action.payload[1];
         state.loginState.loader = false;
       })
       .addCase(postLogin.rejected, (state, action) => {
-        state.loginState.loader = false;
         state.loginState.error =
           action.payload === "Request failed with status code 400"
             ? "Неправильный пароль"
             : action.payload;
+        state.loginState.loader = false;
       });
     builder
       .addCase(postForgot.pending, (state, action) => {
@@ -177,48 +173,30 @@ const userSlice = createSlice({
         state.forgotState.error = action.payload;
       });
     builder
-      .addCase(postLogout.fulfilled, (state, action) => {
-        state.token = "";
-      })
-      .addCase(postLogout.rejected, (state, action) => {
-        state.token = "";
-      });
-    builder
       .addCase(postRegister.pending, (state, action) => {
         state.registerState.loader = true;
       })
       .addCase(postRegister.fulfilled, (state, action) => {
+        state.token = action.payload[0];
+        state.user = action.payload[1];
         state.registerState.loader = false;
-        state.token = action.payload.token;
-        state.user = action.payload.user;
       })
+      // не будет работать, потому что возвращаю массив
       .addCase(postRegister.rejected, (state, action) => {
-        state.registerState.loader = false;
         state.registerState.error = action.payload;
+        state.registerState.loader = false;
       });
 
     // USERS
-    builder
-      .addCase(getUserInfo.fulfilled, (state, action) => {
-        state.user = action.payload;
-      })
-      .addCase(getUserInfo.rejected, (state, action) => {
-        state.token = "";
-      });
-    builder
-      .addCase(updateUser.fulfilled, (state, action) => {
-        state.user = action.payload;
-      })
-      .addCase(updateUser.rejected, (state, action) => {
-        state.token = "";
-      });
-    builder
-      .addCase(userTags.fulfilled, (state, action) => {
-        state.tags = action.payload;
-      })
-      .addCase(userTags.rejected, (state, action) => {
-        state.token = "";
-      });
+    builder.addCase(getUserInfo.fulfilled, (state, action) => {
+      state.user = action.payload;
+    });
+    builder.addCase(updateUser.fulfilled, (state, action) => {
+      state.user = action.payload;
+    });
+    builder.addCase(userTags.fulfilled, (state, action) => {
+      state.tags = action.payload;
+    });
     builder
       .addCase(userInfoById.pending, (state, action) => {
         state.loaderUserInfo = true;
@@ -228,12 +206,10 @@ const userSlice = createSlice({
         state.loaderUserInfo = false;
       })
       .addCase(userInfoById.rejected, (state, action) => {
-        // state.token = "";
-        console.log(action);
         state.loaderUserInfo = false;
       });
   },
 });
 
 export default userSlice.reducer;
-export const { resetState } = userSlice.actions;
+export const { resetState, resetStateLogout } = userSlice.actions;

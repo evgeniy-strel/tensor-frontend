@@ -1,13 +1,13 @@
-import { Avatar, Title, Button, Text } from "@vkontakte/vkui";
+import { Avatar, Title, Button, Text, Card } from "@vkontakte/vkui";
 import { Icon28FavoriteCircleFillGreen } from "@vkontakte/icons";
 import { useDispatch } from "react-redux";
 import { changeActiveModal } from "../../store/reducers/modalSlice";
 
-const My = ({ user }) => {
+const My = ({ user, flexStyle }) => {
   const dispatch = useDispatch();
 
   return (
-    <>
+    <Card mode="tint" style={flexStyle}>
       <Avatar
         size={96}
         initials={
@@ -31,10 +31,12 @@ const My = ({ user }) => {
         Редактировать
       </Button>
 
-      <Text style={{ lineHeight: "20px", letterSpacing: "0.2px" }}>
-        {user?.description}
+      <Text
+        style={{ lineHeight: "20px", letterSpacing: "0.2px", width: "100%" }}
+      >
+        {user.description}
       </Text>
-    </>
+    </Card>
   );
 };
 

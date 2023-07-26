@@ -20,12 +20,13 @@ export default class Helper {
     return {
       id: data.id,
       email: data.email,
-      is_active: true,
+      // is_active: true,
+      // is_superuser: data.is_superuser,
       is_verified: false,
       avatar: data.external.avatar,
       firstName: data.external.firstName,
       lastName: data.external.lastName,
-      categories: data.external.categories,
+      categories: data?.external?.categories || [],
       description: data?.external.description || "",
     };
   }

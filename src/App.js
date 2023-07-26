@@ -62,8 +62,8 @@ function App() {
   const modal = (
     <ModalRoot activeModal={activeModal} onClose={() => dispatch(modalBack())}>
       <SettingsModalPage id="settings" />
-      <HobbiesModalPage id="hobbies" settlingHeight={100} />
-      <EditProfile id="editprofile" settlingHeight={100} />
+      <HobbiesModalPage id="hobbies" />
+      <EditProfile id="editprofile" />
     </ModalRoot>
   );
 

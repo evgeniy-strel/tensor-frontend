@@ -11,7 +11,7 @@ export const fetchChatById = createAsyncThunk(
       const { data: tags } = await RequestAPI.fetchTagsByChatId(id);
       const chat = { ...info, users, messages, tags };
 
-      dispatch(setActiveChat(chat));
+      return chat;
     } catch (error) {
       return rejectWithValue(error?.message);
     }
@@ -53,6 +53,9 @@ export const createNewChat = createAsyncThunk(
 );
 
 const initialState = {
+  isLoaded: {
+    activeChat: false,
+  },
   activeTab: "my_chats",
   chats: [],
   activeChat: null,
@@ -74,6 +77,23 @@ const chatSlice = createSlice({
     addMessage(state, action) {
       state.activeChat.messages.push(action.payload);
     },
+  },
+  extraReducers: (builder) => {
+    // pending
+    builder.addCase(fetchChatById.pending, (state) => {
+      state.activeChat = null;
+      state.isLoaded.activeChat = false;
+    });
+    // fulfilled
+    builder.addCase(fetchChatById.fulfilled, (state, action) => {
+      state.activeChat = action.payload;
+      state.isLoaded.activeChat = true;
+    });
+    // rejected
+    builder.addCase(fetchChatById.rejected, (state) => {
+      state.activeChat = null;
+      state.isLoaded.activeChat = null;
+    });
   },
 });
 

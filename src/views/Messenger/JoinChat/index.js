@@ -15,7 +15,7 @@ const tagsMocks = [
   "тестовые теги",
 ];
 
-const DescriptionChat = ({
+const JoinChat = ({
   id,
   type,
   external: { title, avatar, isMuted, description, subChats, lastMessage },
@@ -33,9 +33,6 @@ const DescriptionChat = ({
 
   const onJoin = () => {
     if (isUserJoined) return;
-
-    console.log("join", user);
-    console.log(users);
   };
 
   return (
@@ -82,4 +79,4 @@ const DescriptionChat = ({
   );
 };
 
-export default DescriptionChat;
+export default JoinChat;

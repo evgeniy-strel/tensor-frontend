@@ -16,19 +16,19 @@ const Messages = ({ messages }) => {
   return (
     <>
       {messages.map(({ external: { message, user } }, i) => {
-        const isMine = currentUser?.name == user?.name;
+        const isMine = currentUser?.id == user?.id;
 
         let isFirstMessage = true;
         let isLastMessage = true;
 
         if (i != 0) {
           const prevMessage = messages[i - 1];
-          isFirstMessage = user?.name != prevMessage?.external.user.name;
+          isFirstMessage = user?.id != prevMessage?.external.user.id;
         }
 
         if (i != messages.length - 1) {
           const nextMessage = messages[i + 1];
-          isLastMessage = user?.name != nextMessage?.external.user?.name;
+          isLastMessage = user?.id != nextMessage?.external.user?.id;
         }
 
         const initials = user?.name

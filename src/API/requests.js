@@ -166,4 +166,10 @@ export default class RequestAPI {
   static async fetchCategories() {
     return axios.get("categories");
   }
+
+  // ---------- EVENT
+  // Создание события
+  static async createNewEvent(event) {
+    return axios.post("event", event);
+  }
 }

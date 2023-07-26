@@ -110,16 +110,17 @@ const ListChats = () => {
       <Group separator="hide" className="group-list-chats">
         <List className="list-chats">
           {chats
-            .filter((chat) =>
-              chat.external.title
-                .toLowerCase()
+            .filter(({ chat }) =>
+              chat?.external?.title
+                ?.toLowerCase()
                 .includes(search.text.toLowerCase())
             )
-            .map((chat, i) => {
+            .map(({ chat, last_message }, i) => {
               return (
                 <ChatItem
                   isSelected={selectedChat?.id == chat?.id}
                   key={i}
+                  lastMessage={last_message}
                   {...chat}
                 />
               );

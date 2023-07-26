@@ -3,17 +3,34 @@ import { View, Panel } from "@vkontakte/vkui";
 import { useLocation, matchRoutes } from "react-router-dom";
 import Chat from "./Chat";
 import ListChats from "./ListChats";
-import ListSubChats from "./ListSubChats";
-import DescriptionChat from "./DescriptionChat";
 import CreateChat from "./CreateChat";
+import { DESTINY_CHAT } from "./../../const/chat";
 
 const panels = [
-  { id: "subChats", path: "/messenger/subchats/:id", element: <ListSubChats /> },
-  { id: "chat", path: "/messenger/chat/:id", element: <Chat /> },
-  { id: "descriptionChat", path: "/messenger/description/:id", element: <DescriptionChat /> },
+  {
+    id: "subChats",
+    path: "/messenger/subchats/:id",
+    element: <Chat destiny={DESTINY_CHAT.subChats} />,
+  },
+  {
+    id: "chat",
+    path: "/messenger/chat/:id",
+    element: <Chat destiny={DESTINY_CHAT.messages} />,
+  },
+  {
+    id: "descriptionChat",
+    path: "/messenger/description/:id",
+    element: <Chat destiny={DESTINY_CHAT.description} />,
+  },
+  {
+    id: "settingsChat",
+    path: "/messenger/settings/:id",
+    element: <Chat destiny={DESTINY_CHAT.settings} />,
+  },
   { id: "createChat", path: "/messenger/create_chat", element: <CreateChat /> },
   { id: "listChats", path: "/messenger", element: <ListChats /> },
 ];
+
 const routes = panels.map(({ path }) => ({ path }));
 
 // компонент необходим для плавной анимации

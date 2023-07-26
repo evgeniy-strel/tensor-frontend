@@ -17,6 +17,7 @@
       right: -7px;
     }
   }
+
   .chat-item {
     padding: 8px 4px !important;
     position: relative;
@@ -24,6 +25,9 @@
     .vkuiSimpleCell__main {
       margin-left: 4px;
       padding: 0;
+      .vkuiSimpleCell__content {
+        margin: 0;
+      }
     }
 
     .vkuiSimpleCell__indicator {
@@ -33,6 +37,10 @@
     &:not(.with-subchats) .vkuiSimpleCell__indicator {
       padding: 0;
       padding-top: 5px;
+    }
+
+    &.selected {
+      background: var(--light-background-background, #ebedf0);
     }
 
     .last-message,
@@ -45,7 +53,8 @@
 
     .last-message,
     .time-message,
-    .subchats {
+    .subchats,
+    .text {
       font-size: 14px !important;
       font-weight: 400 !important;
       line-height: 18px !important; /* 128.571% */
@@ -54,7 +63,7 @@
 
     .last-message {
       width: 100%;
-      padding-top: 6px;
+      padding-top: 8px;
       .username {
         color: #2688eb;
       }
@@ -90,12 +99,30 @@
           padding-top: 0;
         }
         .subchats {
-          padding-top: 2px;
+          padding-top: 4px;
         }
         .last-message {
           padding-top: 4px;
         }
       }
     }
+  }
+}
+
+.subchats-group__list {
+  .subchats {
+    display: none;
+    padding-top: 0;
+  }
+  .group-item {
+    .vkuiSimpleCell {
+      min-height: auto;
+    }
+  }
+  .group-item::before {
+    left: 0 !important;
+  }
+  &:not(.with-subchats) .vkuiSimpleCell__indicator {
+    padding-top: 0 !important;
   }
 }

@@ -1,0 +1,49 @@
+.settings-chat {
+  &__group {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+  .chat-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 16px;
+    &__text {
+      text-align: center;
+      &__title {
+        font-size: 21px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 26px; /* 123.81% */
+      }
+      &__count-users {
+        margin-top: 4px;
+        color: var(--light-text-text-secondary, #818c99);
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 18px; /* 128.571% */
+        letter-spacing: 0.2px;
+      }
+    }
+    &__buttons {
+      width: 100%;
+      flex-grow: 1;
+      &__tabbar {
+        position: static;
+        width: 100%;
+      }
+      &__tabbar-item {
+        text-align: center;
+        background: #fff !important;
+        .vkuiTabbarItem__text {
+          font-size: 12px;
+          font-style: normal;
+          font-weight: 500;
+          line-height: 14px; /* 116.667% */
+          letter-spacing: 0.2px;
+        }
+      }
+    }
+  }
+}

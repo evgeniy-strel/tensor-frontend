@@ -6,8 +6,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchChatById, setActiveChat } from "./../../store/reducers/chatSlice";
 import { activeChatSelector } from "./../../store/selectors/chatSelectors";
 import { PanelSpinner } from "@vkontakte/vkui";
+import { DESTINY_CHAT } from "./../../const/chat";
+import DescriptionChat from "./DescriptionChat";
+import SettingsChat from "./SettingsChat/";
 
-const Chat = () => {
+const Chat = ({ destiny }) => {
   const dispatch = useDispatch();
   const chat = useSelector(activeChatSelector);
   const { id } = useParams();
@@ -23,9 +26,13 @@ const Chat = () => {
 
   if (!chat) return <PanelSpinner style={{ height: "100vh" }} size="large" />;
 
-  if (chat?.type == "private") return <PMChat chat={chat} />;
+  if (destiny == DESTINY_CHAT.description) return <DescriptionChat {...chat} />;
 
-  return <GroupChat chat={chat} />;
+  if (destiny == DESTINY_CHAT.settings) return <SettingsChat {...chat} />;
+
+  if (chat?.type == "private") return <PMChat {...chat} />;
+
+  return <GroupChat {...chat} />;
 };
 
 export default Chat;

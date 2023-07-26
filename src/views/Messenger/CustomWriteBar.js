@@ -1,45 +1,38 @@
-import React from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import {
-  usePlatform,
-  Platform,
   FixedLayout,
   Separator,
-  AdaptiveIconRenderer,
   WriteBar,
   WriteBarIcon,
 } from "@vkontakte/vkui";
+import { useDispatch } from "react-redux";
+import { addMessage } from "../../store/reducers/chatSlice";
 
-import {
-  Icon28SmileOutline,
-  Icon24SmileOutline,
-  Icon28VoiceOutline,
-  Icon24VoiceOutline,
-} from "@vkontakte/icons";
-import { useState, useCallback } from "react";
-
-const CustomWriteBar = ({ onSendMessage, user }) => {
-  const platform = usePlatform();
-  const [text, setText] = React.useState("");
+const CustomWriteBar = ({ user, chatId }) => {
+  const token = localStorage.getItem("token");
+  const socket = useRef();
+  const [text, setText] = useState("");
+  const dispatch = useDispatch();
 
   const sendMessage = () => {
-    onSendMessage({ text, user });
+    if (text.length == 0) return;
+
+    const message = {
+      type: "text",
+      chat_id: chatId,
+      external: {
+        user: user,
+        message: text,
+      },
+    };
+
+    socket.current.send(JSON.stringify(message));
+
+    dispatch(addMessage(message));
+
     setText("");
     writeBarRef.focus();
   };
-
-  const SmileOutlineIcon = (
-    <AdaptiveIconRenderer
-      IconCompact={platform === Platform.IOS ? Icon28SmileOutline : Icon24SmileOutline}
-      IconRegular={Icon28SmileOutline}
-    />
-  );
-
-  const VoiceOutlineIcon = (
-    <AdaptiveIconRenderer
-      IconCompact={platform === Platform.IOS ? Icon28VoiceOutline : Icon24VoiceOutline}
-      IconRegular={Icon28VoiceOutline}
-    />
-  );
 
   const [writeBarRef, setWriteBarRef] = useState();
 
@@ -54,6 +47,29 @@ const CustomWriteBar = ({ onSendMessage, user }) => {
     }
   };
 
+  // TO DO: Замена последнего сообщения чата
+  useEffect(() => {
+    socket.current = new WebSocket(
+      "ws://176.215.13.242:8080/websocket/?token=" + token
+    );
+
+    socket.current.onopen = () => {
+      console.log("Произошло подключение к сокету");
+    };
+    socket.current.onmessage = (event) => {
+      const message = JSON.parse(event.data);
+      console.log("get message from ws", message);
+
+      if (chatId == message.chat_id) dispatch(addMessage(message));
+    };
+    socket.current.onclose = () => {
+      console.log("Socket закрыт");
+    };
+    socket.current.onerror = () => {
+      console.log("Произошла ошибка в socket");
+    };
+  }, []);
+
   return (
     <FixedLayout vertical="bottom" filled>
       <div>
@@ -62,16 +78,7 @@ const CustomWriteBar = ({ onSendMessage, user }) => {
           onKeyDown={onKeyDown}
           getRef={handleGetRef}
           before={<WriteBarIcon mode="attach" />}
-          after={
-            <>
-              {/* {text.length === 0 && (
-                <WriteBarIcon aria-label="Записать голосовое сообщение">
-                  {VoiceOutlineIcon}
-                </WriteBarIcon>
-              )} */}
-              {text.length > 0 && <WriteBarIcon onClick={sendMessage} mode="send" />}
-            </>
-          }
+          after={<WriteBarIcon onClick={sendMessage} mode="send" />}
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder="Сообщение"

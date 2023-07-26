@@ -58,7 +58,10 @@ function App() {
   const { viewWidth } = useAdaptivityConditionalRender();
   const location = useLocation();
   const [activeStory, setActiveStory] = useStory("/", "home", 1);
-  const isNeedTabbar = !location.pathname.includes("/messenger/");
+
+  const pathname = location.pathname;
+  const isNeedTabbar =
+    !pathname.includes("/messenger/") || pathname.length < 12;
 
   const modal = (
     <ModalRoot activeModal={activeModal} onClose={() => dispatch(modalBack())}>

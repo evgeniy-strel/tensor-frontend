@@ -122,10 +122,6 @@ export default class RequestAPI {
       const { data } = await axios.post("files", files);
       return data.filter((file) => typeof file === "object");
     } catch (error) {
-      if (error.response.status == 401) {
-        RequestAPI.tokenExpired();
-      }
-
       console.log(error);
       return error?.message;
     }
@@ -160,6 +156,11 @@ export default class RequestAPI {
   // Получение истории сообщений чата
   static async fetchMessagesByChatId(id) {
     return axios.get(`chats/${id}/messages`);
+  }
+
+  // Получение тегов чата
+  static async fetchTagsByChatId(id) {
+    return axios.get(`/chats/${id}/tags`);
   }
 
   // ---------- CATEGORIES

@@ -19,15 +19,13 @@ import RequestAPI from "../../../API/requests";
 import { useSelector, useDispatch } from "react-redux";
 import { createNewChat } from "./../../../store/reducers/chatSlice";
 import { categoriesSelector } from "./../../../store/selectors/categoriesSelector";
+import { getFullUrlImg } from "../../../utils/helpersMethods";
 
 const initialData = {
   avatar: "",
   title: "",
   description: "",
-  subChats: [],
-  lastMessage: null,
-  admins: [],
-  isMuted: false,
+  mutedUsers: [],
 };
 
 const CreateChat = () => {
@@ -73,7 +71,7 @@ const CreateChat = () => {
       chat: {
         type: "group",
         parent_id: null,
-        external: { ...data, admins: [user.id] },
+        external: { ...data },
       },
       users_id: [user.id],
     };
@@ -110,7 +108,7 @@ const CreateChat = () => {
                     size={96}
                     borderRadius="s"
                     fallbackIcon={<Icon28AddOutline />}
-                    src={`${process.env.REACT_APP_URL_API}/${data.avatar}`}
+                    src={getFullUrlImg(data.avatar)}
                   />
                 </File>
               </FormItem>

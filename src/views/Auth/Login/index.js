@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useState } from "react";
 import {
   PanelHeader,
   PanelHeaderBack,
@@ -8,16 +8,30 @@ import {
   Title,
   Text,
 } from "@vkontakte/vkui";
-import { useSelector } from "react-redux";
-import FormLogin from "./FormLogin";
+import { useSelector, useDispatch } from "react-redux";
+import { postLogin } from "../../../store/reducers/userSlice";
+import FormLog from "./FormLog";
 import classes from "../auth.module.scss";
 
 const Login = ({ setActivePanel, formData, setFormData }) => {
+  const dispatch = useDispatch();
   const loginState = useSelector((state) => state.user.loginState);
+  const [isValid, setIsValid] = useState(true);
 
-  useEffect(() => {
-    setFormData({ ...formData, password: "" });
-  }, []);
+  const handlerSubmit = (e) => {
+    e.preventDefault();
+
+    if (formData.password.length < 8) {
+      setIsValid(false);
+    } else {
+      dispatch(
+        postLogin({
+          email: formData.email,
+          password: formData.password,
+        })
+      );
+    }
+  };
 
   return (
     <>
@@ -36,10 +50,13 @@ const Login = ({ setActivePanel, formData, setFormData }) => {
         {loginState.loader ? (
           <PanelSpinner size="medium" />
         ) : (
-          <FormLogin
+          <FormLog
             setActivePanel={setActivePanel}
             formData={formData}
             setFormData={setFormData}
+            isValid={isValid}
+            handlerSubmit={handlerSubmit}
+            loginState={loginState}
           />
         )}
       </Group>

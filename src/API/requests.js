@@ -6,6 +6,7 @@ export default class RequestAPI {
   static tokenExpired() {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    localStorage.removeItem("userTags");
     axios.defaults.headers["Authorization"] = null;
   }
 
@@ -47,7 +48,9 @@ export default class RequestAPI {
 
   static async register(formData) {
     const data = Helper.transformUserForFetch(formData);
-    return axios.post("auth/register", data);
+    const res = axios.post("auth/register", data);
+    res.then((res) => RequestAPI.setUserInfo(res));
+    return res;
   }
 
   // Восстановление пароля
@@ -85,14 +88,6 @@ export default class RequestAPI {
   // Получение пользователя по id
   static async getUserById(id) {
     const res = axios.get(`user/${id}`);
-    res
-      .then((res) => null)
-      .catch((rej) => {
-        console.log(rej);
-        if (rej.response.status == 401) {
-          RequestAPI.tokenExpired();
-        }
-      });
     return res;
   }
 
@@ -104,13 +99,20 @@ export default class RequestAPI {
   // Получение тегов у текущего пользователя
   static async getUserTags() {
     const res = axios.get("current/tags");
-    res.then((res) => null).catch((rej) => RequestAPI.tokenExpired());
+    res.then((res) =>
+      localStorage.setItem("userTags", JSON.stringify(res.data))
+    );
     return res;
   }
 
   // Обновление тегов у текущего пользователя
-  static async updateUserTags() {
-    const res = axios.post("current/tags");
+  static async updateUserTags(tags) {
+    const formTags = tags.map((el) => el.title);
+    const res = axios.post("current/tags", formTags);
+    res.then((res) =>
+      localStorage.setItem("userTags", JSON.stringify(res.data))
+    );
+    return res;
   }
 
   // ---------- FILES
@@ -166,5 +168,10 @@ export default class RequestAPI {
   // Получение списка категорий
   static async fetchCategories() {
     return axios.get("categories");
+  }
+
+  // Получение списка тегов
+  static async fetchTags() {
+    return axios.get("tags");
   }
 }

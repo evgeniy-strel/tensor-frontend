@@ -17,16 +17,16 @@ import Cards from "./Cards";
 
 const Interests = ({ setActivePanel, formData, setFormData }) => {
   const dispatch = useDispatch();
-  const registerState = useSelector((state) => state.user.registerState);
+  const { tags, registerState } = useSelector((state) => state.user);
 
   const handleSubmit = () => {
-    if (formData.categories.length >= 3) {
+    if (tags.length >= 3) {
       if (formData.avatar) {
         const file = new FormData();
         file.append("files", formData.avatar);
-        dispatch(postRegister([formData, file]));
+        dispatch(postRegister([formData, file, tags]));
       } else {
-        dispatch(postRegister([formData, null]));
+        dispatch(postRegister([formData, null, tags]));
       }
     }
   };
@@ -60,12 +60,12 @@ const Interests = ({ setActivePanel, formData, setFormData }) => {
                 {registerState.error}
               </FormStatus>
             )}
-            <Cards formData={formData} setFormData={setFormData} />
+            <Cards />
             <ButtonGroup className={classes.button_group} stretched>
               <Button
                 onClick={handleSubmit}
                 size="l"
-                disabled={formData.categories.length < 3}
+                disabled={tags.length < 3}
                 stretched
               >
                 Зарегистрироваться

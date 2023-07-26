@@ -50,7 +50,7 @@ const Form = ({
             id="first"
             type="text"
             placeholder="Имя"
-            maxLength={32}
+            maxLength={20}
             onChange={(e) =>
               setNewData({
                 ...newData,
@@ -70,7 +70,7 @@ const Form = ({
             id="last"
             type="text"
             placeholder="Фамилия"
-            maxLength={32}
+            maxLength={20}
             onChange={(e) =>
               setNewData({
                 ...newData,
@@ -83,6 +83,7 @@ const Form = ({
         <FormItem className={classes.form_item}>
           <Textarea
             placeholder="Описание"
+            maxLength={600}
             onChange={(e) =>
               setNewData({ ...newData, description: e.target.value })
             }

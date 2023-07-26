@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   FormLayout,
   FormStatus,
@@ -7,29 +6,15 @@ import {
   Button,
   ButtonGroup,
 } from "@vkontakte/vkui";
-import { useDispatch, useSelector } from "react-redux";
-import { postLogin, getUserInfo } from "../../../store/reducers/userSlice";
 
-const FormLogin = ({ setActivePanel, formData, setFormData }) => {
-  const dispatch = useDispatch();
-  const loginState = useSelector((state) => state.user.loginState);
-  const [isValid, setIsValid] = useState(true);
-
-  const handlerSubmit = (e) => {
-    e.preventDefault();
-
-    if (formData.password.length < 8) {
-      setIsValid(false);
-    } else {
-      dispatch(
-        postLogin({
-          email: formData.email,
-          password: formData.password,
-        })
-      ).then((res) => dispatch(getUserInfo()));
-    }
-  };
-
+const FormLog = ({
+  setActivePanel,
+  formData,
+  setFormData,
+  isValid,
+  handlerSubmit,
+  loginState,
+}) => {
   return (
     <FormLayout onSubmit={handlerSubmit}>
       {loginState.error !== "" && (
@@ -71,18 +56,10 @@ const FormLogin = ({ setActivePanel, formData, setFormData }) => {
           <Button onClick={handlerSubmit} size="l" stretched>
             Войти
           </Button>
-          <Button
-            onClick={() => setActivePanel("forgot")}
-            size="l"
-            stretched
-            mode="secondary"
-          >
-            Восстановить пароль
-          </Button>
         </ButtonGroup>
       </FormItem>
     </FormLayout>
   );
 };
 
-export default FormLogin;
+export default FormLog;

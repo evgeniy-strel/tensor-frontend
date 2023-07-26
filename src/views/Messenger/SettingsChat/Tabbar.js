@@ -31,7 +31,7 @@ const TabbarCustom = ({ id }) => {
   };
 
   const copyLink = () => {
-    const link = `${process.env.REACT_APP_URL_SPA}messenger/chat/${id}`; // server url
+    const link = `${process.env.REACT_APP_URL_SPA}messenger/join/${id}`; // server url
     openSnackbar(copy(link));
   };
 

@@ -101,7 +101,7 @@ const SettingsChat = ({ id, external: { title, avatar }, users }) => {
           </Tabs>
         </div>
         <List>
-          {users.map((user) => (
+          {users.map(({ user }) => (
             <UserItem key={user.id} {...user} />
           ))}
         </List>

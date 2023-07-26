@@ -1,0 +1,13 @@
+.empty-block-messages {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  &__emojy {
+    font-size: 48px;
+  }
+}

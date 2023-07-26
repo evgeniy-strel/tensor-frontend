@@ -3,22 +3,26 @@ import "./ChatItem.scss";
 import { Cell, Avatar, Headline } from "@vkontakte/vkui";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { activeTabChatSelector } from "./../../store/selectors/chatSelectors";
+import { activeTabChatSelector } from "../../../store/selectors/chatSelectors";
+import { getFullUrlImg } from "../../../utils/helpersMethods";
+import cn from "classnames";
 
 const SubtitleGroup = ({ lastMessage, subChats }) => {
-  const subChatsFormated = subChats ? subChats.join(", ") : "";
+  const subChatsFormated = subChats?.length ? subChats.join(", ") : "";
 
   return (
     <>
-      {Boolean(subChats) && (
+      {Boolean(subChats?.length) && (
         <Headline level="1" className="subchats">
           {subChatsFormated}
         </Headline>
       )}
       <Headline level="1" className="last-message">
         <span className="username">{lastMessage?.user.username}</span>
-        {lastMessage?.text && ": "}
-        {lastMessage?.text || "Напишите первое сообщение!"}
+        <span className="text">
+          {lastMessage?.text && ": "}
+          {lastMessage?.text || "Напишите первое сообщение!"}
+        </span>
       </Headline>
     </>
   );
@@ -33,7 +37,9 @@ const SubtitlePM = ({ lastMessage }) => (
 const ChatItem = ({
   id,
   type,
-  external: { title, avatar, isMuted, description, subChats, lastMessage },
+  external: { title, avatar, subChats, lastMessage },
+  hideAvatar,
+  isSelected,
 }) => {
   const activeTab = useSelector(activeTabChatSelector);
   const isUserJoined = activeTab == "my_chats";
@@ -46,15 +52,15 @@ const ChatItem = ({
   return (
     <Link to={url} key={id}>
       <Cell
-        className={`chat-item ${type == "private" ? "" : "group-item"} ${
-          subChats ? "with-subchats" : ""
-        }`}
+        className={cn("chat-item", {
+          "group-item": type != "private",
+          "with-subchats": subChats?.length,
+          selected: isSelected,
+        })}
         before={
-          <Avatar
-            size={56}
-            src={`${process.env.REACT_APP_URL_API}/${avatar}`}
-            className="avatar"
-          />
+          !hideAvatar && (
+            <Avatar size={56} src={getFullUrlImg(avatar)} className="avatar" />
+          )
         }
         subtitle={
           type == "private" ? (

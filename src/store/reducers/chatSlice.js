@@ -8,7 +8,8 @@ export const fetchChatById = createAsyncThunk(
       const { data: info } = await RequestAPI.fetchChatById(id);
       const { data: users } = await RequestAPI.fetchUsersByChatId(id);
       const { data: messages } = await RequestAPI.fetchMessagesByChatId(id);
-      const chat = { ...info, users, messages };
+      const { data: tags } = await RequestAPI.fetchTagsByChatId(id);
+      const chat = { ...info, users, messages, tags };
 
       dispatch(setActiveChat(chat));
     } catch (error) {
@@ -70,8 +71,12 @@ const chatSlice = createSlice({
     setActiveChat(state, action) {
       state.activeChat = action.payload;
     },
+    addMessage(state, action) {
+      state.activeChat.messages.push(action.payload);
+    },
   },
 });
 
 export default chatSlice.reducer;
-export const { setActiveTab, setChats, setActiveChat } = chatSlice.actions;
+export const { setActiveTab, setChats, setActiveChat, addMessage } =
+  chatSlice.actions;

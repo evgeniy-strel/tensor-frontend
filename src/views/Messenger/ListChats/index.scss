@@ -1,15 +1,68 @@
 .list-chats-container {
-  .vkuiPanelHeader__in {
-    padding: 0 10px 0 12px;
-  }
+  position: relative;
+  width: 100%;
 
   .fixed-layout {
-    box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.06), 0px 0px 2px 0px rgba(0, 0, 0, 0.03);
+    box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.06),
+      0px 0px 2px 0px rgba(0, 0, 0, 0.03);
     background-color: var(--vkui--color_background_content);
+    &__search {
+      height: 0;
+      padding: 0;
+      visibility: hidden;
+      opacity: 0;
+      transition: 0.2s;
+    }
+    .vkuiPanelHeader__content {
+      padding-left: 8px !important;
+    }
+  }
+
+  .group-list-chats {
+    position: relative;
+    top: 48px;
+    height: calc(
+      var(--app-height) - var(--vkui--size_panel_header_height--regular) - 48px -
+        48px - var(--vkui_internal--safe_area_inset_bottom)
+    );
+    overflow-y: scroll;
+    overflow-x: hidden;
+    box-sizing: border-box;
   }
 
   .list-chats {
-    padding-top: 48px;
+    transition: 0.2s;
+  }
+
+  &.shown-subchats {
+    .group-list-chats {
+      top: 0 !important;
+      height: calc(
+        var(--app-height) - var(--vkui--size_panel_header_height--regular) -
+          48px - var(--vkui_internal--safe_area_inset_bottom)
+      );
+    }
+    .list-chats {
+      padding-top: 0;
+    }
+    .subchats-group {
+      visibility: visible;
+      right: 0;
+      left: inherit;
+    }
+  }
+
+  &.search-active {
+    .group-list-chats {
+      top: 100px;
+    }
+    .fixed-layout__search {
+      height: var(--vkui--size_search_height--regular);
+      padding: 8px var(--vkui--size_base_padding_horizontal--regular);
+      position: relative;
+      visibility: visible;
+      opacity: 1;
+    }
   }
 
   .vkuiPanelHeader__before {
@@ -21,26 +74,100 @@
     gap: 20px;
   }
 
-  // нормальное отображение fixedLayout tabs на ПК
+  // подчаты
+
+  .subchats-group {
+    visibility: hidden;
+    position: absolute !important;
+    border-left: 1px solid #fafafa;
+    right: calc(
+      -1 * (100% - 4px - var(--vkui--size_base_padding_horizontal--regular) -
+            56px - 12px - 4px)
+    );
+    top: var(--vkui--size_panel_header_height--regular);
+    height: calc(
+      var(--app-height) - var(--vkui--size_panel_header_height--regular) - 48px -
+        var(--vkui_internal--safe_area_inset_bottom)
+    );
+    overflow: auto;
+    overflow-x: hidden;
+    padding: 0;
+    transition: 0.2s;
+    width: calc(
+      100% - 4px - var(--vkui--size_base_padding_horizontal--regular) - 56px -
+        12px - 4px
+    );
+    box-sizing: border-box;
+    z-index: 9;
+    background: #fff;
+  }
+
+  // нормальное отображение fixedLayout tabs и subChats на ПК
   @media screen and (min-width: 768px) {
+    overflow: hidden;
+
     > .vkuiFixedLayout {
       top: 0 !important;
       margin-top: 16px !important;
-      position: relative !important;
+      position: relative;
       border-start-start-radius: var(--vkui--size_border_radius_paper--regular);
       border-start-end-radius: var(--vkui--size_border_radius_paper--regular);
+    }
+
+    .group-list-chats {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      top: 0;
+    }
+
+    .list-chats .chat-item {
+      padding: 8px !important;
     }
 
     .vkuiTabsItem {
       cursor: pointer;
     }
 
+    &.shown-subchats {
+      .group-list-chats {
+        position: relative;
+        border-start-start-radius: var(
+          --vkui--size_border_radius_paper--regular
+        ) !important;
+        border-start-end-radius: var(
+          --vkui--size_border_radius_paper--regular
+        ) !important;
+      }
+    }
+
     > .vkuiGroup {
-      position: relative !important;
+      position: relative;
       border-start-start-radius: 0 !important;
       border-start-end-radius: 0 !important;
       .list-chats {
         padding-top: 0;
+      }
+    }
+
+    .subchats-group {
+      margin-top: 16px;
+      right: calc(
+        -1 * (100% - 4px - var(--vkui--size_base_padding_horizontal--regular) -
+              56px - 12px - 4px - 3px)
+      );
+      width: calc(
+        100% - 4px - var(--vkui--size_base_padding_horizontal--regular) - 56px -
+          12px - 4px - 3px
+      );
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    &.shown-subchats {
+      .panel-header {
+        z-index: 10;
+        box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.06),
+          0px 0px 2px 0px rgba(0, 0, 0, 0.03);
       }
     }
   }

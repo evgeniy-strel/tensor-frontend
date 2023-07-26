@@ -76,7 +76,10 @@ const CreateChat = () => {
       users_id: [user.id],
     };
 
-    const chatInfo = (await dispatch(createNewChat({ chat, tags }))).payload;
+    const tagsValues = tags.map((tag) => tag.value);
+
+    const chatInfo = (await dispatch(createNewChat({ chat, tags: tagsValues })))
+      .payload;
     navigate(`/messenger/chat/${chatInfo.id}`);
   };
 

@@ -44,7 +44,7 @@ export const createNewChat = createAsyncThunk(
   async ({ chat, tags }, { rejectWithValue }) => {
     try {
       const { data: chatInfo } = await RequestAPI.createNewChat(chat);
-      // await RequestAPI.updateChatTags(chatInfo.id, tags);
+      await RequestAPI.updateChatTags(chatInfo.id, tags);
       return chatInfo;
     } catch (error) {
       return rejectWithValue(error?.message);

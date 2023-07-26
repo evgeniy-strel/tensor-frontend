@@ -28,6 +28,7 @@ const modalSlice = createSlice({
       state.modalHistory = localModalHistory;
     },
     modalBack(state, action) {
+      console.log(action.payload);
       state.activeModal = null;
       // changeActiveModal(state.modalHistory[state.modalHistory.length - 3]);
     },

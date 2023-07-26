@@ -7,6 +7,9 @@ export const fetchCategories = createAsyncThunk(
     try {
       const { data: categoriesInfo } = await RequestAPI.fetchCategories();
       dispatch(setCategories(categoriesInfo));
+
+      const { data: tagsInfo } = await RequestAPI.fetchTags();
+      dispatch(setTags(tagsInfo));
     } catch (error) {
       return rejectWithValue(error?.message);
     }
@@ -15,6 +18,7 @@ export const fetchCategories = createAsyncThunk(
 
 const initialState = {
   categories: [],
+  tags: [],
 };
 
 const categoriesSlice = createSlice({
@@ -24,8 +28,11 @@ const categoriesSlice = createSlice({
     setCategories(state, action) {
       state.categories = action.payload;
     },
+    setTags(state, action) {
+      state.tags = action.payload;
+    },
   },
 });
 
 export default categoriesSlice.reducer;
-export const { setCategories } = categoriesSlice.actions;
+export const { setCategories, setTags } = categoriesSlice.actions;

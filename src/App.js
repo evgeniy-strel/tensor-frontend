@@ -25,6 +25,7 @@ import { modalBack } from "./store/reducers/modalSlice";
 import SettingsModalPage from "./modals/SettingsModalPage";
 import HobbiesModalPage from "./modals/HobbiesModalPage";
 import EditProfile from "./modals/EditProfile";
+import CategoryModalPage from "./modals/CategoryModalPage";
 import { fetchCategories } from "./store/reducers/categoriesSlice";
 
 const pages = [
@@ -65,8 +66,9 @@ function App() {
   const modal = (
     <ModalRoot activeModal={activeModal} onClose={() => dispatch(modalBack())}>
       <SettingsModalPage id="settings" />
-      <HobbiesModalPage id="hobbies" settlingHeight={100} />
-      <EditProfile id="editprofile" settlingHeight={100} />
+      <HobbiesModalPage id="hobbies" />
+      <CategoryModalPage id="tags" />
+      <EditProfile id="editprofile" />
     </ModalRoot>
   );
 

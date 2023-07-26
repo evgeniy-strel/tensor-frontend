@@ -1,15 +1,21 @@
 import { useEffect } from "react";
-import { Avatar, Title, Button, Text, PanelSpinner } from "@vkontakte/vkui";
+import {
+  Avatar,
+  Title,
+  Button,
+  Text,
+  PanelSpinner,
+  Card,
+} from "@vkontakte/vkui";
 import { Icon28FavoriteCircleFillGreen } from "@vkontakte/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { userInfoById } from "../../store/reducers/userSlice";
 
-const Another = ({ userId }) => {
+const Another = ({ userId, flexStyle }) => {
   const dispatch = useDispatch();
   const { loaderUserInfo, anothUser } = useSelector((state) => state.user);
 
   useEffect(() => {
-    // Получение информации о другом пользователе
     dispatch(userInfoById(userId));
   }, []);
 
@@ -18,7 +24,7 @@ const Another = ({ userId }) => {
       {loaderUserInfo ? (
         <PanelSpinner size="medium" />
       ) : (
-        <>
+        <Card mode="tint" style={flexStyle}>
           {" "}
           <Avatar
             size={96}
@@ -45,7 +51,7 @@ const Another = ({ userId }) => {
           <Text style={{ lineHeight: "20px", letterSpacing: "0.2px" }}>
             {anothUser?.description}
           </Text>
-        </>
+        </Card>
       )}
     </>
   );

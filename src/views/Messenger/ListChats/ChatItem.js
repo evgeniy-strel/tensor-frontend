@@ -58,17 +58,9 @@ const ChatItem = ({
           selected: isSelected,
         })}
         before={
-<<<<<<< HEAD:src/views/Messenger/ChatItem.js
-          <Avatar
-            size={56}
-            src={`${process.env.REACT_APP_URL_API}${avatar}`}
-            className="avatar"
-          />
-=======
           !hideAvatar && (
             <Avatar size={56} src={getFullUrlImg(avatar)} className="avatar" />
           )
->>>>>>> df7c85938e6acef11ba086ca5cfcf240d34da79d:src/views/Messenger/ListChats/ChatItem.js
         }
         subtitle={
           type == "private" ? (

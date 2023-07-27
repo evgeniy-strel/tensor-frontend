@@ -52,7 +52,6 @@ const Another = ({ userId, flexStyle }) => {
           <Button size="l" stretched onClick={sendUser}>
             Написать
           </Button>
-          ;
           <Text style={{ lineHeight: "20px", letterSpacing: "0.2px" }}>
             {anothUser?.description}
           </Text>

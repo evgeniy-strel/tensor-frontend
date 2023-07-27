@@ -1,20 +1,11 @@
 import React from "react";
 import { Group, List } from "@vkontakte/vkui";
-import ChatItem from "./ChatItem";
+import MyChatItem from "./MyChatItem";
 
-const ListSubChats = ({ subChats }) => {
+const ListSubChats = ({ children }) => {
   return (
     <div className="subchats-group">
-      <List className="subchats-group__list list-chats">
-        {subChats.map(({ chat, last_message }, i) => (
-          <ChatItem
-            key={i}
-            hideAvatar={true}
-            lastMessage={last_message}
-            {...chat}
-          />
-        ))}
-      </List>
+      <List className="subchats-group__list list-chats">{children}</List>
     </div>
   );
 };

@@ -34,10 +34,10 @@ export const fetchChats = createAsyncThunk(
       if (activeTab == "my_chats") {
         chats = (await RequestAPI.fetchUserChats()).data;
       } else {
-        // chats = await ... TO DO
+        chats = (await RequestAPI.fetchReccomendChats()).data;
       }
 
-      dispatch(setChats(chats));
+      return chats;
     } catch (error) {
       return rejectWithValue(error?.message);
     }
@@ -86,6 +86,7 @@ export const addUsersToChat = createAsyncThunk(
 const initialState = {
   isLoaded: {
     activeChat: false,
+    chats: false,
   },
   activeTab: "my_chats",
   chats: [],
@@ -99,6 +100,7 @@ const chatSlice = createSlice({
   initialState,
   reducers: {
     setActiveTab(state, action) {
+      state.chats = [];
       state.activeTab = action.payload;
     },
     setChats(state, action) {
@@ -145,6 +147,10 @@ const chatSlice = createSlice({
       state.activeChat = null;
       state.isLoaded.activeChat = false;
     });
+    builder.addCase(fetchChats.pending, (state) => {
+      state.chats = [];
+      state.isLoaded.chats = false;
+    });
     // fulfilled
     builder.addCase(fetchChatById.fulfilled, (state, action) => {
       state.activeChat = action.payload;
@@ -152,6 +158,10 @@ const chatSlice = createSlice({
     });
     builder.addCase(addUsersToChat.fulfilled, (state, action) => {
       state.activeChat.users = action.payload;
+    });
+    builder.addCase(fetchChats.fulfilled, (state, action) => {
+      state.chats = action.payload;
+      state.isLoaded.chats = true;
     });
     // rejected
     builder.addCase(fetchChatById.rejected, (state) => {

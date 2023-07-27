@@ -6,14 +6,16 @@ import {
   TabsItem,
   FixedLayout,
   Search,
+  PanelSpinner,
 } from "@vkontakte/vkui";
 import "./index.scss";
-import ChatItem from "./ChatItem";
+import MyChatItem from "./MyChatItem";
 import { useDispatch, useSelector } from "react-redux";
 import { setActiveTab } from "../../../store/reducers/chatSlice";
 import {
   activeTabChatSelector,
   chatsSelector,
+  isLoadedChatsSelector,
 } from "../../../store/selectors/chatSelectors";
 import { fetchChats } from "./../../../store/reducers/chatSlice";
 import {
@@ -23,6 +25,7 @@ import {
 import cn from "classnames";
 import PanelHeader from "./PanelHeader";
 import ListSubChats from "./ListSubChats";
+import ReccomendChatItem from "./ReccomendChatItem";
 
 const tabs = [
   {
@@ -31,7 +34,7 @@ const tabs = [
   },
   {
     id: "others_chats",
-    text: "Все чаты",
+    text: "Рекомендации",
   },
 ];
 
@@ -60,6 +63,7 @@ const ListChats = () => {
 
   const chats = useSelector(chatsSelector);
   const selected = useSelector(activeTabChatSelector);
+  const isLoaded = useSelector(isLoadedChatsSelector);
   const [search, setSearch] = useState({ isActive: false, text: "" });
   const [selectedChat, setSelectedChat] = useState();
 
@@ -73,13 +77,34 @@ const ListChats = () => {
     return () => addBounceEffect();
   }, []);
 
-  // TO DO: Изменить последнее сообщение и его дату
+  const showSubchats = () => {
+    setSelectedChat(chats[1]);
+  };
+
   // TO DO: Сделать анимацию загрузки чатов
-  // TO DO: Фильтры(если все пойдет очень хорошо)
 
-  // TO DO: Изменить key={i} на key={id}
+  const ListMyChats = ({ ...props }) =>
+    chats
+      .filter(({ chat }) =>
+        chat?.external?.title?.toLowerCase().includes(search.text.toLowerCase())
+      )
+      .map(({ chat, last_message }, i) => {
+        return (
+          <MyChatItem
+            {...props}
+            isSelected={selectedChat?.id == chat?.id}
+            key={chat.id}
+            lastMessage={last_message}
+            {...chat}
+          />
+        );
+      });
 
-  console.log(selectedChat);
+  const ListReccomendChats = ({ ...props }) => {
+    return chats.map((chat, i) => {
+      return <ReccomendChatItem {...props} key={chat.id} {...chat} />;
+    });
+  };
 
   return (
     <div
@@ -91,7 +116,7 @@ const ListChats = () => {
       <PanelHeader
         isShownSubchats={Boolean(selectedChat)}
         hideSubChats={() => setSelectedChat(null)}
-        showSubChats={() => setSelectedChat(chats[0])}
+        showSubChats={showSubchats}
         title={selectedChat?.chat?.external?.title || "Тестовое название"}
         avatar={selectedChat?.chat?.external?.avatar}
         isSearchActive={search.isActive}
@@ -113,25 +138,28 @@ const ListChats = () => {
       )}
       <Group separator="hide" className="group-list-chats">
         <List className="list-chats">
-          {chats
-            .filter(({ chat }) =>
-              chat?.external?.title
-                ?.toLowerCase()
-                .includes(search.text.toLowerCase())
+          {isLoaded ? (
+            selected == "my_chats" ? (
+              <ListMyChats />
+            ) : (
+              <ListReccomendChats />
             )
-            .map(({ chat, last_message }, i) => {
-              return (
-                <ChatItem
-                  isSelected={selectedChat?.id == chat?.id}
-                  key={i}
-                  lastMessage={last_message}
-                  {...chat}
-                />
-              );
-            })}
+          ) : (
+            <PanelSpinner style={{ height: "80vh" }} size="large" />
+          )}
         </List>
       </Group>
-      <ListSubChats subChats={chats} />
+      <ListSubChats>
+        {isLoaded ? (
+          selected == "my_chats" ? (
+            <ListMyChats hideAvatar={true} />
+          ) : (
+            <ListReccomendChats hideAvatar={true} />
+          )
+        ) : (
+          <PanelSpinner style={{ height: "80vh" }} size="large" />
+        )}
+      </ListSubChats>
     </div>
   );
 };

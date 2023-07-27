@@ -144,6 +144,11 @@ export default class RequestAPI {
     return axios.get("chats");
   }
 
+  // Получение рекомендованных чатов
+  static async fetchReccomendChats() {
+    return axios.get("/chats/recomended/userschats");
+  }
+
   // Получение конкретного чата
   static async fetchChatById(id) {
     return axios.get(`chats/${id}`);

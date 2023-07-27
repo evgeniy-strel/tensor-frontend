@@ -1,5 +1,5 @@
 import React from "react";
-import "./ChatItem.scss";
+import "./MyChatItem.scss";
 import { Cell, Avatar, Headline } from "@vkontakte/vkui";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -10,8 +10,6 @@ import cn from "classnames";
 const SubtitleGroup = ({ lastMessage, subChats }) => {
   const subChatsFormated = subChats?.length ? subChats.join(", ") : "";
   const external = lastMessage?.external;
-
-  console.log(lastMessage);
 
   return (
     <>
@@ -41,7 +39,7 @@ const SubtitlePM = ({ lastMessage }) => {
   );
 };
 
-const ChatItem = ({
+const MyChatItem = ({
   id,
   type,
   external: { title, avatar, subChats },
@@ -90,4 +88,4 @@ const ChatItem = ({
   );
 };
 
-export default ChatItem;
+export default MyChatItem;

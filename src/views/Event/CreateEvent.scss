@@ -19,7 +19,7 @@
 
   .eventsImage {
     overflow: hidden;
-    
+    position: relative;
     height: 30vh;
     background-color: #A2A2A2;
     display: flex;
@@ -57,17 +57,17 @@
     .date{
       display: flex;
 
-      .vkuiSelect {
-        width: 33%;
-      }
+      // .vkuiSelect {
+      //   width: 33%;
+      // }
     }
 
     .time {
       display: flex;
       
-      .vkuiSelect {
-        width: 50%;
-      }
+      // .vkuiSelect {
+      //   width: 50%;
+      // }
     }
   }
 }

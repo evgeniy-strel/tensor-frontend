@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   View,
   Panel,
@@ -31,6 +31,7 @@ import {
   chatsSelector,
 } from "../../store/selectors/chatSelectors";
 import { setActiveTab } from "../../store/reducers/chatSlice";
+import { fetchChats } from "./../../store/reducers/chatSlice";
 
 const Event = () => {
   const navigate = useNavigate();
@@ -38,6 +39,10 @@ const Event = () => {
 
   const chats = useSelector(chatsSelector);
   const selected = useSelector(activeTabChatSelector);
+
+  useEffect(() => {
+    dispatch(fetchChats());
+  }, [selected]);
 
   return (
     <View id="event" activePanel="event">
@@ -77,7 +82,7 @@ const Event = () => {
         </Tabs>
         <Group>
           <div className="wrapper">
-            {chats.map((chat, i) => {
+            {chats.map(({ chat, last_message }, i) => {
               return (
                 <EventCard
                   // isSelected={selectedChat?.id == chat?.id}

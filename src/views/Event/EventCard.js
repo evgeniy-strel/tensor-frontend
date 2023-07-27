@@ -12,19 +12,34 @@ import "./EventCard.scss";
 import { getFullUrlImg } from "../../utils/helpersMethods";
 import { useNavigate } from "react-router-dom";
 
+const months = {
+  1: "января",
+  2: "февраля",
+  3: "марта",
+  4: "апреля",
+  5: "мая",
+  6: "июня",
+  7: "июля",
+  8: "августа",
+  9: "сентября",
+  10: "октября",
+  11: "ноября",
+  12: "декабря",
+};
+
 const EventCard = ({
   id,
-  external: { title, avatar, place, day, month, year, hour, minute },
+  external: { title, avatar, place, date, hour, minute },
 }) => {
   const navigate = useNavigate();
 
   return (
-    <div id="eventCard" onClick={() => navigate(`event/${id}`)} key={id}>
+    <div id="eventCard" onClick={() => navigate(`/event/${id}`)} key={id}>
       <div>
         <div className="eventsImage">
           <img src={getFullUrlImg(avatar)} />
           <div className="infoImage">
-            <div>Танцы</div>
+            <div>Tag</div>
             <PanelHeaderButton
               onClick={(e) => {
                 e.stopPropagation();
@@ -48,7 +63,7 @@ const EventCard = ({
         </div>
         <div className="time">
           <p>
-            {day} {month}октября, {hour}:{minute}
+            {date?.day} {months[date?.month]}, {hour}:{minute}
           </p>
           <p>{place}</p>
         </div>

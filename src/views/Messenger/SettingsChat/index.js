@@ -1,81 +1,71 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./index.scss";
 import {
   PanelHeader,
   Image,
   PanelHeaderBack,
   Title,
-  Tabbar,
-  TabbarItem,
   Group,
   Tabs,
+  TabsItem,
+  Separator,
+  List,
 } from "@vkontakte/vkui";
-import {
-  Icon28ChainOutline,
-  Icon28Notifications,
-  Icon28DoorArrowLeftOutline,
-} from "@vkontakte/icons";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import {
   getCaseOfUchastnik,
   getFullUrlImg,
 } from "../../../utils/helpersMethods";
-
-const tabbarItems = [
-  {
-    icon: <Icon28ChainOutline />,
-    text: "Ссылка на чат",
-  },
-  {
-    icon: <Icon28Notifications />,
-    text: "Уведомления",
-  },
-  {
-    icon: <Icon28DoorArrowLeftOutline />,
-    text: "Выйти",
-  },
-];
+import UserItem from "./UserItem";
+import Tabbar from "./Tabbar";
+import {
+  addBounceEffect,
+  removeBounceEffect,
+} from "./../../../utils/bounceEffect";
 
 const tabs = [
   {
     id: "users",
     text: "Участники",
   },
-  {
-    id: "images",
-    text: "Фото",
-  },
-  {
-    id: "files",
-    text: "Файлы",
-  },
-  {
-    id: "links",
-    text: "Ссылки",
-  },
+  // {
+  //   id: "images",
+  //   text: "Фото",
+  // },
+  // {
+  //   id: "files",
+  //   text: "Файлы",
+  // },
+  // {
+  //   id: "links",
+  //   text: "Ссылки",
+  // },
 ];
 
-const SettingsChat = ({
-  id,
-  external: { title, avatar },
-  users,
-  messages: historyMessages,
-}) => {
+const SettingsChat = ({ id, external: { title, avatar }, users }) => {
+  console.log(id, title);
+
   const navigate = useNavigate();
 
   const user = useSelector((state) => state.user.user);
+  const [selected, setSelected] = useState(tabs[0].id);
 
   const onClickBack = () => {
     navigate(-1);
   };
+
+  useEffect(() => {
+    removeBounceEffect();
+
+    return () => addBounceEffect();
+  }, []);
 
   return (
     <div className="settings-chat">
       <PanelHeader
         className="settings-chat__panel_header"
         before={<PanelHeaderBack onClick={onClickBack} />}
-        separator={false}
       />
       <Group className="settings-chat__group">
         <div className="chat-container">
@@ -89,34 +79,32 @@ const SettingsChat = ({
             </div>
           </div>
           <div className="chat-container__buttons">
-            <Tabbar className="chat-container__buttons__tabbar" shadow={false}>
-              {tabbarItems.map(({ icon, text }) => (
-                <TabbarItem
-                  className="chat-container__buttons__tabbar-item"
-                  selected={true}
-                  onClick={() => {}}
-                  text={text}>
-                  {icon}
-                </TabbarItem>
-              ))}
-            </Tabbar>
+            <Tabbar id={id} />
           </div>
         </div>
+        <Separator className="separator-content" />
         <div className="users-list">
-          {/* <Tabs className="users-list__tabbar">
-            {tabs.map(({ text }) => (
+          <Tabs className="users-list__tabs">
+            {tabs.map(({ text, id }) => (
               <TabsItem
+                className="users-list__tabs__tab"
                 selected={selected === id}
                 onClick={() => {
                   setSelected(id);
                 }}
                 id={id}
+                key={id}
                 aria-controls={id}>
                 {text}
               </TabsItem>
             ))}
-          </Tabs> */}
+          </Tabs>
         </div>
+        <List>
+          {users.map(({ user }) => (
+            <UserItem key={user.id} {...user} />
+          ))}
+        </List>
       </Group>
     </div>
   );

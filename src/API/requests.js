@@ -155,12 +155,17 @@ export default class RequestAPI {
 
   // Получение истории сообщений чата
   static async fetchMessagesByChatId(id) {
-    return axios.get(`chats/${id}/messages`);
+    return axios.get(`chats/${id}/messages?limit=100000000`);
   }
 
   // Получение тегов чата
   static async fetchTagsByChatId(id) {
     return axios.get(`/chats/${id}/tags`);
+  }
+
+  // Добавление юзеров чата
+  static async addUsersToChat(chatId, users) {
+    return axios.put(`/chats/${chatId}/users`, users);
   }
 
   // ---------- CATEGORIES

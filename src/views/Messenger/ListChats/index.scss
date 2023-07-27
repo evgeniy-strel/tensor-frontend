@@ -25,6 +25,12 @@
       var(--app-height) - var(--vkui--size_panel_header_height--regular) - 48px -
         48px - var(--vkui_internal--safe_area_inset_bottom)
     );
+    @media screen and (min-width: 768px) {
+      height: calc(
+        var(--app-height) - var(--vkui--size_panel_header_height--regular) -
+          48px - 48px - 16px
+      );
+    }
     overflow-y: scroll;
     overflow-x: hidden;
     box-sizing: border-box;
@@ -41,6 +47,12 @@
         var(--app-height) - var(--vkui--size_panel_header_height--regular) -
           48px - var(--vkui_internal--safe_area_inset_bottom)
       );
+      @media screen and (min-width: 768px) {
+        height: calc(
+          var(--app-height) - var(--vkui--size_panel_header_height--regular) -
+            48px - 16px
+        );
+      }
     }
     .list-chats {
       padding-top: 0;
@@ -89,6 +101,12 @@
       var(--app-height) - var(--vkui--size_panel_header_height--regular) - 48px -
         var(--vkui_internal--safe_area_inset_bottom)
     );
+    @media screen and (min-width: 768px) {
+      height: calc(
+        var(--app-height) - var(--vkui--size_panel_header_height--regular) -
+          48px - 16px
+      );
+    }
     overflow: auto;
     overflow-x: hidden;
     padding: 0;
@@ -100,6 +118,8 @@
     box-sizing: border-box;
     z-index: 9;
     background: #fff;
+    border-start-end-radius: var(--vkui--size_border_radius_paper--regular);
+    border-end-end-radius: var(--vkui--size_border_radius_paper--regular);
   }
 
   // нормальное отображение fixedLayout tabs и subChats на ПК

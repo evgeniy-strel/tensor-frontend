@@ -2,19 +2,21 @@ import { useState } from "react";
 import "./index.scss";
 import {
   PanelHeader,
+  PanelHeaderButton,
   PanelHeaderBack,
   Avatar,
   PanelHeaderContent,
   Title,
   FixedLayout,
   Separator,
+  calcInitialsAvatarColor,
 } from "@vkontakte/vkui";
-import { useNavigate } from "react-router-dom";
+import { Icon28SettingsOutline } from "@vkontakte/icons";
+import { useNavigate, Navigate } from "react-router-dom";
 import CustomWriteBar from "../CustomWriteBar";
 import LayoutMessages from "../LayoutMessages";
 import Messages from "./Messages";
 import { useSelector } from "react-redux";
-import { calcInitialsAvatarColor } from "@vkontakte/vkui";
 import {
   getCaseOfUchastnik,
   getFirstDigitGuid,
@@ -30,11 +32,24 @@ const GroupChat = ({ id, external: { title, avatar }, users, messages }) => {
     navigate(-1);
   };
 
+  const handleSettingsIcon = () => {
+    navigate(`/messenger/settings/${id}`);
+  };
+
+  if (!users.find(({ user }) => user?.id == currentUser.id)) {
+    return <Navigate to={`/messenger/join/${id}`} />;
+  }
+
   return (
     <div className="group-chat">
       <PanelHeader
         className="group-chat__panel-header"
-        before={<PanelHeaderBack onClick={onClickBack} />}>
+        before={<PanelHeaderBack onClick={onClickBack} aria-label="back" />}
+        after={
+          <PanelHeaderButton onClick={handleSettingsIcon} aria-label="settings">
+            <Icon28SettingsOutline />
+          </PanelHeaderButton>
+        }>
         <PanelHeaderContent
           className="group-chat__panel-header__content"
           status={

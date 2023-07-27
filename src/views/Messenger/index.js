@@ -18,9 +18,9 @@ const panels = [
     element: <Chat destiny={DESTINY_CHAT.messages} />,
   },
   {
-    id: "descriptionChat",
-    path: "/messenger/description/:id",
-    element: <Chat destiny={DESTINY_CHAT.description} />,
+    id: "joinChat",
+    path: "/messenger/join/:id",
+    element: <Chat destiny={DESTINY_CHAT.join} />,
   },
   {
     id: "settingsChat",

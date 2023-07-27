@@ -9,6 +9,7 @@ import cn from "classnames";
 
 const SubtitleGroup = ({ lastMessage, subChats }) => {
   const subChatsFormated = subChats?.length ? subChats.join(", ") : "";
+  const external = lastMessage?.external;
 
   return (
     <>
@@ -18,28 +19,33 @@ const SubtitleGroup = ({ lastMessage, subChats }) => {
         </Headline>
       )}
       <Headline level="1" className="last-message">
-        <span className="username">{lastMessage?.user.username}</span>
+        <span className="username">{external?.user?.firstName}</span>
         <span className="text">
-          {lastMessage?.text && ": "}
-          {lastMessage?.text || "Напишите первое сообщение!"}
+          {external?.message && ": "}
+          {external?.message || "Напишите первое сообщение!"}
         </span>
       </Headline>
     </>
   );
 };
 
-const SubtitlePM = ({ lastMessage }) => (
-  <Headline level="1" className="last-message">
-    {lastMessage?.text || "Напишите первое сообщение!"}
-  </Headline>
-);
+const SubtitlePM = ({ lastMessage }) => {
+  const external = lastMessage?.external;
+
+  return (
+    <Headline level="1" className="last-message">
+      {external?.message || "Напишите первое сообщение!"}
+    </Headline>
+  );
+};
 
 const ChatItem = ({
   id,
   type,
-  external: { title, avatar, subChats, lastMessage },
+  external: { title, avatar, subChats },
   hideAvatar,
   isSelected,
+  lastMessage,
 }) => {
   const activeTab = useSelector(activeTabChatSelector);
   const isUserJoined = activeTab == "my_chats";

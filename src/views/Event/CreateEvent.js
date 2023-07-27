@@ -16,6 +16,7 @@ import {
   Textarea,
   DatePicker,
   CustomSelect,
+  FormLayoutGroup,
 } from "@vkontakte/vkui";
 import { Icon28Cancel, Icon28AddOutline } from "@vkontakte/icons";
 import { useNavigate } from "react-router-dom";
@@ -247,11 +248,11 @@ const CreateEvent = () => {
                   yearPlaceholder="ГГГГ"
                 />
               </FormItem>
-              <FormItem
-                status={isSubmited ? "error" : "default"}
-                bottom={isSubmited && "Заполните поля"}
-              >
-                <div className="time">
+              <FormLayoutGroup segmented mode="horizontal">
+                <FormItem
+                  status={isSubmited ? "error" : "default"}
+                  bottom={isSubmited && "Заполните поля"}
+                >
                   <Select
                     placeholder="Часов"
                     options={hours}
@@ -259,6 +260,8 @@ const CreateEvent = () => {
                       setHour(e.target.value);
                     }}
                   ></Select>
+                </FormItem>
+                <FormItem>
                   <Select
                     placeholder="Минут"
                     options={minutes}
@@ -269,8 +272,8 @@ const CreateEvent = () => {
                       }));
                     }}
                   ></Select>
-                </div>
-              </FormItem>
+                </FormItem>
+              </FormLayoutGroup>
               <FormItem
                 status={isSubmited && rules.place ? "error" : "default"}
                 bottom={

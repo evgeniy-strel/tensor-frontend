@@ -30,6 +30,7 @@ import { fetchCategories } from "./store/reducers/categoriesSlice";
 import HobbiesModalPageChat from "./modals/HobbiesModalPage/chat";
 import CategoryModalPageChat from "./modals/CategoryModalPage/chat";
 import { resetTags } from "./store/reducers/userSlice";
+import FilterModalPage from "./modals/FilterModalPage";
 
 const pages = [
   {
@@ -83,6 +84,8 @@ function App() {
       {/* create chat */}
       <HobbiesModalPageChat id="hobbies_chat" />
       <CategoryModalPageChat id="tags_chat" />
+      {/* event */}
+      <FilterModalPage id="filtration"/>
     </ModalRoot>
   );
 

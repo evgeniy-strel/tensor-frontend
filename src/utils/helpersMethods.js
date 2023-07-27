@@ -25,3 +25,26 @@ export const getCaseOfUchastnik = (countUsers) => {
 
   return word;
 };
+
+const addZero = (number) => {
+  if (+number < 10) return `0${number}`;
+
+  return number;
+};
+
+export const getFormatedDate = (date) => {
+  const currentDate = new Date();
+
+  const newDate = new Date(`${date}Z`);
+  let formatedDate = `${addZero(newDate.getHours())}:${addZero(
+    newDate.getMinutes()
+  )}`;
+
+  if (currentDate.getDate() - newDate.getDate() != 0) {
+    formatedDate = `${addZero(newDate.getDate())}.${addZero(
+      newDate.getMonth()
+    )} ${formatedDate}`;
+  }
+
+  return formatedDate;
+};

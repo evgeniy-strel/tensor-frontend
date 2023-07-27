@@ -4,7 +4,7 @@ import { Cell, Avatar, Headline } from "@vkontakte/vkui";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { activeTabChatSelector } from "../../../store/selectors/chatSelectors";
-import { getFullUrlImg } from "../../../utils/helpersMethods";
+import { getFormatedDate, getFullUrlImg } from "../../../utils/helpersMethods";
 import cn from "classnames";
 
 const SubtitleGroup = ({ lastMessage, subChats }) => {
@@ -42,18 +42,27 @@ const SubtitlePM = ({ lastMessage }) => {
 const MyChatItem = ({
   id,
   type,
-  external: { title, avatar, subChats },
+  external: { title: titleGroup, avatar: avatarGroup, subChats },
   hideAvatar,
   isSelected,
   lastMessage,
+  user: receivedUser,
+  date,
 }) => {
-  const activeTab = useSelector(activeTabChatSelector);
-  const isUserJoined = activeTab == "my_chats";
-  let url;
+  const isGroup = type == "group";
 
-  if (isUserJoined && !subChats?.length) url = `/messenger/chat/${id}`;
-  else if (isUserJoined && subChats?.length) url = `/messenger/subchats/${id}`;
-  else url = `/messenger/description/${id}`;
+  const currentUser = useSelector((state) => state.user.user);
+  const url = `/messenger/chat/${id}`;
+
+  const title = isGroup
+    ? titleGroup
+    : `${receivedUser?.external?.firstName} ${receivedUser?.external?.lastName}`;
+
+  const avatar = isGroup ? avatarGroup : receivedUser?.external?.avatar;
+
+  let formatedDate = getFormatedDate(date);
+
+  if (type == "private" && !receivedUser) return <></>;
 
   return (
     <Link to={url} key={id}>
@@ -77,7 +86,7 @@ const MyChatItem = ({
         }
         indicator={
           <Headline level="1" className="time-message">
-            17:58
+            {formatedDate}
           </Headline>
         }>
         <Headline level="1" className="name-chat">

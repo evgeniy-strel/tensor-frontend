@@ -42,18 +42,25 @@ const SubtitlePM = ({ lastMessage }) => {
 const MyChatItem = ({
   id,
   type,
-  external: { title, avatar, subChats },
+  external: { title: titleGroup, avatar: avatarGroup, subChats, users },
   hideAvatar,
   isSelected,
   lastMessage,
 }) => {
-  const activeTab = useSelector(activeTabChatSelector);
-  const isUserJoined = activeTab == "my_chats";
-  let url;
+  const isGroup = type == "group";
 
-  if (isUserJoined && !subChats?.length) url = `/messenger/chat/${id}`;
-  else if (isUserJoined && subChats?.length) url = `/messenger/subchats/${id}`;
-  else url = `/messenger/description/${id}`;
+  const currentUser = useSelector((state) => state.user.user);
+  const url = `/messenger/chat/${id}`;
+
+  const receivedUser = users?.find((user) => user.id != currentUser.id);
+
+  const title = isGroup
+    ? titleGroup
+    : `${receivedUser?.external?.firstName} ${receivedUser?.external?.lastName}`;
+
+  const avatar = isGroup ? avatarGroup : receivedUser?.external?.avatar;
+
+  if (type == "private" && !users) return <></>;
 
   return (
     <Link to={url} key={id}>

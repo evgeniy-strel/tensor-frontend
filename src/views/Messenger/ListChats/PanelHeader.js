@@ -62,7 +62,7 @@ const PanelHeaderListChats = ({ showSubChats, isSearchActive, setSearch }) => {
         after={
           <>
             <Icon28AddOutline onClick={createChatFunc} />
-            <Icon28SlidersOutline onClick={showSubChats} />
+            {/* <Icon28SlidersOutline /> */}
             {isSearchActive ? (
               <img
                 src="/icons/search-close.svg"

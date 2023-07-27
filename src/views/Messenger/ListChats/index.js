@@ -160,7 +160,7 @@ const ListChats = () => {
           )}
         </List>
       </Group>
-      <ListSubChats>
+      {/* <ListSubChats>
         {isLoaded ? (
           selected == "my_chats" ? (
             <ListMyChats hideAvatar={true} />
@@ -170,7 +170,7 @@ const ListChats = () => {
         ) : (
           <PanelSpinner style={{ height: "80vh" }} size="large" />
         )}
-      </ListSubChats>
+      </ListSubChats> */}
     </div>
   );
 };

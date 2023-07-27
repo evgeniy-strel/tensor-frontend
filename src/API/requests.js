@@ -107,11 +107,13 @@ export default class RequestAPI {
 
   // Обновление тегов у текущего пользователя
   static async updateUserTags(tags) {
-    const formTags = tags.map((el) => el.title);
+    const formTags = tags.map((el) =>
+      Boolean(el?.display) ? el.display : el.title
+    );
     const res = axios.post("current/tags", formTags);
     res.then((res) =>
       localStorage.setItem("userTags", JSON.stringify(res.data))
-    );
+    )
     return res;
   }
 

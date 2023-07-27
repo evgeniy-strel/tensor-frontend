@@ -79,7 +79,7 @@ const EditProfile = ({ id, ...props }) => {
     }
   };
 
-  useEffect(() => updateModalHeight, [newData.description, newData.tags]);
+  useEffect(() => updateModalHeight(), [newData.description]);
 
   return (
     <ModalPage

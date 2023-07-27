@@ -24,15 +24,7 @@ const HobbiesModalPage = ({ id, ...props }) => {
   };
 
   return (
-    <ModalPage
-      id={id}
-      onClose={() => {
-        dispatch(resetTags());
-        dispatch(modalBack());
-      }}
-      hideCloseButton
-      {...props}
-    >
+    <ModalPage id={id} hideCloseButton {...props}>
       <ModalPageHeader
         before={
           <PanelHeaderBack

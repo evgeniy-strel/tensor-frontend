@@ -2,13 +2,14 @@ import { Avatar, Title, Button, Text, Card } from "@vkontakte/vkui";
 import { Icon28FavoriteCircleFillGreen } from "@vkontakte/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { changeActiveModal } from "../../store/reducers/modalSlice";
+import classes from "./profile.module.scss";
 
-const My = ({ user, flexStyle }) => {
+const My = ({ user }) => {
   const dispatch = useDispatch();
   const tags = useSelector((state) => state.user.tags);
 
   return (
-    <Card mode="tint" style={flexStyle}>
+    <Card mode="tint" className={classes.card}>
       <Avatar
         size={96}
         initials={
@@ -31,29 +32,10 @@ const My = ({ user, flexStyle }) => {
       >
         Редактировать
       </Button>
-
-      <Text
-        style={{ lineHeight: "20px", letterSpacing: "0.2px", width: "100%" }}
-      >
-        {user.description}
-      </Text>
-      <div
-        style={{
-          display: "flex",
-          gap: "8px",
-          flexWrap: "wrap",
-        }}
-      >
+      <Text className={classes.description}>{user.description}</Text>
+      <div className={classes.container_tags}>
         {tags.map((el) => (
-          <div
-            style={{
-              backgroundColor: "var(--vkui--color_background_accent_themed)",
-              color: "var(--vkui--color_text_contrast_themed)",
-              padding: "4px 8px",
-              fontSize: "13px",
-              borderRadius: "87px"
-            }}
-          >
+          <div className={classes.tag} key={el.id}>
             {el.title}
           </div>
         ))}

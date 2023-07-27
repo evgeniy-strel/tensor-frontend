@@ -1,17 +1,8 @@
 import { CardGrid, Card, Text, Counter } from "@vkontakte/vkui";
 import classes from "../auth.module.scss";
 import { useSelector, useDispatch } from "react-redux";
-import { Icon28PrivacyOutline } from "@vkontakte/icons";
 import { changeActiveModal } from "../../../store/reducers/modalSlice";
 import { setCategoryModal } from "../../../store/reducers/userSlice";
-
-const styleFlex = {
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  justifyContent: "center",
-  textAlign: "center",
-};
 
 const Cards = () => {
   const dispatch = useDispatch();
@@ -33,7 +24,6 @@ const Cards = () => {
             dispatch(setCategoryModal(category));
           }}
           mode="outline"
-          style={styleFlex}
           key={category.id}
         >
           {tags.filter((el) => el.category_id === category.id).length > 0 && (
@@ -45,7 +35,7 @@ const Cards = () => {
               {tags.filter((el) => el.category_id === category.id).length}
             </Counter>
           )}
-          <Icon28PrivacyOutline />
+          {<div dangerouslySetInnerHTML={{ __html: category.external.icon }} />}
           <Text style={{ wordBreak: "break-word" }}>{category.title}</Text>
         </Card>
       ))}

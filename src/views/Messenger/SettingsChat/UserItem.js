@@ -21,6 +21,7 @@ const UserItem = ({ id, external: { avatar, firstName, lastName } }) => {
             gradientColor={calcInitialsAvatarColor(getFirstDigitGuid(id))}
             size={40}
             src={getFullUrlImg(avatar)}
+            initials={`${firstName.at(0)}${lastName?.at(0)}`}
             className="avatar"
           />
         }>

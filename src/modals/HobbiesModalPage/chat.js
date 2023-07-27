@@ -1,62 +1,61 @@
-import { useEffect } from "react";
 import {
   Group,
   ModalPage,
   ModalPageHeader,
   PanelHeaderBack,
+  PanelHeaderClose,
   ButtonGroup,
   Button,
 } from "@vkontakte/vkui";
 import { useDispatch, useSelector } from "react-redux";
+import {
+  resetNewChatState,
+  resetTagsNewChat,
+  setCategoryNewChat,
+} from "../../store/reducers/chatSlice";
 import { changeActiveModal, modalBack } from "../../store/reducers/modalSlice";
 import {
   updateUserTags,
   resetTags,
   setCategoryModal,
 } from "../../store/reducers/userSlice";
+import { tagsNewChatSelector } from "../../store/selectors/chatSelectors";
 import Cards from "../../views/Auth/Interests/Cards";
 import classes from "./index.module.scss";
-import { useModalRootContext } from "@vkontakte/vkui";
 
-const HobbiesModalPage = ({ id }) => {
-  const { updateModalHeight } = useModalRootContext();
-  const tags = useSelector((state) => state.user.tags);
+const HobbiesModalPageChat = ({ id, ...props }) => {
+  const tags = useSelector(tagsNewChatSelector);
   const dispatch = useDispatch();
 
   const handleSubmit = () => {
     if (tags.length >= 3) {
-      dispatch(changeActiveModal("settings"));
-      console.log(tags);
-      dispatch(updateUserTags(tags));
+      dispatch(modalBack());
     }
   };
 
   const onClickCard = (category) => {
-    dispatch(changeActiveModal("tags"));
-    dispatch(setCategoryModal(category));
+    dispatch(changeActiveModal("tags_chat"));
+    dispatch(setCategoryNewChat(category));
   };
-
-  useEffect(() => updateModalHeight(), []);
 
   return (
     <ModalPage
       id={id}
       onClose={() => {
-        dispatch(resetTags());
+        dispatch(resetTagsNewChat());
         dispatch(modalBack());
       }}
       hideCloseButton
-    >
+      {...props}>
       <ModalPageHeader
         before={
-          <PanelHeaderBack
+          <PanelHeaderClose
             onClick={() => {
-              dispatch(resetTags());
-              dispatch(changeActiveModal("settings"));
+              dispatch(resetTagsNewChat());
+              dispatch(modalBack());
             }}
           />
-        }
-      >
+        }>
         Увлечения
       </ModalPageHeader>
       <Group>
@@ -66,8 +65,7 @@ const HobbiesModalPage = ({ id }) => {
             onClick={handleSubmit}
             size="l"
             disabled={tags.length < 3}
-            stretched
-          >
+            stretched>
             Готово
           </Button>
         </ButtonGroup>
@@ -76,4 +74,4 @@ const HobbiesModalPage = ({ id }) => {
   );
 };
 
-export default HobbiesModalPage;
+export default HobbiesModalPageChat;

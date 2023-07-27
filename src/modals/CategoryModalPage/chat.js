@@ -7,38 +7,29 @@ import {
   Cell,
 } from "@vkontakte/vkui";
 import { useDispatch, useSelector } from "react-redux";
-import { changeActiveModal, modalBack } from "../store/reducers/modalSlice";
-import { setTag } from "../store/reducers/userSlice";
+import { setTagNewChat } from "../../store/reducers/chatSlice";
+import { changeActiveModal, modalBack } from "../../store/reducers/modalSlice";
+import { setTag } from "../../store/reducers/userSlice";
 
-const CategoryModalPage = ({ id }) => {
+const CategoryModalPageChat = ({ id }) => {
   const dispatch = useDispatch();
   const allTags = useSelector((state) => state.categories.tags);
-  const { token, tags, activeCategory } = useSelector((state) => state.user);
-  const isAuth = token !== "";
+  const { tagsNewChat: tags, categoryNewChat: activeCategory } = useSelector(
+    (state) => state.chat
+  );
 
   const handlerClose = () => {
-    if (isAuth) {
-      dispatch(changeActiveModal("hobbies"));
-    } else {
-      dispatch(modalBack());
-    }
+    dispatch(changeActiveModal("hobbies_chat"));
   };
 
   return (
     <ModalPage id={id} onClose={handlerClose} hideCloseButton>
       <ModalPageHeader
-        before={
-          isAuth ? (
-            <PanelHeaderBack onClick={handlerClose} />
-          ) : (
-            <PanelHeaderClose onClick={handlerClose} />
-          )
-        }
-      >
-        {activeCategory.title}
+        before={<PanelHeaderClose onClick={handlerClose} children={"Назад"} />}>
+        {activeCategory?.title}
       </ModalPageHeader>
       <Group>
-        {activeCategory.title === "Пользовательская"
+        {activeCategory?.title === "Пользовательская"
           ? tags
               .filter((el) => el.category_id === activeCategory.id)
               .map((el) => (
@@ -52,8 +43,7 @@ const CategoryModalPage = ({ id }) => {
                         .includes(el.title)}
                     />
                   }
-                  key={el.id}
-                >
+                  key={el.id}>
                   {el.title}
                 </Cell>
               ))
@@ -64,14 +54,13 @@ const CategoryModalPage = ({ id }) => {
                   Component="label"
                   after={
                     <Cell.Checkbox
-                      onChange={() => dispatch(setTag(el))}
+                      onChange={() => dispatch(setTagNewChat(el))}
                       defaultChecked={tags
                         .map((el) => el.title)
                         .includes(el.title)}
                     />
                   }
-                  key={el.id}
-                >
+                  key={el.id}>
                   {el.display}
                 </Cell>
               ))}
@@ -80,4 +69,4 @@ const CategoryModalPage = ({ id }) => {
   );
 };
 
-export default CategoryModalPage;
+export default CategoryModalPageChat;

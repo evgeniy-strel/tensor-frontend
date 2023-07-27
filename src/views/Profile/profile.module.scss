@@ -1,0 +1,29 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+  padding: 36px 16px 53px;
+  background: var(--vkui--color_background_content) !important;
+}
+
+.description {
+  line-height: 20px;
+  letter-spacing: 0.2px;
+  width: 100%;
+}
+
+.container_tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  > div {
+    background-color: var(--vkui--color_background_accent_themed);
+    color: var(--vkui--color_text_contrast_themed);
+    padding: 4px 8px;
+    font-size: 13px;
+    border-radius: 87px;
+  }
+}

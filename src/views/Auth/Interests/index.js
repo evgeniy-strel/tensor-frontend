@@ -11,9 +11,13 @@ import {
   Button,
 } from "@vkontakte/vkui";
 import { useSelector, useDispatch } from "react-redux";
-import { postRegister } from "../../../store/reducers/userSlice";
+import {
+  postRegister,
+  setCategoryModal,
+} from "../../../store/reducers/userSlice";
 import classes from "../auth.module.scss";
 import Cards from "./Cards";
+import { changeActiveModal } from "../../../store/reducers/modalSlice";
 
 const Interests = ({ setActivePanel, formData, setFormData }) => {
   const dispatch = useDispatch();
@@ -29,6 +33,11 @@ const Interests = ({ setActivePanel, formData, setFormData }) => {
         dispatch(postRegister([formData, null, tags]));
       }
     }
+  };
+
+  const onClickCard = (category) => {
+    dispatch(changeActiveModal("tags"));
+    dispatch(setCategoryModal(category));
   };
 
   return (
@@ -60,7 +69,7 @@ const Interests = ({ setActivePanel, formData, setFormData }) => {
                 {registerState.error}
               </FormStatus>
             )}
-            <Cards />
+            <Cards tags={tags} onClick={onClickCard} />
             <ButtonGroup className={classes.button_group} stretched>
               <Button
                 onClick={handleSubmit}

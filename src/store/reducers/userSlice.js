@@ -243,6 +243,7 @@ const userSlice = createSlice({
         state.loaderUserInfo = false;
       })
       .addCase(userInfoById.rejected, (state, action) => {
+        state.anothUser = {};
         state.loaderUserInfo = false;
       });
   },

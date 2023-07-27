@@ -31,7 +31,7 @@
           48px - 48px - 16px
       );
     }
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
     box-sizing: border-box;
   }
@@ -65,9 +65,21 @@
   }
 
   &.search-active {
-    .group-list-chats {
-      top: 100px;
+    @media screen and (max-width: 767px) {
+      .group-list-chats {
+        top: 100px;
+      }
     }
+
+    @media screen and (min-width: 768px) {
+      .group-list-chats {
+        height: calc(
+          var(--app-height) - var(--vkui--size_panel_header_height--regular) -
+            48px - 52px - 48px - 16px
+        );
+      }
+    }
+
     .fixed-layout__search {
       height: var(--vkui--size_search_height--regular);
       padding: 8px var(--vkui--size_base_padding_horizontal--regular);

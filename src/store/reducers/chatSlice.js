@@ -34,10 +34,10 @@ export const fetchChats = createAsyncThunk(
       if (activeTab == "my_chats") {
         chats = (await RequestAPI.fetchUserChats()).data;
       } else {
-        // chats = await ... TO DO
+        chats = (await RequestAPI.fetchReccomendChats()).data;
       }
 
-      dispatch(setChats(chats));
+      return chats;
     } catch (error) {
       return rejectWithValue(error?.message);
     }
@@ -86,9 +86,12 @@ export const addUsersToChat = createAsyncThunk(
 const initialState = {
   isLoaded: {
     activeChat: false,
+    chats: false,
   },
   activeTab: "my_chats",
   chats: [],
+  tagsNewChat: [],
+  categoryNewChat: null,
   activeChat: null,
 };
 
@@ -97,6 +100,8 @@ const chatSlice = createSlice({
   initialState,
   reducers: {
     setActiveTab(state, action) {
+      if (state.activeTab == action.payload) return;
+      state.chats = [];
       state.activeTab = action.payload;
     },
     setChats(state, action) {
@@ -110,12 +115,42 @@ const chatSlice = createSlice({
       if (!messages.find((message) => message.id == action.payload.id))
         state.activeChat.messages.push(action.payload);
     },
+    setTagNewChat(state, action) {
+      if (
+        state.tagsNewChat.map((el) => el.title).includes(action.payload.title)
+      ) {
+        state.tagsNewChat = [
+          ...state.tagsNewChat.filter(
+            (el) => el.title !== action.payload.title
+          ),
+        ];
+      } else {
+        state.tagsNewChat = [...state.tagsNewChat, action.payload];
+      }
+    },
+    resetTagsNewChat(state) {
+      state.tagsNewChat = [];
+    },
+    setCategoryNewChat(state, action) {
+      state.categoryNewChat = action.payload;
+    },
+    resetCategoryNewChat(state) {
+      state.categoryNewChat = null;
+    },
+    resetNewChatState(state) {
+      state.tagsNewChat = [];
+      state.categoryNewChat = null;
+    },
   },
   extraReducers: (builder) => {
     // pending
     builder.addCase(fetchChatById.pending, (state) => {
       state.activeChat = null;
       state.isLoaded.activeChat = false;
+    });
+    builder.addCase(fetchChats.pending, (state) => {
+      state.chats = [];
+      state.isLoaded.chats = false;
     });
     // fulfilled
     builder.addCase(fetchChatById.fulfilled, (state, action) => {
@@ -124,6 +159,10 @@ const chatSlice = createSlice({
     });
     builder.addCase(addUsersToChat.fulfilled, (state, action) => {
       state.activeChat.users = action.payload;
+    });
+    builder.addCase(fetchChats.fulfilled, (state, action) => {
+      state.chats = action.payload;
+      state.isLoaded.chats = true;
     });
     // rejected
     builder.addCase(fetchChatById.rejected, (state) => {
@@ -134,5 +173,14 @@ const chatSlice = createSlice({
 });
 
 export default chatSlice.reducer;
-export const { setActiveTab, setChats, setActiveChat, addMessage } =
-  chatSlice.actions;
+export const {
+  setActiveTab,
+  setChats,
+  setActiveChat,
+  addMessage,
+  setTagNewChat,
+  resetTagsNewChat,
+  setCategoryNewChat,
+  resetCategoryNewChat,
+  resetNewChatState,
+} = chatSlice.actions;

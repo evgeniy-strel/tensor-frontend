@@ -21,29 +21,20 @@ const EventCard = ({ id, external: { title, avatar, place, datetime } }) => {
   const [date, setDate] = useState();
   const [tags, setTags] = useState([]);
 
-  function convertor(dateTime) {
-    const str = dateTime?.split(" ");
-    const [year, month, day] = str[0]?.split("-");
-    const [hour, minute] = str[1]?.split(":");
-    let hD = day;
-    let hM = month;
-
-    if (day[0] === "0") {
-      hD = day[1];
-    }
-    if (month[0] === "0") {
-      hM = month[1];
-    }
-
-    return { day: hD, month: hM, year: year, hour: hour, minute: minute };
-  }
-
   useEffect(() => {
     RequestAPI.fetchUsersByChatId(id).then((e) => {
       setCountUsers(e?.data.length);
     });
     RequestAPI.fetchTagsByChatId(id).then((e) => setTags(e?.data));
-    setDate(convertor(datetime));
+
+    let dd = new Date(datetime);
+    setDate({
+      day: dd.getDay(),
+      month: dd.getMonth(),
+      year: dd.getFullYear(),
+      hour: dd.getHours(),
+      minute: dd.getMinutes(),
+    });
   }, []);
 
   return (

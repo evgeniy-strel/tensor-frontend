@@ -1,10 +1,10 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Meet's match",
+  "name": "Meet's match",
   "icons": [
     {
-      "src": "favicon.ico",
-      "type": "image/x-icon",
+      "src": "logo64.png",
+      "type": "image/png",
       "sizes": "64x64"
     },
     {

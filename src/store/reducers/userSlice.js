@@ -240,11 +240,10 @@ const userSlice = createSlice({
       })
       .addCase(userInfoById.fulfilled, (state, action) => {
         state.anothUser = action.payload;
-        state.userExist = true;
         state.loaderUserInfo = false;
       })
       .addCase(userInfoById.rejected, (state, action) => {
-        state.userExist = false;
+        state.anothUser = {};
         state.loaderUserInfo = false;
       });
   },

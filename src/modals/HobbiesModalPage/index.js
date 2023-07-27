@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
   Group,
   ModalPage,
@@ -15,8 +16,10 @@ import {
 } from "../../store/reducers/userSlice";
 import Cards from "../../views/Auth/Interests/Cards";
 import classes from "./index.module.scss";
+import { useModalRootContext } from "@vkontakte/vkui";
 
-const HobbiesModalPage = ({ id, ...props }) => {
+const HobbiesModalPage = ({ id }) => {
+  const { updateModalHeight } = useModalRootContext();
   const tags = useSelector((state) => state.user.tags);
   const dispatch = useDispatch();
 
@@ -33,6 +36,8 @@ const HobbiesModalPage = ({ id, ...props }) => {
     dispatch(setCategoryModal(category));
   };
 
+  useEffect(() => updateModalHeight(), []);
+
   return (
     <ModalPage
       id={id}
@@ -41,7 +46,7 @@ const HobbiesModalPage = ({ id, ...props }) => {
         dispatch(modalBack());
       }}
       hideCloseButton
-      {...props}>
+    >
       <ModalPageHeader
         before={
           <PanelHeaderBack
@@ -50,7 +55,8 @@ const HobbiesModalPage = ({ id, ...props }) => {
               dispatch(changeActiveModal("settings"));
             }}
           />
-        }>
+        }
+      >
         Увлечения
       </ModalPageHeader>
       <Group>
@@ -60,7 +66,8 @@ const HobbiesModalPage = ({ id, ...props }) => {
             onClick={handleSubmit}
             size="l"
             disabled={tags.length < 3}
-            stretched>
+            stretched
+          >
             Готово
           </Button>
         </ButtonGroup>

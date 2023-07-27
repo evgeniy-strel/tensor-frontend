@@ -16,13 +16,11 @@ import classes from "./profile.module.scss";
 const Another = ({ userId }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { loaderUserInfo, anothUser, userExist } = useSelector(
-    (state) => state.user
-  );
+  const { loaderUserInfo, anothUser } = useSelector((state) => state.user);
 
   useEffect(() => {
     dispatch(userInfoById(userId)).then((res) => {
-      if (!userExist) {
+      if (res.type !== "user/another/fulfilled") {
         navigate("/profile/me");
       }
     });
@@ -50,7 +48,8 @@ const Another = ({ userId }) => {
             src={
               anothUser.avatar &&
               process.env.REACT_APP_URL_API + anothUser.avatar
-            }>
+            }
+          >
             <Avatar.Badge>
               <Icon28FavoriteCircleFillGreen />
             </Avatar.Badge>

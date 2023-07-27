@@ -74,6 +74,7 @@ const TabsHeader = ({ selected, setSelected }) => {
 
 const Event = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [chats, setChats] = useState();
   const [selected, setSelected] = useState("all_events");
@@ -124,19 +125,19 @@ const Event = () => {
         >
           <Title>События</Title>
         </PanelHeader>
-        <Tabs mode={"default"}>
-          <HorizontalScroll arrowSize="m">
-            <TabsItem aria-controls="all-event">Все события</TabsItem>
-            <TabsItem>Избранное</TabsItem>
-            <TabsItem>Мои события</TabsItem>
-          </HorizontalScroll>
-        </Tabs>
-        <Group id="all-event">
+        {/*<Tabs mode={"default"}>*/}
+        {/*  <HorizontalScroll arrowSize="m">*/}
+        {/*    <TabsItem aria-controls="all-event">Все события</TabsItem>*/}
+        {/*    <TabsItem>Избранное</TabsItem>*/}
+        {/*    <TabsItem>Мои события</TabsItem>*/}
+        {/*  </HorizontalScroll>*/}
+        {/*</Tabs>*/}
+
         <TabsHeader
           selected={selected}
           setSelected={(value) => setSelected(value)}
         />
-        <Group>
+        <Group id="all-event">
 
           <div className="wrapper">
             {chats?.map((chat, i) => {

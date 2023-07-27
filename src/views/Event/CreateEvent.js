@@ -16,6 +16,7 @@ import {
   Textarea,
   DatePicker,
   CustomSelect,
+  FormLayoutGroup,
 } from "@vkontakte/vkui";
 import { Icon28Cancel, Icon28AddOutline } from "@vkontakte/icons";
 import { useNavigate } from "react-router-dom";
@@ -198,7 +199,7 @@ const CreateEvent = () => {
           <FormLayout className="formLayout">
             <FormItem className="eventsImage">
               {!data.avatar ? (
-                <File onChange={fileOnChange} accept="image/*">
+                <File onChange={fileOnChange} accept="image/*" mode="link">
                   <Image
                     borderRadius="s"
                     // size={196}
@@ -244,11 +245,11 @@ const CreateEvent = () => {
                   yearPlaceholder="ГГГГ"
                 />
               </FormItem>
-              <FormItem
-                status={isSubmited ? "error" : "default"}
-                bottom={isSubmited && "Заполните поля"}
-              >
-                <div className="time">
+              <FormLayoutGroup segmented mode="horizontal">
+                <FormItem
+                  status={isSubmited ? "error" : "default"}
+                  bottom={isSubmited && "Заполните поля"}
+                >
                   <Select
                     placeholder="Часов"
                     options={hours}
@@ -256,6 +257,8 @@ const CreateEvent = () => {
                       setData((prev) => ({ ...prev, hour: e.target.value }));
                     }}
                   ></Select>
+                </FormItem>
+                <FormItem>
                   <Select
                     placeholder="Минут"
                     options={minutes}
@@ -263,8 +266,8 @@ const CreateEvent = () => {
                       setData((prev) => ({ ...prev, minute: e.target.value }));
                     }}
                   ></Select>
-                </div>
-              </FormItem>
+                </FormItem>
+              </FormLayoutGroup>
               <FormItem
                 status={isSubmited && rules.place ? "error" : "default"}
                 bottom={

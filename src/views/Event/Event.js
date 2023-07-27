@@ -32,6 +32,7 @@ import {
 } from "../../store/selectors/chatSelectors";
 import { setActiveTab } from "../../store/reducers/chatSlice";
 import { fetchChats } from "./../../store/reducers/chatSlice";
+import { changeActiveModal } from "../../store/reducers/modalSlice";
 
 const Event = () => {
   const navigate = useNavigate();
@@ -57,7 +58,7 @@ const Event = () => {
                 <Icon28AddOutline />
               </PanelHeaderButton>
               <PanelHeaderButton
-                onClick={() => console.log("filters")}
+                onClick={() => dispatch(changeActiveModal("filtration"))}
                 aria-label="filtration"
               >
                 <Icon28SlidersOutline />
@@ -75,12 +76,12 @@ const Event = () => {
         </PanelHeader>
         <Tabs mode={"default"}>
           <HorizontalScroll arrowSize="m">
-            <TabsItem>Все события</TabsItem>
+            <TabsItem aria-controls="all-event">Все события</TabsItem>
             <TabsItem>Избранное</TabsItem>
             <TabsItem>Мои события</TabsItem>
           </HorizontalScroll>
         </Tabs>
-        <Group>
+        <Group id="all-event">
           <div className="wrapper">
             {chats.map(({ chat, last_message }, i) => {
               return (

@@ -179,4 +179,11 @@ export default class RequestAPI {
   static async fetchTags() {
     return axios.get("tags");
   }
+
+  // -----------EVENTS
+
+  // Получение событий
+  static async fetchUserEvents() {
+    return axios.get("chats/recomended/events");
+  }
 }

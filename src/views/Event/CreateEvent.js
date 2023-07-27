@@ -121,9 +121,7 @@ const initialData = {
   title: "",
   description: "",
   place: "",
-  date: "",
-  hour: "",
-  minute: "",
+  datetime: "",
 };
 
 const CreateEvent = () => {
@@ -134,6 +132,7 @@ const CreateEvent = () => {
   const categories = useSelector(categoriesSelector);
   const [tags, setTags] = useState([]);
   const [data, setData] = useState(initialData);
+  const [hour, setHour] = useState();
   const [isSubmited, setIsSubmited] = useState(false);
 
   const fileOnChange = async (e) => {
@@ -241,7 +240,10 @@ const CreateEvent = () => {
                   min={{ day: 1, month: 1, year: 1901 }}
                   max={{ day: 1, month: 1, year: 2006 }}
                   onDateChange={(value) => {
-                    setData((prev) => ({ ...prev, date: value }));
+                    setData((prev) => ({
+                      ...prev,
+                      datetime: `${value.year}-${value.month}-${value.day}`,
+                    }));
                   }}
                   dayPlaceholder="ДД"
                   monthPlaceholder="ММММ"
@@ -257,14 +259,20 @@ const CreateEvent = () => {
                     placeholder="Часов"
                     options={hours}
                     onChange={(e) => {
-                      setData((prev) => ({ ...prev, hour: e.target.value }));
+                      setData((prev) => ({
+                        ...prev,
+                        datetime: ` ${e.target.value}:`,
+                      }));
                     }}
                   ></Select>
                   <Select
                     placeholder="Минут"
                     options={minutes}
                     onChange={(e) => {
-                      setData((prev) => ({ ...prev, minute: e.target.value }));
+                      setData((prev) => ({
+                        ...prev,
+                        datetime: e.target.value,
+                      }));
                     }}
                   ></Select>
                 </div>

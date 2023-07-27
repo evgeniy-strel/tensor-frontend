@@ -32,6 +32,7 @@ import {
 } from "../../store/selectors/chatSelectors";
 import { setActiveTab } from "../../store/reducers/chatSlice";
 import { fetchChats } from "./../../store/reducers/chatSlice";
+import RequestAPI from "../../API/requests";
 
 const tabs = [
   {
@@ -70,13 +71,17 @@ const TabsHeader = ({ selected, setSelected }) => {
 
 const Event = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
-  const chats = useSelector(chatsSelector);
-  const selected = useSelector(activeTabChatSelector);
+  const [chats, setChats] = useState();
+  const [selected, setSelected] = useState("all_events");
 
   useEffect(() => {
-    dispatch(fetchChats());
+    if (selected === "all_events") {
+      RequestAPI.fetchUserEvents().then((e) => console.log(e?.data));
+    }
+    if (selected === "my_events") {
+      RequestAPI.fetchUserChats().then((e) => console.log(e?.data[1]?.chat));
+    }
   }, [selected]);
 
   return (
@@ -110,18 +115,12 @@ const Event = () => {
         </PanelHeader>
         <TabsHeader
           selected={selected}
-          setSelected={(value) => dispatch(setActiveTab(value))}
+          setSelected={(value) => setSelected(value)}
         />
         <Group>
           <div className="wrapper">
-            {chats.map(({ chat }, i) => {
-              return (
-                <EventCard
-                  // isSelected={selectedChat?.id == chat?.id}
-                  key={i}
-                  {...chat}
-                />
-              );
+            {chats?.map((chat, i) => {
+              return <EventCard {...chat} key={i} />;
             })}
           </div>
         </Group>

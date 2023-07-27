@@ -68,7 +68,7 @@ const GroupChat = ({
             <Avatar
               size={36}
               src={getFullUrlImg(avatar)}
-              initials={title?.at(0)}
+              initials={title?.substr(0, 1)}
               gradientColor={calcInitialsAvatarColor(getFirstDigitGuid(id))}
             />
           }>

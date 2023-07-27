@@ -35,7 +35,7 @@ const ReccomendChatItem = (item) => {
               size={56}
               src={getFullUrlImg(external?.avatar)}
               gradientColor={calcInitialsAvatarColor(getFirstDigitGuid(id))}
-              initials={title?.at(0)}
+              initials={title && title?.substr(0, 1)}
               className="avatar"
             />
           )

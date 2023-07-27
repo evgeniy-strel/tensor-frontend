@@ -9,7 +9,7 @@ import {
 } from "@vkontakte/vkui";
 import { useDispatch, useSelector } from "react-redux";
 import { modalBack } from "../../store/reducers/modalSlice";
-import { userTags, updateUser } from "../../store/reducers/userSlice";
+import { updateUser } from "../../store/reducers/userSlice";
 import Form from "./Form";
 import classes from "./index.module.scss";
 
@@ -21,7 +21,6 @@ const EditProfile = ({ id, ...props }) => {
     firstName: user?.firstName,
     lastName: user?.lastName,
     description: user?.description,
-    tags: [],
   });
   const [avatarSrc, setAvatarSrc] = useState(
     user.avatar ? `${process.env.REACT_APP_URL_API}${user.avatar}` : ""
@@ -62,10 +61,6 @@ const EditProfile = ({ id, ...props }) => {
       dispatch(modalBack());
     }
   };
-
-  useEffect(() => {
-    dispatch(userTags());
-  }, []);
 
   return (
     <ModalPage

@@ -6,15 +6,27 @@ import {
   WriteBarIcon,
 } from "@vkontakte/vkui";
 import { useDispatch } from "react-redux";
-import { addMessage } from "../../store/reducers/chatSlice";
+import { addMessage, setActiveChat } from "../../store/reducers/chatSlice";
+import { useNavigate } from "react-router-dom";
 
-const CustomWriteBar = ({ user, chatId }) => {
+const CustomWriteBar = ({ user, chatId: chatIdProps, onMessage }) => {
+  const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const socket = useRef();
   const [text, setText] = useState("");
   const dispatch = useDispatch();
 
-  const sendMessage = () => {
+  const [chatId, setChatId] = useState(chatIdProps);
+
+  // TO DO: Private Chats
+
+  const sendMessage = async () => {
+    if (onMessage) {
+      const chatInfo = await onMessage();
+      // setChatId(chatInfo.id);
+      console.log(chatInfo);
+    }
+
     if (text.length == 0) return;
 
     const message = {
@@ -28,10 +40,14 @@ const CustomWriteBar = ({ user, chatId }) => {
 
     socket.current.send(JSON.stringify(message));
 
-    dispatch(addMessage(message));
+    dispatch(addMessage({ ...message, id: new Date().toJSON() }));
 
     setText("");
     writeBarRef.focus();
+
+    if (onMessage) {
+      // navigate(`/messenger/chat/${chatId}`);
+    }
   };
 
   const [writeBarRef, setWriteBarRef] = useState();
@@ -58,9 +74,10 @@ const CustomWriteBar = ({ user, chatId }) => {
     };
     socket.current.onmessage = (event) => {
       const message = JSON.parse(event.data);
-      console.log("get message from ws", message);
+      // console.log("get message from ws", message);
 
       if (chatId == message.chat_id) dispatch(addMessage(message));
+      console.log("added");
     };
     socket.current.onclose = () => {
       console.log("Socket закрыт");

@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import RequestAPI from "./../../API/requests";
 
 export const fetchChatById = createAsyncThunk(
@@ -9,9 +9,14 @@ export const fetchChatById = createAsyncThunk(
       const { data: users } = await RequestAPI.fetchUsersByChatId(id);
       const { data: messages } = await RequestAPI.fetchMessagesByChatId(id);
       const { data: tags } = await RequestAPI.fetchTagsByChatId(id);
-      const chat = { ...info, users, messages, tags };
 
-      dispatch(setActiveChat(chat));
+      const messagesSorted = messages.sort(
+        (a, b) => new Date(a.created_at) - new Date(b.created_at)
+      );
+
+      const chat = { ...info, users, messages: messagesSorted, tags };
+
+      return chat;
     } catch (error) {
       return rejectWithValue(error?.message);
     }
@@ -44,7 +49,7 @@ export const createNewChat = createAsyncThunk(
   async ({ chat, tags }, { rejectWithValue }) => {
     try {
       const { data: chatInfo } = await RequestAPI.createNewChat(chat);
-      // await RequestAPI.updateChatTags(chatInfo.id, tags);
+      if (tags) await RequestAPI.updateChatTags(chatInfo.id, tags);
       return chatInfo;
     } catch (error) {
       return rejectWithValue(error?.message);
@@ -52,7 +57,36 @@ export const createNewChat = createAsyncThunk(
   }
 );
 
+export const addUsersToChat = createAsyncThunk(
+  "chat/addUsersToChat",
+  async ({ chatId, users }, { rejectWithValue }) => {
+    try {
+      await RequestAPI.addUsersToChat(chatId, users);
+      const { data: chatUsers } = await RequestAPI.fetchUsersByChatId(chatId);
+      return chatUsers;
+    } catch (error) {
+      return rejectWithValue(error?.message);
+    }
+  }
+);
+
+// export const createNewChatPM = createAsyncThunk(
+//   "chat/create",
+//   async ({ chat, receivedUser }, { rejectWithValue }) => {
+//     try {
+//       const { data: chatInfo } = await RequestAPI.createNewChat(chat);
+//       await RequestAPI.addUsersToChat(chatInfo.id, [receivedUser]);
+//       return chatInfo;
+//     } catch (error) {
+//       return rejectWithValue(error?.message);
+//     }
+//   }
+// );
+
 const initialState = {
+  isLoaded: {
+    activeChat: false,
+  },
   activeTab: "my_chats",
   chats: [],
   activeChat: null,
@@ -72,8 +106,30 @@ const chatSlice = createSlice({
       state.activeChat = action.payload;
     },
     addMessage(state, action) {
-      state.activeChat.messages.push(action.payload);
+      const { messages } = current(state).activeChat;
+      if (!messages.find((message) => message.id == action.payload.id))
+        state.activeChat.messages.push(action.payload);
     },
+  },
+  extraReducers: (builder) => {
+    // pending
+    builder.addCase(fetchChatById.pending, (state) => {
+      state.activeChat = null;
+      state.isLoaded.activeChat = false;
+    });
+    // fulfilled
+    builder.addCase(fetchChatById.fulfilled, (state, action) => {
+      state.activeChat = action.payload;
+      state.isLoaded.activeChat = true;
+    });
+    builder.addCase(addUsersToChat.fulfilled, (state, action) => {
+      state.activeChat.users = action.payload;
+    });
+    // rejected
+    builder.addCase(fetchChatById.rejected, (state) => {
+      state.activeChat = null;
+      state.isLoaded.activeChat = null;
+    });
   },
 });
 

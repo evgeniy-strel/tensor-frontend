@@ -1,5 +1,5 @@
 export const DESTINY_CHAT = {
-  description: "description",
+  join: "join",
   messages: "messages",
   settings: "settings",
 };

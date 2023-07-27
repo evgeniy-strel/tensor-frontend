@@ -1,6 +1,10 @@
 import "./Messages.scss";
-import { Avatar } from "@vkontakte/vkui";
+import { Avatar, calcInitialsAvatarColor } from "@vkontakte/vkui";
 import { useSelector } from "react-redux";
+import {
+  getFirstDigitGuid,
+  getFullUrlImg,
+} from "./../../../utils/helpersMethods";
 
 const Messages = ({ messages }) => {
   const currentUser = useSelector((state) => state.user.user);
@@ -16,27 +20,22 @@ const Messages = ({ messages }) => {
   return (
     <>
       {messages.map(({ external: { message, user } }, i) => {
-        const isMine = currentUser?.name == user?.name;
+        const isMine = currentUser?.id == user?.id;
 
         let isFirstMessage = true;
         let isLastMessage = true;
 
         if (i != 0) {
           const prevMessage = messages[i - 1];
-          isFirstMessage = user?.name != prevMessage?.external.user.name;
+          isFirstMessage = user?.id != prevMessage?.external.user.id;
         }
 
         if (i != messages.length - 1) {
           const nextMessage = messages[i + 1];
-          isLastMessage = user?.name != nextMessage?.external.user?.name;
+          isLastMessage = user?.id != nextMessage?.external.user?.id;
         }
 
-        const initials = user?.name
-          .split(" ")
-          .slice(0, 2)
-          .map((symbol) => (symbol.length ? symbol[0] : ""))
-          .join("")
-          .toUpperCase();
+        const initials = `${user?.firstName?.at(0)}${user?.lastName?.at(0)}`;
 
         return (
           <div
@@ -47,11 +46,16 @@ const Messages = ({ messages }) => {
             <Avatar
               size={32}
               initials={initials}
-              src={user.img}
+              src={getFullUrlImg(user?.avatar)}
               className="user-avatar"
+              gradientColor={calcInitialsAvatarColor(
+                getFirstDigitGuid(user?.id)
+              )}
             />
             <div className="message">
-              <div className="username">{user?.name}</div>
+              <div className="username">
+                {user?.firstName} {user?.lastName}
+              </div>
               <div className="text">{message}</div>
             </div>
           </div>

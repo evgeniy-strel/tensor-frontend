@@ -3,39 +3,40 @@ import "./index.scss";
 import { Avatar, Group, PanelHeader, PanelHeaderBack } from "@vkontakte/vkui";
 import { useNavigate } from "react-router";
 import { Icon16Users } from "@vkontakte/icons";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { getFullUrlImg } from "../../../utils/helpersMethods";
+import { addUsersToChat } from "../../../store/reducers/chatSlice";
 
-const tagsMocks = [
-  "Танцы",
-  "Компания",
-  "Поесть",
-  "Песни",
-  "Гитара",
-  "тестовые теги",
-];
-
-const DescriptionChat = ({
+const JoinChat = ({
   id,
   type,
   external: { title, avatar, isMuted, description, subChats, lastMessage },
   users,
   tags,
 }) => {
-  const user = useSelector((state) => state.user.user);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const currentUser = useSelector((state) => state.user.user);
 
   const onClickBack = () => {
     navigate(-1);
   };
 
-  const isUserJoined = users.find((u) => u.id == user.id);
+  const isUserJoined = users.find(({ user }) => user.id == currentUser.id);
 
-  const onJoin = () => {
-    if (isUserJoined) return;
+  const onJoin = async () => {
+    await dispatch(
+      addUsersToChat({
+        chatId: id,
+        users: [{ user_id: currentUser.id, role: "user" }],
+      })
+    );
+    goToChat();
+  };
 
-    console.log("join", user);
-    console.log(users);
+  const goToChat = () => {
+    navigate(`/messenger/chat/${id}`);
   };
 
   return (
@@ -64,16 +65,22 @@ const DescriptionChat = ({
             </div>
           </div>
           <div className="main__tags">
-            {tagsMocks.map((tag, i) => (
-              <div className="main__tags__tag" key={i}>
-                {tag}
+            {tags.map(({ title, id }) => (
+              <div className="main__tags__tag" key={id}>
+                {title}
               </div>
             ))}
           </div>
           <div className="main__description">{description}</div>
           <div className="main__join">
-            <div className="main__join__button" onClick={onJoin}>
-              {isUserJoined ? "Вы уже присоеденены" : "Присоединиться"}
+            <div
+              className="main__join__button"
+              onClick={isUserJoined ? goToChat : onJoin}>
+              {isUserJoined ? (
+                <span>Перейти к чату</span>
+              ) : (
+                <span>Присоединиться</span>
+              )}
             </div>
           </div>
         </main>
@@ -82,4 +89,4 @@ const DescriptionChat = ({
   );
 };
 
-export default DescriptionChat;
+export default JoinChat;

@@ -135,12 +135,18 @@ export default class RequestAPI {
 
   // Обновление тегов чата
   static async updateChatTags(chatId, tags) {
-    return axios.post(`chats/${chatId}/tags`, tags);
+    const titleTags = tags.map((el) => el.title);
+    return axios.post(`chats/${chatId}/tags`, titleTags);
   }
 
   // Получение чатов пользователя
   static async fetchUserChats() {
     return axios.get("chats");
+  }
+
+  // Получение рекомендованных чатов
+  static async fetchReccomendChats() {
+    return axios.get("/chats/recomended/userschats");
   }
 
   // Получение конкретного чата

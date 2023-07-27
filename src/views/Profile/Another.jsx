@@ -28,6 +28,10 @@ const Another = ({ userId }) => {
     });
   }, []);
 
+  const sendUser = () => {
+    navigate("/messenger/create_chat_pm");
+  };
+
   return (
     <>
       {loaderUserInfo ? (
@@ -46,14 +50,13 @@ const Another = ({ userId }) => {
             src={
               anothUser.avatar &&
               process.env.REACT_APP_URL_API + anothUser.avatar
-            }
-          >
+            }>
             <Avatar.Badge>
               <Icon28FavoriteCircleFillGreen />
             </Avatar.Badge>
           </Avatar>
           <Title level="2">{`${anothUser.firstName} ${anothUser.lastName}`}</Title>
-          <Button size="l" stretched>
+          <Button size="l" stretched onClick={sendUser}>
             Написать
           </Button>
           <Text className={classes.description}>{anothUser?.description}</Text>

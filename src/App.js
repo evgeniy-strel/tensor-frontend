@@ -27,6 +27,8 @@ import HobbiesModalPage from "./modals/HobbiesModalPage";
 import EditProfile from "./modals/EditProfile";
 import CategoryModalPage from "./modals/CategoryModalPage";
 import { fetchCategories } from "./store/reducers/categoriesSlice";
+import HobbiesModalPageChat from "./modals/HobbiesModalPage/chat";
+import CategoryModalPageChat from "./modals/CategoryModalPage/chat";
 import { resetTags } from "./store/reducers/userSlice";
 
 const pages = [
@@ -76,6 +78,9 @@ function App() {
       <HobbiesModalPage id="hobbies" />
       <CategoryModalPage id="tags" />
       <EditProfile id="editprofile" />
+      {/* create chat */}
+      <HobbiesModalPageChat id="hobbies_chat" />
+      <CategoryModalPageChat id="tags_chat" />
     </ModalRoot>
   );
 
@@ -88,8 +93,7 @@ function App() {
     <SplitLayout
       header={isVKCOM && <PanelHeader separator={false} />}
       style={{ justifyContent: "center" }}
-      modal={modal}
-    >
+      modal={modal}>
       {viewWidth.tabletPlus && token !== "" && (
         <Desktop
           isVKCOM={isVKCOM}
@@ -113,8 +117,7 @@ function App() {
                 setActiveStory={setActiveStory}
               />
             )
-          }
-        >
+          }>
           <Rout id={activeStory} />
         </Epic>
       </SplitCol>

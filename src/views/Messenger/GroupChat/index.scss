@@ -12,6 +12,8 @@
         line-height: 20px !important; /* 125% */
         letter-spacing: 0.1px !important;
         font-weight: 400 !important;
+        text-overflow: ellipsis !important;
+        overflow: hidden;
       }
       &__status {
         letter-spacing: 0.2px;
@@ -51,8 +53,8 @@
     .messages-container {
       margin-top: 52.5px;
       height: calc(
-        var(--app-height) - var(--vkui--size_panel_header_height--regular) - 52.5px - 54px -
-          var(--vkui_internal--safe_area_inset_bottom)
+        var(--app-height) - var(--vkui--size_panel_header_height--regular) -
+          52.5px - 54px - var(--vkui_internal--safe_area_inset_bottom)
       );
 
       .message-block {
@@ -120,7 +122,10 @@
 
     .messages-container-group .messages-container {
       margin: 0 !important;
-      height: calc(100vh - var(--vkui--size_panel_header_height--regular) - 16px - 52.5px - 52.5px);
+      height: calc(
+        100vh - var(--vkui--size_panel_header_height--regular) - 16px - 52.5px -
+          52.5px
+      );
       box-sizing: border-box;
     }
 

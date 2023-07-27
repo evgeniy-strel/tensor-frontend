@@ -54,8 +54,6 @@ const PanelHeaderListChats = ({ showSubChats, isSearchActive, setSearch }) => {
     navigate("/messenger/create_chat");
   };
 
-  console.log("list chats");
-
   return (
     <div className="chats-header">
       <PanelHeader

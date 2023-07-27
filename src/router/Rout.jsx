@@ -28,6 +28,7 @@ const Rout = () => {
             <Route path="join/:id" element={<Messenger />} />
             <Route path="settings/:id" element={<Messenger />} />
             <Route path="create_chat" element={<Messenger />} />
+            <Route path="create_chat_pm" element={<Messenger />} />
           </Route>
           <Route path="/profile/:id" element={<Profile />} />{" "}
         </>

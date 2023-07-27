@@ -74,13 +74,27 @@
     }
 
     .tags{
-      display: flex;
       position: absolute;
       top: 85%;
       left: 16px;
-      gap: 8px;
 
-      div{
+      .vkuiHorizontalScroll__in-wrapper{
+
+        div{
+          display: flex;
+          gap: 8px;
+        }
+      }
+
+      // .vkuiCard{
+      //   background: none;
+      //   div{
+      //     display: flex;
+      //     gap: 8px;
+      //   }
+      // }
+
+      .tag{
         background-color: #FFF;
         border-radius: 87px;
         padding: 4px 8px;

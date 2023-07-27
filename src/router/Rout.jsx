@@ -7,6 +7,7 @@ import Auth from "../views/Auth";
 import CreateEvent from "../views/Event/CreateEvent";
 import { useSelector } from "react-redux";
 import DescriptionEvent from "../views/Event/DescriptionEvent";
+import EditEvent from "../views/Event/EditEvent";
 
 const Rout = () => {
   const token = useSelector((state) => state.user.token);
@@ -19,6 +20,7 @@ const Rout = () => {
           <Route path="/event/">
             <Route path="" element={<Event />} />
             <Route path="create" element={<CreateEvent />} />
+            <Route path="edit/:id" element={<EditEvent />} />
             <Route path=":id" element={<DescriptionEvent />} />
           </Route>
           <Route path="/messenger/">

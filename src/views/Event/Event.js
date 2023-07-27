@@ -77,10 +77,18 @@ const Event = () => {
 
   useEffect(() => {
     if (selected === "all_events") {
-      RequestAPI.fetchUserEvents().then((e) => console.log(e?.data));
+      RequestAPI.fetchUserEvents().then((e) => setChats(e?.data));
     }
     if (selected === "my_events") {
-      RequestAPI.fetchUserChats().then((e) => console.log(e?.data[1]?.chat));
+      RequestAPI.fetchUserChats().then((e) => {
+        const info = e?.data
+          ?.filter((el) => el?.chat?.type === "event")
+          ?.map((e) => {
+            return e?.chat;
+          });
+
+        setChats(info);
+      });
     }
   }, [selected]);
 

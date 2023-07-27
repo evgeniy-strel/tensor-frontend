@@ -1,4 +1,4 @@
-import "./CreateEvent.scss";
+import "./EditEvent.scss";
 import {
   View,
   Panel,
@@ -19,12 +19,13 @@ import {
 } from "@vkontakte/vkui";
 import { Icon28Cancel, Icon28AddOutline } from "@vkontakte/icons";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import RequestAPI from "../../API/requests";
 import { useSelector, useDispatch } from "react-redux";
 import { createNewChat } from "./../../store/reducers/chatSlice";
 import { categoriesSelector } from "./../../store/selectors/categoriesSelector";
 import { getFullUrlImg } from "../../utils/helpersMethods";
+import { useLocation, matchRoutes } from "react-router-dom";
 
 const hours = [
   { value: "00", label: "00" },
@@ -124,17 +125,50 @@ const initialData = {
   datetime: "",
 };
 
-const CreateEvent = () => {
+const EditEvent = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const location = useLocation();
 
-  const user = useSelector((state) => state.user.user);
   const categories = useSelector(categoriesSelector);
   const [tags, setTags] = useState([]);
-  const [data, setData] = useState(initialData);
   const [date, setDate] = useState();
+  const [dat, setDat] = useState();
   const [hour, setHour] = useState();
+  const [event, setEvent] = useState(initialData);
+  const [idChat, setIdChat] = useState();
   const [isSubmited, setIsSubmited] = useState(false);
+
+  function convertor(dateTime) {
+    const str = dateTime?.split(" ");
+    const [year, month, day] = str[0]?.split("-");
+    const [hour, minute] = str[1]?.split(":");
+    let hD = day;
+    let hM = month;
+
+    if (day[0] === "0") {
+      hD = day[1];
+    }
+    if (month[0] === "0") {
+      hM = month[1];
+    }
+
+    return { day: hD, month: hM, year: year, hour: hour, minute: minute };
+  }
+
+  useEffect(() => {
+    setIdChat(location.pathname.split("/")[3]);
+    RequestAPI.fetchChatById(location.pathname.split("/")[3]).then((e) => {
+      setEvent(e?.data?.external);
+    });
+    RequestAPI.fetchTagsByChatId(location.pathname.split("/")[3]).then((e) =>
+      setTags(e?.data)
+    );
+  }, []);
+
+  useEffect(() => {
+    console.log(event?.datetime);
+    // setDat(convertor(event?.datetime));
+  }, [event]);
 
   const fileOnChange = async (e) => {
     const img = e.target.files[0];
@@ -143,7 +177,7 @@ const CreateEvent = () => {
     const formData = new FormData();
     formData.append("files", img);
     const dataImg = (await RequestAPI.uploadFiles(formData))[0];
-    setData((prev) => ({ ...prev, avatar: dataImg.link }));
+    setEvent((prev) => ({ ...prev, avatar: dataImg.link }));
   };
 
   const tagsChipsProps = {
@@ -155,30 +189,10 @@ const CreateEvent = () => {
   };
 
   const rules = {
-    title: data.title.length < 4,
+    title: event.title.length < 4,
     tags: tags.length === 0,
-    description: data.description.length < 10,
-    place: data.place.length < 4,
-  };
-
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmited(true);
-    if (Object.values(rules).filter((rule) => rule).length !== 0) return;
-    const chat = {
-      chat: {
-        type: "event",
-        parent_id: null,
-        external: { ...data, admins: [user.id] },
-      },
-      users_id: [user.id],
-    };
-
-    const tagsValues = tags.map((tag) => tag.value);
-
-    const chatInfo = (await dispatch(createNewChat({ chat, tags: tagsValues })))
-      .payload;
-    navigate(`/messenger/chat/${chatInfo.id}`);
+    description: event.description.length < 10,
+    place: event.place.length < 4,
   };
 
   return (
@@ -195,12 +209,12 @@ const CreateEvent = () => {
             </PanelHeaderButton>
           }
         >
-          <Title>Создание события</Title>
+          <Title>Редактирование события</Title>
         </PanelHeader>
         <Group>
           <FormLayout className="formLayout">
             <FormItem className="eventsImage">
-              {!data.avatar ? (
+              {!event.avatar ? (
                 <File onChange={fileOnChange} accept="image/*">
                   <Image
                     borderRadius="s"
@@ -209,7 +223,7 @@ const CreateEvent = () => {
                   />
                 </File>
               ) : (
-                <img src={getFullUrlImg(data.avatar)} className="img" />
+                <img src={getFullUrlImg(event.avatar)} className="img" />
               )}
             </FormItem>
             <div className="container">
@@ -224,10 +238,10 @@ const CreateEvent = () => {
                 <Input
                   type="text"
                   minLength={4}
-                  value={data.title}
+                  value={event.title}
                   maxLength={40}
                   onChange={(e) =>
-                    setData((prev) => ({ ...prev, title: e.target.value }))
+                    setEvent((prev) => ({ ...prev, title: e.target.value }))
                   }
                   placeholder="Название мероприятия"
                 />
@@ -239,6 +253,7 @@ const CreateEvent = () => {
                 <DatePicker
                   min={{ day: 1, month: 1, year: 1901 }}
                   max={{ day: 1, month: 1, year: 2006 }}
+                  value={event.datetime}
                   onDateChange={(value) => {
                     setDate(`${value.year}-${value.month}-${value.day}`);
                   }}
@@ -263,7 +278,7 @@ const CreateEvent = () => {
                     placeholder="Минут"
                     options={minutes}
                     onChange={(e) => {
-                      setData((prev) => ({
+                      setEvent((prev) => ({
                         ...prev,
                         datetime: `${date} ${hour}:${e.target.value}`,
                       }));
@@ -283,10 +298,10 @@ const CreateEvent = () => {
                   placeholder="Место проведения"
                   type="text"
                   minLength={4}
-                  value={data.place}
+                  value={event.place}
                   maxLength={60}
                   onChange={(e) =>
-                    setData((prev) => ({ ...prev, place: e.target.value }))
+                    setEvent((prev) => ({ ...prev, place: e.target.value }))
                   }
                 />
               </FormItem>
@@ -311,9 +326,9 @@ const CreateEvent = () => {
               >
                 <Textarea
                   placeholder="Описание события"
-                  value={data.description}
+                  value={event.description}
                   onChange={(e) =>
-                    setData((prev) => ({
+                    setEvent((prev) => ({
                       ...prev,
                       description: e.target.value,
                     }))
@@ -321,7 +336,7 @@ const CreateEvent = () => {
                 />
               </FormItem>
               <FormItem>
-                <button className="btn" onClick={onSubmit}>
+                <button className="btn" onClick={() => console.log(event)}>
                   Создать
                 </button>
               </FormItem>
@@ -333,4 +348,4 @@ const CreateEvent = () => {
   );
 };
 
-export default CreateEvent;
+export default EditEvent;

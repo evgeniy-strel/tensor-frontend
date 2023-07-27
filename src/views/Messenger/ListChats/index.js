@@ -83,19 +83,21 @@ const ListChats = () => {
   // TO DO: Сделать анимацию загрузки чатов
 
   const ListMyChats = ({ ...props }) =>
-    sortChats(chats).map(({ chat, last_message, user, date }, i) => {
-      return (
-        <MyChatItem
-          {...props}
-          isSelected={selectedChat?.id == chat?.id}
-          key={chat?.id}
-          lastMessage={last_message}
-          user={user}
-          date={date}
-          {...chat}
-        />
-      );
-    });
+    sortChats(chats)
+      .filter((chat) => chat?.chat?.id)
+      .map(({ chat, last_message, user, date }, i) => {
+        return (
+          <MyChatItem
+            {...props}
+            isSelected={selectedChat?.id == chat?.id}
+            key={chat?.id}
+            lastMessage={last_message}
+            user={user}
+            date={date}
+            {...chat}
+          />
+        );
+      });
 
   const sortChats = (chats) => {
     const searchText = search.text.toLowerCase();
@@ -115,9 +117,11 @@ const ListChats = () => {
   };
 
   const ListReccomendChats = ({ ...props }) => {
-    return sortChats(chats).map((chat, i) => {
-      return <ReccomendChatItem {...props} key={chat?.id} {...chat} />;
-    });
+    return sortChats(chats)
+      .filter((chat) => chat?.chat?.id)
+      .map(({ chat }, i) => {
+        return <ReccomendChatItem {...props} key={chat?.id} {...chat} />;
+      });
   };
 
   return (

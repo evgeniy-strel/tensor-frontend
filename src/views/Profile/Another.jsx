@@ -12,11 +12,14 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { userInfoById } from "../../store/reducers/userSlice";
 import classes from "./profile.module.scss";
+import { createNewChat } from "../../store/reducers/chatSlice";
 
 const Another = ({ userId }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { loaderUserInfo, anothUser } = useSelector((state) => state.user);
+  const { loaderUserInfo, anothUser, user } = useSelector(
+    (state) => state.user
+  );
 
   useEffect(() => {
     dispatch(userInfoById(userId)).then((res) => {
@@ -26,8 +29,27 @@ const Another = ({ userId }) => {
     });
   }, []);
 
-  const sendUser = () => {
-    navigate("/messenger/create_chat_pm");
+  const sendUser = async () => {
+    const users = [user, anothUser].map(
+      ({ email, id, is_verified, ...props }) => ({
+        email,
+        id,
+        is_verified,
+        external: { ...props },
+      })
+    );
+
+    const chat = {
+      chat: {
+        type: "private",
+        parent_id: null,
+        external: { users },
+      },
+      users_id: [user.id, anothUser.id],
+    };
+
+    const chatInfo = (await dispatch(createNewChat({ chat }))).payload;
+    navigate(`/messenger/chat/${chatInfo.id}`);
   };
 
   return (
@@ -48,8 +70,7 @@ const Another = ({ userId }) => {
             src={
               anothUser.avatar &&
               process.env.REACT_APP_URL_API + anothUser.avatar
-            }
-          >
+            }>
             <Avatar.Badge>
               <Icon28FavoriteCircleFillGreen />
             </Avatar.Badge>

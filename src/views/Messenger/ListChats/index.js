@@ -83,13 +83,15 @@ const ListChats = () => {
   // TO DO: Сделать анимацию загрузки чатов
 
   const ListMyChats = ({ ...props }) =>
-    sortChats(chats).map(({ chat, last_message }, i) => {
+    sortChats(chats).map(({ chat, last_message, user, date }, i) => {
       return (
         <MyChatItem
           {...props}
           isSelected={selectedChat?.id == chat?.id}
           key={chat?.id}
           lastMessage={last_message}
+          user={user}
+          date={date}
           {...chat}
         />
       );
@@ -160,7 +162,7 @@ const ListChats = () => {
           )}
         </List>
       </Group>
-      <ListSubChats>
+      {/* <ListSubChats>
         {isLoaded ? (
           selected == "my_chats" ? (
             <ListMyChats hideAvatar={true} />
@@ -170,7 +172,7 @@ const ListChats = () => {
         ) : (
           <PanelSpinner style={{ height: "80vh" }} size="large" />
         )}
-      </ListSubChats>
+      </ListSubChats> */}
     </div>
   );
 };

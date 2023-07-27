@@ -3,9 +3,8 @@ import { View, Panel } from "@vkontakte/vkui";
 import { useLocation, matchRoutes } from "react-router-dom";
 import Chat from "./Chat";
 import ListChats from "./ListChats";
-import CreateChat from "./CreateChat";
 import { DESTINY_CHAT } from "./../../const/chat";
-import CreateChatPM from "./CreateChatPM";
+import CreateChat from "./CreateChat";
 
 const panels = [
   {
@@ -29,11 +28,6 @@ const panels = [
     element: <Chat destiny={DESTINY_CHAT.settings} />,
   },
   { id: "createChat", path: "/messenger/create_chat", element: <CreateChat /> },
-  {
-    id: "createChatPM",
-    path: "/messenger/create_chat_pm",
-    element: <CreateChatPM />,
-  },
   { id: "listChats", path: "/messenger", element: <ListChats /> },
 ];
 

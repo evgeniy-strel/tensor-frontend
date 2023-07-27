@@ -198,6 +198,8 @@ const EditEvent = () => {
     place: event.place.length < 4,
   };
 
+  const currentDate = new Date();
+
   return (
     <View id="createEvent" activePanel="createEvent">
       <Panel id="createEvent">
@@ -206,12 +208,10 @@ const EditEvent = () => {
           before={
             <PanelHeaderButton
               onClick={() => navigate("/event")}
-              aria-label="back"
-            >
+              aria-label="back">
               <Icon28Cancel />
             </PanelHeaderButton>
-          }
-        >
+          }>
           <Title>Редактирование события</Title>
         </PanelHeader>
         <Group>
@@ -236,8 +236,7 @@ const EditEvent = () => {
                   isSubmited &&
                   rules.title &&
                   "Введите название от 4-х символов"
-                }
-              >
+                }>
                 <Input
                   type="text"
                   minLength={4}
@@ -251,10 +250,13 @@ const EditEvent = () => {
               </FormItem>
               <FormItem
                 status={isSubmited ? "error" : "default"}
-                bottom={isSubmited && "Заполните поля"}
-              >
+                bottom={isSubmited && "Заполните поля"}>
                 <DatePicker
-                  // min={{ day: 1, month: 1, year: 1901 }}
+                  min={{
+                    day: currentDate.getDate(),
+                    month: currentDate.getMonth() + 1,
+                    year: currentDate.getFullYear(),
+                  }}
                   max={{ day: 1, month: 1, year: 2030 }}
                   value={`${dat.year}-${dat.month}-${dat.day}`}
                   onDateChange={(value) => {
@@ -267,8 +269,7 @@ const EditEvent = () => {
               </FormItem>
               <FormItem
                 status={isSubmited ? "error" : "default"}
-                bottom={isSubmited && "Заполните поля"}
-              >
+                bottom={isSubmited && "Заполните поля"}>
                 <div className="time">
                   <Select
                     placeholder="Часов"
@@ -276,8 +277,7 @@ const EditEvent = () => {
                     value={dat.hour}
                     onChange={(e) => {
                       setHour(e.target.value);
-                    }}
-                  ></Select>
+                    }}></Select>
                   <Select
                     placeholder="Минут"
                     options={minutes}
@@ -287,8 +287,7 @@ const EditEvent = () => {
                         ...prev,
                         datetime: `${date} ${hour}:${e.target.value}`,
                       }));
-                    }}
-                  ></Select>
+                    }}></Select>
                 </div>
               </FormItem>
               <FormItem
@@ -297,8 +296,7 @@ const EditEvent = () => {
                   isSubmited &&
                   rules.title &&
                   "Введите название от 4-х символов"
-                }
-              >
+                }>
                 <Input
                   placeholder="Место проведения"
                   type="text"
@@ -312,8 +310,7 @@ const EditEvent = () => {
               </FormItem>
               <FormItem
                 status={isSubmited && rules.tags ? "error" : "default"}
-                bottom={isSubmited && rules.tags && "Выберите хотя-бы 1 тег"}
-              >
+                bottom={isSubmited && rules.tags && "Выберите хотя-бы 1 тег"}>
                 <ChipsSelect
                   {...tagsChipsProps}
                   showSelected={false}
@@ -327,8 +324,7 @@ const EditEvent = () => {
                   isSubmited &&
                   rules.description &&
                   "Опишите событие от 10 символов"
-                }
-              >
+                }>
                 <Textarea
                   placeholder="Описание события"
                   value={event.description}

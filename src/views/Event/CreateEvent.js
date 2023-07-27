@@ -182,6 +182,8 @@ const CreateEvent = () => {
     navigate(`/messenger/chat/${chatInfo?.id}`);
   };
 
+  const currentDate = new Date();
+
   return (
     <View id="createEvent" activePanel="createEvent">
       <Panel id="createEvent">
@@ -234,7 +236,11 @@ const CreateEvent = () => {
                 status={isSubmited ? "error" : "default"}
                 bottom={isSubmited && "Заполните поля"}>
                 <DatePicker
-                  // min={{ day: 1, month: 1, year: 1901 }}
+                  min={{
+                    day: currentDate.getDate(),
+                    month: currentDate.getMonth() + 1,
+                    year: currentDate.getFullYear(),
+                  }}
                   max={{ day: 1, month: 1, year: 2030 }}
                   onDateChange={(value) => {
                     setDate(`${value.year}-${value.month}-${value.day}`);

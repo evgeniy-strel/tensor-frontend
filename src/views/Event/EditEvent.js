@@ -256,7 +256,11 @@ const EditEvent = () => {
                 <DatePicker
                   // min={{ day: 1, month: 1, year: 1901 }}
                   max={{ day: 1, month: 1, year: 2030 }}
-                  value={`${dat.year}-${dat.month}-${dat.day}`}
+                  defaultValue={{
+                    day: 1,
+                    month: 1,
+                    year: 2023,
+                  }}
                   onDateChange={(value) => {
                     setDate(`${value.year}-${value.month}-${value.day}`);
                   }}
@@ -273,7 +277,7 @@ const EditEvent = () => {
                   <Select
                     placeholder="Часов"
                     options={hours}
-                    value={dat.hour}
+                    value={new Date(event?.datetime).getHours()}
                     onChange={(e) => {
                       setHour(e.target.value);
                     }}
@@ -281,7 +285,7 @@ const EditEvent = () => {
                   <Select
                     placeholder="Минут"
                     options={minutes}
-                    value={dat.minute}
+                    value={new Date(event?.datetime).getMinutes()}
                     onChange={(e) => {
                       setEvent((prev) => ({
                         ...prev,

@@ -27,7 +27,7 @@ const EventCard = ({ id, external: { title, avatar, place, datetime } }) => {
     });
     RequestAPI.fetchTagsByChatId(id).then((e) => setTags(e?.data));
 
-    let dd = new Date(datetime);
+    let dd = new Date(datetime?.replace(/-/g, "/"));
     setDate({
       day: dd.getDate(),
       month: dd.getMonth(),

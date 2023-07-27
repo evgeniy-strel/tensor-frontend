@@ -29,7 +29,7 @@ const PanelHeaderSubchats = ({ title, id = "666", avatar, onClickBack }) => (
           <Avatar
             size={36}
             src={getFullUrlImg(avatar)}
-            initials={title?.at(0)}
+            initials={title && title?.substr(0, 1)}
             gradientColor={calcInitialsAvatarColor(getFirstDigitGuid(id))}
           />
         }>

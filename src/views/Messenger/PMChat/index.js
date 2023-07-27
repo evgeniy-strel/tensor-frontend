@@ -47,7 +47,7 @@ const PMChat = ({ id, users, messages }) => {
             <Avatar
               size={36}
               src={getFullUrlImg(receivedUser?.external?.avatar)}
-              initials={receivedUser?.external?.firstName?.at(0)}
+              initials={receivedUser?.external?.firstName?.substr(0, 1)}
               onClick={onClickReceivedUser}
               gradientColor={calcInitialsAvatarColor(
                 getFirstDigitGuid(receivedUser?.id)

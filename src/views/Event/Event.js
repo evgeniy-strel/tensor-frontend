@@ -32,6 +32,8 @@ import {
 } from "../../store/selectors/chatSelectors";
 import { setActiveTab } from "../../store/reducers/chatSlice";
 import { fetchChats } from "./../../store/reducers/chatSlice";
+
+import { changeActiveModal } from "../../store/reducers/modalSlice";
 import RequestAPI from "../../API/requests";
 
 const tabs = [
@@ -69,8 +71,10 @@ const TabsHeader = ({ selected, setSelected }) => {
   );
 };
 
+
 const Event = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [chats, setChats] = useState();
   const [selected, setSelected] = useState("all_events");
@@ -105,7 +109,7 @@ const Event = () => {
                 <Icon28AddOutline />
               </PanelHeaderButton>
               <PanelHeaderButton
-                onClick={() => console.log("filters")}
+                onClick={() => dispatch(changeActiveModal("filtration"))}
                 aria-label="filtration"
               >
                 <Icon28SlidersOutline />
@@ -121,11 +125,20 @@ const Event = () => {
         >
           <Title>События</Title>
         </PanelHeader>
-        <TabsHeader
-          selected={selected}
-          setSelected={(value) => setSelected(value)}
-        />
-        <Group>
+        {/*<Tabs mode={"default"}>*/}
+        {/*  <HorizontalScroll arrowSize="m">*/}
+        {/*    <TabsItem aria-controls="all-event">Все события</TabsItem>*/}
+        {/*    <TabsItem>Избранное</TabsItem>*/}
+        {/*    <TabsItem>Мои события</TabsItem>*/}
+        {/*  </HorizontalScroll>*/}
+        {/*</Tabs>*/}
+
+        <Group id="all-event">
+
+          <TabsHeader
+            selected={selected}
+            setSelected={(value) => setSelected(value)}
+          />
           <div className="wrapper">
             {chats?.map((chat, i) => {
               return <EventCard {...chat} key={i} />;

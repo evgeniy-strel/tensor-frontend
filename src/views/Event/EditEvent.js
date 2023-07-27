@@ -156,7 +156,7 @@ const EditEvent = () => {
   useEffect(() => {
     if (event?.datetime) {
       // console.log(event?.datetime?.tolocaledatestring());
-      let dd = new Date(event?.datetime);
+      let dd = new Date(event?.datetime?.replace(/-/g, "/"));
       setDat({
         day: dd.getDate(),
         month: dd.getMonth(),

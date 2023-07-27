@@ -35,7 +35,10 @@ const Messages = ({ messages }) => {
           isLastMessage = user?.id != nextMessage?.external.user?.id;
         }
 
-        const initials = `${user?.firstName?.at(0)}${user?.lastName?.at(0)}`;
+        const initials =
+          user?.firstName &&
+          user?.lastName &&
+          `${user?.firstName?.substr(0, 1)}${user?.lastName?.substr(0, 1)}`;
 
         return (
           <div

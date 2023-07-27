@@ -79,6 +79,8 @@ const ListChats = () => {
 
   // TO DO: Изменить key={i} на key={id}
 
+  console.log(selectedChat);
+
   return (
     <div
       className={cn("list-chats-container", {
@@ -89,9 +91,9 @@ const ListChats = () => {
       <PanelHeader
         isShownSubchats={Boolean(selectedChat)}
         hideSubChats={() => setSelectedChat(null)}
-        showSubChats={() => setSelectedChat(chats[1])}
-        title={selectedChat?.external?.title || "Тестовое название"}
-        avatar={selectedChat?.external?.avatar}
+        showSubChats={() => setSelectedChat(chats[0])}
+        title={selectedChat?.chat?.external?.title || "Тестовое название"}
+        avatar={selectedChat?.chat?.external?.avatar}
         isSearchActive={search.isActive}
         setSearch={setSearch}
       />

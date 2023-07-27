@@ -89,6 +89,8 @@ const initialState = {
   },
   activeTab: "my_chats",
   chats: [],
+  tagsNewChat: [],
+  categoryNewChat: null,
   activeChat: null,
 };
 
@@ -109,6 +111,32 @@ const chatSlice = createSlice({
       const { messages } = current(state).activeChat;
       if (!messages.find((message) => message.id == action.payload.id))
         state.activeChat.messages.push(action.payload);
+    },
+    setTagNewChat(state, action) {
+      if (
+        state.tagsNewChat.map((el) => el.title).includes(action.payload.title)
+      ) {
+        state.tagsNewChat = [
+          ...state.tagsNewChat.filter(
+            (el) => el.title !== action.payload.title
+          ),
+        ];
+      } else {
+        state.tagsNewChat = [...state.tagsNewChat, action.payload];
+      }
+    },
+    resetTagsNewChat(state) {
+      state.tagsNewChat = [];
+    },
+    setCategoryNewChat(state, action) {
+      state.categoryNewChat = action.payload;
+    },
+    resetCategoryNewChat(state) {
+      state.categoryNewChat = null;
+    },
+    resetNewChatState(state) {
+      state.tagsNewChat = [];
+      state.categoryNewChat = null;
     },
   },
   extraReducers: (builder) => {
@@ -134,5 +162,14 @@ const chatSlice = createSlice({
 });
 
 export default chatSlice.reducer;
-export const { setActiveTab, setChats, setActiveChat, addMessage } =
-  chatSlice.actions;
+export const {
+  setActiveTab,
+  setChats,
+  setActiveChat,
+  addMessage,
+  setTagNewChat,
+  resetTagsNewChat,
+  setCategoryNewChat,
+  resetCategoryNewChat,
+  resetNewChatState,
+} = chatSlice.actions;

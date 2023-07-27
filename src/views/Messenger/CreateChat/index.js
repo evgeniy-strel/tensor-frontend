@@ -9,7 +9,6 @@ import {
   Image,
   Input,
   PanelHeader,
-  unstable_ChipsSelect as ChipsSelect,
   Textarea,
 } from "@vkontakte/vkui";
 import { useNavigate } from "react-router";
@@ -17,9 +16,14 @@ import { Icon28AddOutline, Icon28CancelOutline } from "@vkontakte/icons";
 import { useState } from "react";
 import RequestAPI from "../../../API/requests";
 import { useSelector, useDispatch } from "react-redux";
-import { createNewChat } from "./../../../store/reducers/chatSlice";
-import { categoriesSelector } from "./../../../store/selectors/categoriesSelector";
+import {
+  createNewChat,
+  resetNewChatState,
+} from "./../../../store/reducers/chatSlice";
 import { getFullUrlImg } from "../../../utils/helpersMethods";
+import { changeActiveModal } from "../../../store/reducers/modalSlice";
+import { tagsNewChatSelector } from "../../../store/selectors/chatSelectors";
+import cn from "classnames";
 
 const initialData = {
   avatar: "",
@@ -33,27 +37,23 @@ const CreateChat = () => {
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user.user);
-  const categories = useSelector(categoriesSelector);
   const [data, setData] = useState(initialData);
-  const [tags, setTags] = useState([]);
+  const tags = useSelector(tagsNewChatSelector);
   const [isSubmited, setIsSubmited] = useState(false);
-
-  const tagsChipsProps = {
-    value: tags,
-    onChange: setTags,
-    options: categories.map(({ title }) => ({ label: title, value: title })),
-    placeholder: "Выберите тэги",
-    emptyText: "Ничего не найдено",
-  };
 
   const onClickBack = () => {
     navigate(-1);
   };
 
+  // tags
+  const onChooseTags = (e) => {
+    e.preventDefault();
+    dispatch(changeActiveModal("hobbies_chat"));
+  };
+
   // обработка фотографии
   const fileOnChange = async (e) => {
     const img = e.target.files[0];
-    console.log(img);
     if (!img) return;
 
     const formData = new FormData();
@@ -77,16 +77,14 @@ const CreateChat = () => {
       users_id: [user.id],
     };
 
-    const tagsValues = tags.map((tag) => tag.value);
-
-    const chatInfo = (await dispatch(createNewChat({ chat, tags: tagsValues })))
-      .payload;
+    const chatInfo = (await dispatch(createNewChat({ chat, tags }))).payload;
     navigate(`/messenger/chat/${chatInfo.id}`);
+    dispatch(resetNewChatState());
   };
 
   const rules = {
     title: data.title.length < 4,
-    tags: tags.length == 0,
+    tags: tags.length < 3,
     description: data.description.length < 10,
   };
 
@@ -99,8 +97,7 @@ const CreateChat = () => {
             className="panel-header__icon"
             onClick={onClickBack}
           />
-        }
-      >
+        }>
         <span className="panel-header__title">Создание чата</span>
       </PanelHeader>
       <Group className="create-chat__group">
@@ -125,8 +122,7 @@ const CreateChat = () => {
                   isSubmited &&
                   rules.title &&
                   "Введите название от 4-х символов"
-                }
-              >
+                }>
                 <Input
                   name="title"
                   id="form-layout__title"
@@ -141,17 +137,21 @@ const CreateChat = () => {
                   placeholder="Название чата"
                 />
               </FormItem>
+
               <FormItem
                 status={isSubmited && rules.tags ? "error" : "default"}
-                bottom={isSubmited && rules.tags && "Выберите хотя-бы 1 тег"}
-              >
-                <ChipsSelect
-                  id="groups"
-                  {...tagsChipsProps}
-                  showSelected={false}
-                  closeAfterSelect={false}
-                  creatable={true}
-                />
+                bottom={isSubmited && rules.tags && "Выберите от 3-х тегов"}>
+                <div
+                  className={cn("form-layout__tags", {
+                    error: isSubmited && rules.tags,
+                  })}
+                  onClick={onChooseTags}>
+                  {tags.length
+                    ? tags.map(({ title }) => (
+                        <div className="form-layout__tag">{title}</div>
+                      ))
+                    : "Теги чата"}
+                </div>
               </FormItem>
               <FormItem
                 status={isSubmited && rules.description ? "error" : "default"}
@@ -159,8 +159,7 @@ const CreateChat = () => {
                   isSubmited &&
                   rules.description &&
                   "Опишите чат от 10 символов"
-                }
-              >
+                }>
                 <Textarea
                   placeholder="Описание чата"
                   value={data.description}

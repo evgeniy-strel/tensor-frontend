@@ -11,6 +11,8 @@ const SubtitleGroup = ({ lastMessage, subChats }) => {
   const subChatsFormated = subChats?.length ? subChats.join(", ") : "";
   const external = lastMessage?.external;
 
+  console.log(lastMessage);
+
   return (
     <>
       {Boolean(subChats?.length) && (

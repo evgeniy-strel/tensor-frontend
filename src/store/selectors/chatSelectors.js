@@ -6,3 +6,5 @@ export const activeChatSelector = (state) => state.chat.activeChat;
 
 export const isLoadedActiveChatSelector = (state) =>
   state.chat.isLoaded.activeChat;
+
+export const tagsNewChatSelector = (state) => state.chat.tagsNewChat;

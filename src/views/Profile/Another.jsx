@@ -10,14 +10,20 @@ import {
 import { Icon28FavoriteCircleFillGreen } from "@vkontakte/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { userInfoById } from "../../store/reducers/userSlice";
+import { useNavigate } from "react-router-dom";
 
 const Another = ({ userId, flexStyle }) => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { loaderUserInfo, anothUser } = useSelector((state) => state.user);
 
   useEffect(() => {
     dispatch(userInfoById(userId));
   }, []);
+
+  const sendUser = () => {
+    navigate("/messenger/create_chat_pm");
+  };
 
   return (
     <>
@@ -37,14 +43,13 @@ const Another = ({ userId, flexStyle }) => {
             src={
               anothUser.avatar &&
               process.env.REACT_APP_URL_API + anothUser.avatar
-            }
-          >
+            }>
             <Avatar.Badge>
               <Icon28FavoriteCircleFillGreen />
             </Avatar.Badge>
           </Avatar>
           <Title level="2">{`${anothUser.firstName} ${anothUser.lastName}`}</Title>
-          <Button size="l" stretched>
+          <Button size="l" stretched onClick={sendUser}>
             Написать
           </Button>
           ;

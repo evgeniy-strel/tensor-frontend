@@ -7,8 +7,8 @@ import {
   Cell,
 } from "@vkontakte/vkui";
 import { useDispatch, useSelector } from "react-redux";
-import { changeActiveModal, modalBack } from "../store/reducers/modalSlice";
-import { setTag } from "../store/reducers/userSlice";
+import { changeActiveModal, modalBack } from "../../store/reducers/modalSlice";
+import { setTag } from "../../store/reducers/userSlice";
 
 const CategoryModalPage = ({ id }) => {
   const dispatch = useDispatch();
@@ -27,14 +27,14 @@ const CategoryModalPage = ({ id }) => {
   return (
     <ModalPage id={id} onClose={handlerClose} hideCloseButton>
       <ModalPageHeader
+        children={"Назад"}
         before={
           isAuth ? (
             <PanelHeaderBack onClick={handlerClose} />
           ) : (
             <PanelHeaderClose onClick={handlerClose} />
           )
-        }
-      >
+        }>
         {activeCategory.title}
       </ModalPageHeader>
       <Group>
@@ -52,8 +52,7 @@ const CategoryModalPage = ({ id }) => {
                         .includes(el.title)}
                     />
                   }
-                  key={el.id}
-                >
+                  key={el.id}>
                   {el.title}
                 </Cell>
               ))
@@ -70,8 +69,7 @@ const CategoryModalPage = ({ id }) => {
                         .includes(el.title)}
                     />
                   }
-                  key={el.id}
-                >
+                  key={el.id}>
                   {el.display}
                 </Cell>
               ))}

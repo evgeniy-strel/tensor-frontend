@@ -6,8 +6,13 @@ const ListSubChats = ({ subChats }) => {
   return (
     <div className="subchats-group">
       <List className="subchats-group__list list-chats">
-        {subChats.map(({ chat }, i) => (
-          <ChatItem key={i} hideAvatar={true} {...chat} />
+        {subChats.map(({ chat, last_message }, i) => (
+          <ChatItem
+            key={i}
+            hideAvatar={true}
+            lastMessage={last_message}
+            {...chat}
+          />
         ))}
       </List>
     </div>

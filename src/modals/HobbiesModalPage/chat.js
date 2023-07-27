@@ -3,51 +3,56 @@ import {
   ModalPage,
   ModalPageHeader,
   PanelHeaderBack,
+  PanelHeaderClose,
   ButtonGroup,
   Button,
 } from "@vkontakte/vkui";
 import { useDispatch, useSelector } from "react-redux";
+import {
+  resetNewChatState,
+  resetTagsNewChat,
+  setCategoryNewChat,
+} from "../../store/reducers/chatSlice";
 import { changeActiveModal, modalBack } from "../../store/reducers/modalSlice";
 import {
   updateUserTags,
   resetTags,
   setCategoryModal,
 } from "../../store/reducers/userSlice";
+import { tagsNewChatSelector } from "../../store/selectors/chatSelectors";
 import Cards from "../../views/Auth/Interests/Cards";
 import classes from "./index.module.scss";
 
-const HobbiesModalPage = ({ id, ...props }) => {
-  const tags = useSelector((state) => state.user.tags);
+const HobbiesModalPageChat = ({ id, ...props }) => {
+  const tags = useSelector(tagsNewChatSelector);
   const dispatch = useDispatch();
 
   const handleSubmit = () => {
     if (tags.length >= 3) {
-      dispatch(changeActiveModal("settings"));
-      console.log(tags);
-      dispatch(updateUserTags(tags));
+      dispatch(modalBack());
     }
   };
 
   const onClickCard = (category) => {
-    dispatch(changeActiveModal("tags"));
-    dispatch(setCategoryModal(category));
+    dispatch(changeActiveModal("tags_chat"));
+    dispatch(setCategoryNewChat(category));
   };
 
   return (
     <ModalPage
       id={id}
       onClose={() => {
-        dispatch(resetTags());
+        dispatch(resetTagsNewChat());
         dispatch(modalBack());
       }}
       hideCloseButton
       {...props}>
       <ModalPageHeader
         before={
-          <PanelHeaderBack
+          <PanelHeaderClose
             onClick={() => {
-              dispatch(resetTags());
-              dispatch(changeActiveModal("settings"));
+              dispatch(resetTagsNewChat());
+              dispatch(modalBack());
             }}
           />
         }>
@@ -69,4 +74,4 @@ const HobbiesModalPage = ({ id, ...props }) => {
   );
 };
 
-export default HobbiesModalPage;
+export default HobbiesModalPageChat;

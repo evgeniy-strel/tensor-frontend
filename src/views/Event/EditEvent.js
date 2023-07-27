@@ -143,27 +143,6 @@ const EditEvent = () => {
   const [idChat, setIdChat] = useState();
   const [isSubmited, setIsSubmited] = useState(false);
 
-  function convertor(dateTime) {
-    if (!dateTime) {
-      return { day: 0, month: 0, year: 0, hour: 0, minute: 0 };
-    }
-    const str = dateTime?.split(" ");
-    const [year, month, day] = str[0]?.split("-");
-    const [hour, minute] = str[1]?.split(":");
-    let hD = day;
-    let hM = month;
-    console.log(day);
-
-    if (day[0] === "0") {
-      hD = day[1];
-    }
-    if (month[0] === "0") {
-      hM = month[1];
-    }
-
-    return { day: hD, month: hM, year: year, hour: hour, minute: minute };
-  }
-
   useEffect(() => {
     setIdChat(location.pathname.split("/")[3]);
     RequestAPI.fetchChatById(location.pathname.split("/")[3]).then((e) => {
@@ -176,7 +155,15 @@ const EditEvent = () => {
 
   useEffect(() => {
     if (event?.datetime) {
-      setDat(convertor(event?.datetime));
+      // console.log(event?.datetime?.tolocaledatestring());
+      let dd = new Date(event?.datetime);
+      setDat({
+        day: dd.getDay(),
+        month: dd.getMonth(),
+        year: dd.getFullYear(),
+        hour: dd.getHours(),
+        minute: dd.getMinutes(),
+      });
     }
   }, [event?.datetime]);
 

@@ -176,6 +176,12 @@ export default class RequestAPI {
     return axios.put(`/chats/${chatId}/users`, users);
   }
 
+  // Юзер выходит из чата
+  static async leaveUserChat(chatId) {
+    console.log(chatId, "leave");
+    return axios.delete(`/chats/${chatId}/user`);
+  }
+
   // ---------- CATEGORIES
 
   // Получение списка категорий

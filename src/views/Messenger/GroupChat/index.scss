@@ -51,11 +51,18 @@
 
   .messages-container-group {
     .messages-container {
-      margin-top: 52.5px;
       height: calc(
         var(--app-height) - var(--vkui--size_panel_header_height--regular) -
-          52.5px - 54px - var(--vkui_internal--safe_area_inset_bottom)
+          54px - var(--vkui_internal--safe_area_inset_bottom)
       );
+
+      &.event {
+        margin-top: 32.5px;
+        height: calc(
+          var(--app-height) - var(--vkui--size_panel_header_height--regular) -
+            32.5px - 54px - var(--vkui_internal--safe_area_inset_bottom)
+        );
+      }
 
       .message-block {
         &.mine {
@@ -123,10 +130,15 @@
     .messages-container-group .messages-container {
       margin: 0 !important;
       height: calc(
-        100vh - var(--vkui--size_panel_header_height--regular) - 16px - 52.5px -
-          52.5px
+        100vh - var(--vkui--size_panel_header_height--regular) - 16px - 52.5px
       );
       box-sizing: border-box;
+      &.event {
+        height: calc(
+          100vh - var(--vkui--size_panel_header_height--regular) - 16px - 32.5px -
+            52.5px
+        );
+      }
     }
 
     .vkuiGroup {

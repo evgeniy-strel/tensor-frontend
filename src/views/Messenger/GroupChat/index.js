@@ -22,8 +22,15 @@ import {
   getFirstDigitGuid,
   getFullUrlImg,
 } from "./../../../utils/helpersMethods";
+import cn from "classnames";
 
-const GroupChat = ({ id, external: { title, avatar }, users, messages }) => {
+const GroupChat = ({
+  id,
+  type,
+  external: { title, avatar },
+  users,
+  messages,
+}) => {
   const currentUser = useSelector((state) => state.user.user);
 
   const navigate = useNavigate();
@@ -72,17 +79,17 @@ const GroupChat = ({ id, external: { title, avatar }, users, messages }) => {
           </Title>
         </PanelHeaderContent>
       </PanelHeader>
-      <FixedLayout vertical="top" className="group-chat__fixed-layout">
-        <Separator wide className="group-chat__fixed-layout__separator" />
-        <Title level="3" className="group-chat__fixed-layout__title">
-          Прогулка гуляш
-        </Title>
-        <div className="group-chat__fixed-layout__description">
-          <span>29 февраля, 31:99</span>
-          <span>Ельцин центр</span>
-        </div>
-      </FixedLayout>
-      <div className="messages-container-group">
+      {type == "event" && (
+        <FixedLayout vertical="top" className="group-chat__fixed-layout">
+          <Separator wide className="group-chat__fixed-layout__separator" />
+          <div className="group-chat__fixed-layout__description">
+            <span>29 февраля, 31:99</span>
+            <span>Ельцин центр</span>
+          </div>
+        </FixedLayout>
+      )}
+      <div
+        className={cn("messages-container-group", { event: type == "event" })}>
         <LayoutMessages>
           <Messages messages={messages} currentUser={currentUser} />
         </LayoutMessages>

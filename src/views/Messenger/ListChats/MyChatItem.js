@@ -4,7 +4,7 @@ import { Cell, Avatar, Headline } from "@vkontakte/vkui";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { activeTabChatSelector } from "../../../store/selectors/chatSelectors";
-import { getFullUrlImg } from "../../../utils/helpersMethods";
+import { getFormatedDate, getFullUrlImg } from "../../../utils/helpersMethods";
 import cn from "classnames";
 
 const SubtitleGroup = ({ lastMessage, subChats }) => {
@@ -42,17 +42,17 @@ const SubtitlePM = ({ lastMessage }) => {
 const MyChatItem = ({
   id,
   type,
-  external: { title: titleGroup, avatar: avatarGroup, subChats, users },
+  external: { title: titleGroup, avatar: avatarGroup, subChats },
   hideAvatar,
   isSelected,
   lastMessage,
+  user: receivedUser,
+  date,
 }) => {
   const isGroup = type == "group";
 
   const currentUser = useSelector((state) => state.user.user);
   const url = `/messenger/chat/${id}`;
-
-  const receivedUser = users?.find((user) => user.id != currentUser.id);
 
   const title = isGroup
     ? titleGroup
@@ -60,7 +60,9 @@ const MyChatItem = ({
 
   const avatar = isGroup ? avatarGroup : receivedUser?.external?.avatar;
 
-  if (type == "private" && !users) return <></>;
+  let formatedDate = getFormatedDate(date);
+
+  if (type == "private" && !receivedUser) return <></>;
 
   return (
     <Link to={url} key={id}>
@@ -84,7 +86,7 @@ const MyChatItem = ({
         }
         indicator={
           <Headline level="1" className="time-message">
-            17:58
+            {formatedDate}
           </Headline>
         }>
         <Headline level="1" className="name-chat">

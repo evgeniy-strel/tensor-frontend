@@ -70,18 +70,19 @@ export const addUsersToChat = createAsyncThunk(
   }
 );
 
-// export const createNewChatPM = createAsyncThunk(
-//   "chat/create",
-//   async ({ chat, receivedUser }, { rejectWithValue }) => {
-//     try {
-//       const { data: chatInfo } = await RequestAPI.createNewChat(chat);
-//       await RequestAPI.addUsersToChat(chatInfo.id, [receivedUser]);
-//       return chatInfo;
-//     } catch (error) {
-//       return rejectWithValue(error?.message);
-//     }
-//   }
-// );
+export const leaveUserChat = createAsyncThunk(
+  "chat/leaveUserChat",
+  async ({ chatId }, { rejectWithValue, dispatch }) => {
+    console.log("leave chat");
+
+    try {
+      await RequestAPI.leaveUserChat(chatId);
+      dispatch(fetchChats);
+    } catch (error) {
+      return rejectWithValue(error?.message);
+    }
+  }
+);
 
 const initialState = {
   isLoaded: {

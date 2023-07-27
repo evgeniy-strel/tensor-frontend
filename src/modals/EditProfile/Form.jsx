@@ -92,7 +92,7 @@ const Form = ({
             value={newData.description}
           />
         </FormItem>
-        <FormItem htmlFor="custom">
+        {/* <FormItem htmlFor="custom">
           <ChipsInput
             id="custom"
             value={newData.tags}
@@ -118,7 +118,7 @@ const Form = ({
               </Chip>
             )}
           />
-        </FormItem>
+        </FormItem> */}
       </FormLayoutGroup>
     </FormLayout>
   );

@@ -7,7 +7,6 @@ const initialStateUser = {
   loginState: { loader: false, error: "" },
   registerState: { loader: false, error: "" },
   forgotState: { loader: false, error: "" },
-  userExist: false,
   anothUser: {},
 };
 

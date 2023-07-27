@@ -1,4 +1,3 @@
-import "./EditEvent.scss";
 import {
   View,
   Panel,
@@ -132,18 +131,28 @@ const EditEvent = () => {
   const categories = useSelector(categoriesSelector);
   const [tags, setTags] = useState([]);
   const [date, setDate] = useState();
-  const [dat, setDat] = useState();
+  const [dat, setDat] = useState({
+    day: 0,
+    month: 0,
+    year: 0,
+    hour: 0,
+    minute: 0,
+  });
   const [hour, setHour] = useState();
   const [event, setEvent] = useState(initialData);
   const [idChat, setIdChat] = useState();
   const [isSubmited, setIsSubmited] = useState(false);
 
   function convertor(dateTime) {
+    if (!dateTime) {
+      return { day: 0, month: 0, year: 0, hour: 0, minute: 0 };
+    }
     const str = dateTime?.split(" ");
     const [year, month, day] = str[0]?.split("-");
     const [hour, minute] = str[1]?.split(":");
     let hD = day;
     let hM = month;
+    console.log(day);
 
     if (day[0] === "0") {
       hD = day[1];
@@ -166,9 +175,16 @@ const EditEvent = () => {
   }, []);
 
   useEffect(() => {
-    console.log(event?.datetime);
-    // setDat(convertor(event?.datetime));
-  }, [event]);
+    if (event?.datetime) {
+      setDat(convertor(event?.datetime));
+    }
+  }, [event?.datetime]);
+
+  const onSubmit = () => {
+    console.log(event);
+    RequestAPI.updateEvents(idChat, event);
+    // navigate(`/event/${idChat}`);
+  };
 
   const fileOnChange = async (e) => {
     const img = e.target.files[0];
@@ -215,7 +231,7 @@ const EditEvent = () => {
           <FormLayout className="formLayout">
             <FormItem className="eventsImage">
               {!event.avatar ? (
-                <File onChange={fileOnChange} accept="image/*">
+                <File onChange={fileOnChange} accept="image/*" mode="link">
                   <Image
                     borderRadius="s"
                     // size={196}
@@ -251,9 +267,9 @@ const EditEvent = () => {
                 bottom={isSubmited && "Заполните поля"}
               >
                 <DatePicker
-                  min={{ day: 1, month: 1, year: 1901 }}
-                  max={{ day: 1, month: 1, year: 2006 }}
-                  value={event.datetime}
+                  // min={{ day: 1, month: 1, year: 1901 }}
+                  max={{ day: 1, month: 1, year: 2030 }}
+                  value={`${dat.year}-${dat.month}-${dat.day}`}
                   onDateChange={(value) => {
                     setDate(`${value.year}-${value.month}-${value.day}`);
                   }}
@@ -270,6 +286,7 @@ const EditEvent = () => {
                   <Select
                     placeholder="Часов"
                     options={hours}
+                    value={dat.hour}
                     onChange={(e) => {
                       setHour(e.target.value);
                     }}
@@ -277,6 +294,7 @@ const EditEvent = () => {
                   <Select
                     placeholder="Минут"
                     options={minutes}
+                    value={dat.minute}
                     onChange={(e) => {
                       setEvent((prev) => ({
                         ...prev,
@@ -336,8 +354,8 @@ const EditEvent = () => {
                 />
               </FormItem>
               <FormItem>
-                <button className="btn" onClick={() => console.log(event)}>
-                  Создать
+                <button className="btn" onClick={onSubmit}>
+                  Готово
                 </button>
               </FormItem>
             </div>

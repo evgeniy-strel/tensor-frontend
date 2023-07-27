@@ -201,7 +201,7 @@ const CreateEvent = () => {
           <FormLayout className="formLayout">
             <FormItem className="eventsImage">
               {!data.avatar ? (
-                <File onChange={fileOnChange} accept="image/*">
+                <File onChange={fileOnChange} accept="image/*" mode="link">
                   <Image
                     borderRadius="s"
                     // size={196}
@@ -237,8 +237,8 @@ const CreateEvent = () => {
                 bottom={isSubmited && "Заполните поля"}
               >
                 <DatePicker
-                  min={{ day: 1, month: 1, year: 1901 }}
-                  max={{ day: 1, month: 1, year: 2006 }}
+                  // min={{ day: 1, month: 1, year: 1901 }}
+                  max={{ day: 1, month: 1, year: 2030 }}
                   onDateChange={(value) => {
                     setDate(`${value.year}-${value.month}-${value.day}`);
                   }}

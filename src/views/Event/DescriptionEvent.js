@@ -67,7 +67,10 @@ const DescriptionEvent = () => {
         <PanelHeader
           className="header"
           before={
-            <PanelHeaderButton onClick={() => navigate(-1)} aria-label="back">
+            <PanelHeaderButton
+              onClick={() => navigate("/event")}
+              aria-label="back"
+            >
               <Icon28ArrowLeftOutline />
             </PanelHeaderButton>
           }

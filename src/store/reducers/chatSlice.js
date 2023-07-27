@@ -34,7 +34,9 @@ export const fetchChats = createAsyncThunk(
       if (activeTab == "my_chats") {
         chats = (await RequestAPI.fetchUserChats()).data;
       } else {
-        chats = (await RequestAPI.fetchReccomendChats()).data;
+        chats = (await RequestAPI.fetchReccomendChats()).data.map((chat) => ({
+          chat: chat,
+        }));
       }
 
       return chats;

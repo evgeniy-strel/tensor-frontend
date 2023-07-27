@@ -11,21 +11,7 @@ import { Icon28LikeOutline, Icon16Users } from "@vkontakte/icons";
 import "./EventCard.scss";
 import { getFullUrlImg } from "../../utils/helpersMethods";
 import { useNavigate } from "react-router-dom";
-
-const months = {
-  1: "января",
-  2: "февраля",
-  3: "марта",
-  4: "апреля",
-  5: "мая",
-  6: "июня",
-  7: "июля",
-  8: "августа",
-  9: "сентября",
-  10: "октября",
-  11: "ноября",
-  12: "декабря",
-};
+import { months } from "./values";
 
 const EventCard = ({
   id,

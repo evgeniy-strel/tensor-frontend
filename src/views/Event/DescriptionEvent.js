@@ -14,9 +14,30 @@ import {
 } from "@vkontakte/icons";
 import "./DescriptionEvent.scss";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchChatById } from "../../store/reducers/chatSlice";
+import { useLocation, matchRoutes } from "react-router-dom";
+import { useEffect, useState } from "react";
+import RequestAPI from "../../API/requests";
+import { months } from "./values";
 
 const DescriptionEvent = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const [event, setEvent] = useState();
+
+  useEffect(() => {
+    RequestAPI.fetchChatById(location.pathname.split("/")[2]).then((e) =>
+      setEvent(e?.data?.external)
+    );
+  }, []);
+
+  const onSubmit = async (e) => {
+    const chatInfo = (
+      await dispatch(fetchChatById("e51101c1-d361-4bed-a702-fe4dcdc627e9"))
+    ).payload;
+  };
 
   return (
     <View id="description" activePanel="description">
@@ -44,7 +65,7 @@ const DescriptionEvent = () => {
                   <PanelHeaderButton
                     onClick={(e) => {
                       e.stopPropagation();
-                      console.log("123");
+                      console.log(123);
                     }}
                   >
                     <Icon28LikeOutline
@@ -57,7 +78,7 @@ const DescriptionEvent = () => {
             </div>
             <div className="info">
               <div className="title">
-                <p>Исторические танцы</p>
+                <p>{event?.title}</p>
                 <div>
                   <span>12</span>
                   <PanelHeaderButton>
@@ -66,16 +87,16 @@ const DescriptionEvent = () => {
                 </div>
               </div>
               <div className="time">
-                <p>10 октября, 12:00</p>
-                <p>ул. Колотушкина, 23</p>
+                <p>
+                  {event?.date?.day} {months[event?.date?.month]}, {event?.hour}
+                  :{event?.minute}
+                </p>
+                <p>{event?.place}</p>
               </div>
             </div>
           </div>
           <div className="desc">
-            <p>
-              Берите с собой свои гитары - чем больше, тем лучше. Посидим на
-              плотинке, попоем песни. Потом можно сходить перекусить
-            </p>
+            <p>{event?.description}</p>
             <div className="btns">
               <button className="btn">Присоединиться</button>
               <button className="btn">Чат</button>

@@ -56,18 +56,14 @@
 
     .date{
       display: flex;
-
-      // .vkuiSelect {
-      //   width: 33%;
-      // }
     }
 
     .time {
       display: flex;
       
-      // .vkuiSelect {
-      //   width: 50%;
-      // }
+      .vkuiSelect {
+        width: 50%;
+      }
     }
   }
 }

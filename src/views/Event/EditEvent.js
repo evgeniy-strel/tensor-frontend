@@ -158,7 +158,7 @@ const EditEvent = () => {
       // console.log(event?.datetime?.tolocaledatestring());
       let dd = new Date(event?.datetime);
       setDat({
-        day: dd.getDay(),
+        day: dd.getDate(),
         month: dd.getMonth(),
         year: dd.getFullYear(),
         hour: dd.getHours(),
@@ -169,7 +169,7 @@ const EditEvent = () => {
 
   const onSubmit = () => {
     console.log(event);
-    RequestAPI.updateEvents(idChat, event);
+    // RequestAPI.updateEvents(idChat, event);
     // navigate(`/event/${idChat}`);
   };
 
@@ -257,9 +257,9 @@ const EditEvent = () => {
                   // min={{ day: 1, month: 1, year: 1901 }}
                   max={{ day: 1, month: 1, year: 2030 }}
                   defaultValue={{
-                    day: 1,
-                    month: 1,
-                    year: 2023,
+                    day: dat.day,
+                    month: dat.month,
+                    year: dat.year,
                   }}
                   onDateChange={(value) => {
                     setDate(`${value.year}-${value.month}-${value.day}`);
@@ -277,7 +277,7 @@ const EditEvent = () => {
                   <Select
                     placeholder="Часов"
                     options={hours}
-                    value={new Date(event?.datetime).getHours()}
+                    value={dat.hour}
                     onChange={(e) => {
                       setHour(e.target.value);
                     }}
@@ -285,7 +285,7 @@ const EditEvent = () => {
                   <Select
                     placeholder="Минут"
                     options={minutes}
-                    value={new Date(event?.datetime).getMinutes()}
+                    value={dat.minute}
                     onChange={(e) => {
                       setEvent((prev) => ({
                         ...prev,

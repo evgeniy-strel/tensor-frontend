@@ -1,39 +1,30 @@
-import { useState } from "react";
 import {
   View,
   Panel,
   PanelHeader,
   PanelHeaderButton,
+  PanelHeaderBack,
   Group,
 } from "@vkontakte/vkui";
 import { Icon28MenuOutline } from "@vkontakte/icons";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { changeActiveModal } from "../../store/reducers/modalSlice";
 import My from "./My";
 import Another from "./Another";
 
-const flexStyle = {
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  padding: "36px 16px 53px",
-  gap: "16px",
-  background: "var(--vkui--color_background_content)",
-  textAlign: "center",
-};
-
 const Profile = () => {
+  const navigate = useNavigate();
   const params = useParams();
   const dispatch = useDispatch();
-  const { loaderUserInfo, user } = useSelector((state) => state.user);
-  const [activePanel, setActivePanel] = useState("profile");
+  const user = useSelector((state) => state.user.user);
   const isMy = params.id === "me" || user.id === params.id;
 
   return (
-    <View id="profile" activePanel={activePanel}>
+    <View id="profile" activePanel="profile">
       <Panel id="profile">
         <PanelHeader
+          before={!isMy && <PanelHeaderBack onClick={() => navigate(-1)} />}
           after={
             isMy && (
               <PanelHeaderButton
@@ -48,11 +39,7 @@ const Profile = () => {
           Профиль
         </PanelHeader>
         <Group>
-          {isMy ? (
-            <My user={user} flexStyle={flexStyle} />
-          ) : (
-            <Another userId={params.id} flexStyle={flexStyle} />
-          )}
+          {isMy ? <My user={user} /> : <Another userId={params.id} />}
         </Group>
       </Panel>
     </View>

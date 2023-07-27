@@ -8,17 +8,24 @@ import {
   Card,
 } from "@vkontakte/vkui";
 import { Icon28FavoriteCircleFillGreen } from "@vkontakte/icons";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { userInfoById } from "../../store/reducers/userSlice";
-import { useNavigate } from "react-router-dom";
+import classes from "./profile.module.scss";
 
-const Another = ({ userId, flexStyle }) => {
+const Another = ({ userId }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { loaderUserInfo, anothUser } = useSelector((state) => state.user);
+  const { loaderUserInfo, anothUser, userExist } = useSelector(
+    (state) => state.user
+  );
 
   useEffect(() => {
-    dispatch(userInfoById(userId));
+    dispatch(userInfoById(userId)).then((res) => {
+      if (!userExist) {
+        navigate("/profile/me");
+      }
+    });
   }, []);
 
   const sendUser = () => {
@@ -30,7 +37,7 @@ const Another = ({ userId, flexStyle }) => {
       {loaderUserInfo ? (
         <PanelSpinner size="medium" />
       ) : (
-        <Card mode="tint" style={flexStyle}>
+        <Card mode="tint" className={classes.card}>
           {" "}
           <Avatar
             size={96}
@@ -52,9 +59,7 @@ const Another = ({ userId, flexStyle }) => {
           <Button size="l" stretched onClick={sendUser}>
             Написать
           </Button>
-          <Text style={{ lineHeight: "20px", letterSpacing: "0.2px" }}>
-            {anothUser?.description}
-          </Text>
+          <Text className={classes.description}>{anothUser?.description}</Text>
         </Card>
       )}
     </>

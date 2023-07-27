@@ -49,8 +49,7 @@ const TabsHeader = ({ selected, setSelected }) => {
           }}
           key={id}
           id={id}
-          aria-controls={id}
-        >
+          aria-controls={id}>
           {text}
         </TabsItem>
       ))}
@@ -84,24 +83,37 @@ const ListChats = () => {
   // TO DO: Сделать анимацию загрузки чатов
 
   const ListMyChats = ({ ...props }) =>
-    chats
-      .filter(({ chat }) =>
-        chat?.external?.title?.toLowerCase().includes(search.text.toLowerCase())
-      )
-      .map(({ chat, last_message }, i) => {
-        return (
-          <MyChatItem
-            {...props}
-            isSelected={selectedChat?.id == chat?.id}
-            key={chat.id}
-            lastMessage={last_message}
-            {...chat}
-          />
-        );
-      });
+    sortChats(chats).map(({ chat, last_message }, i) => {
+      return (
+        <MyChatItem
+          {...props}
+          isSelected={selectedChat?.id == chat?.id}
+          key={chat.id}
+          lastMessage={last_message}
+          {...chat}
+        />
+      );
+    });
+
+  const sortChats = (chats) => {
+    const searchText = search.text.toLowerCase();
+
+    return chats.filter((item) => {
+      const chat = item?.chat || item;
+
+      if (chat?.type == "group") {
+        return chat?.external?.title?.toLowerCase().includes(searchText);
+      } else if (chat?.email) {
+        const name = `${chat?.external?.firstName} ${chat?.external?.lastName}`;
+        return name.toLowerCase().includes(searchText);
+      }
+
+      return true;
+    });
+  };
 
   const ListReccomendChats = ({ ...props }) => {
-    return chats.map((chat, i) => {
+    return sortChats(chats).map((chat, i) => {
       return <ReccomendChatItem {...props} key={chat.id} {...chat} />;
     });
   };
@@ -111,8 +123,7 @@ const ListChats = () => {
       className={cn("list-chats-container", {
         "search-active": search.isActive,
         "shown-subchats": Boolean(selectedChat),
-      })}
-    >
+      })}>
       <PanelHeader
         isShownSubchats={Boolean(selectedChat)}
         hideSubChats={() => setSelectedChat(null)}

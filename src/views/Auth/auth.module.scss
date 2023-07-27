@@ -25,6 +25,11 @@ $active: #2688eb;
 }
 
 .card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
   aspect-ratio: 1.13;
   color: $default;
   transition: 0.3s color;

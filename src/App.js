@@ -27,6 +27,7 @@ import HobbiesModalPage from "./modals/HobbiesModalPage";
 import EditProfile from "./modals/EditProfile";
 import CategoryModalPage from "./modals/CategoryModalPage";
 import { fetchCategories } from "./store/reducers/categoriesSlice";
+import { resetTags } from "./store/reducers/userSlice";
 
 const pages = [
   {
@@ -64,7 +65,13 @@ function App() {
     !pathname.includes("/messenger/") || pathname.length < 12;
 
   const modal = (
-    <ModalRoot activeModal={activeModal} onClose={() => dispatch(modalBack())}>
+    <ModalRoot
+      activeModal={activeModal}
+      onClose={() => {
+        dispatch(resetTags());
+        dispatch(modalBack());
+      }}
+    >
       <SettingsModalPage id="settings" />
       <HobbiesModalPage id="hobbies" />
       <CategoryModalPage id="tags" />

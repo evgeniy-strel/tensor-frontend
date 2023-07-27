@@ -133,12 +133,12 @@ const Event = () => {
         {/*  </HorizontalScroll>*/}
         {/*</Tabs>*/}
 
-        <TabsHeader
-          selected={selected}
-          setSelected={(value) => setSelected(value)}
-        />
         <Group id="all-event">
 
+          <TabsHeader
+            selected={selected}
+            setSelected={(value) => setSelected(value)}
+          />
           <div className="wrapper">
             {chats?.map((chat, i) => {
               return <EventCard {...chat} key={i} />;

@@ -142,7 +142,7 @@ const DescriptionEvent = () => {
             </div>
             <div className="time">
               <p>
-                {date.getDay()} {months[date.getMonth()]}, {date.getHours()}:
+                {date.getDate()} {months[date.getMonth()]}, {date.getHours()}:
                 {date.getMinutes()}
               </p>
               <p>{event?.place}</p>

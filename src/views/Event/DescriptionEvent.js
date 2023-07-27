@@ -23,21 +23,39 @@ import { months } from "./values";
 
 const DescriptionEvent = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const location = useLocation();
+  const [idChat, setIdChat] = useState();
   const [event, setEvent] = useState();
+  const [tags, setTags] = useState();
+  const [users, setUsers] = useState(0);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [participant, setParticipant] = useState(false);
+  const [idUser, setIdUser] = useState();
 
   useEffect(() => {
+    setIdChat(location.pathname.split("/")[2]);
     RequestAPI.fetchChatById(location.pathname.split("/")[2]).then((e) =>
       setEvent(e?.data?.external)
     );
+    RequestAPI.fetchTagsByChatId(location.pathname.split("/")[2]).then((e) =>
+      setTags(e?.data)
+    );
+    RequestAPI.currentUser().then((e) => setIdUser(e?.data?.id));
   }, []);
 
-  const onSubmit = async (e) => {
-    const chatInfo = (
-      await dispatch(fetchChatById("e51101c1-d361-4bed-a702-fe4dcdc627e9"))
-    ).payload;
-  };
+  useEffect(() => {
+    RequestAPI.fetchUsersByChatId(location.pathname.split("/")[2]).then((e) => {
+      setUsers(e?.data?.length);
+      e?.data?.map((v) => {
+        if (v?.user?.id === idUser) {
+          setParticipant(true);
+          if (v?.role === "admin" && v?.user?.id === idUser) {
+            setIsAdmin(true);
+          }
+        }
+      });
+    });
+  }, [idUser]);
 
   return (
     <View id="description" activePanel="description">
@@ -57,56 +75,82 @@ const DescriptionEvent = () => {
         </PanelHeader>
         <Group className="wrapper">
           <div>
-            <div>
-              <div className="eventsImage">
-                <img src="https://ic.pics.livejournal.com/evfimi/71423938/386042/386042_original.jpg" />
-                <div className="infoImage">
-                  <div>Танцы</div>
-                  <PanelHeaderButton
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      console.log(123);
-                    }}
-                  >
-                    <Icon28LikeOutline
-                      fill="white"
-                      style={{ padding: "0px" }}
-                    />
-                  </PanelHeaderButton>
-                </div>
+            <div className="eventsImage">
+              <img src="https://ic.pics.livejournal.com/evfimi/71423938/386042/386042_original.jpg" />
+              <div className="infoImage">
+                <PanelHeaderButton
+                  aria-label="favorites"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    console.log(idChat);
+                  }}
+                >
+                  <Icon28LikeOutline fill="white" style={{ padding: "0px" }} />
+                </PanelHeaderButton>
+              </div>
+              <div className="tags">
+                {tags?.map((e) => {
+                  return <div key={e?.tag_id}>{e?.title}</div>;
+                })}
               </div>
             </div>
-            <div className="info">
-              <div className="title">
-                <p>{event?.title}</p>
-                <div>
-                  <span>12</span>
-                  <PanelHeaderButton>
-                    <Icon16Users />
-                  </PanelHeaderButton>
-                </div>
+          </div>
+          <div className="info">
+            <div className="title">
+              <p>{event?.title}</p>
+              <div>
+                <span>{users}</span>
+                <PanelHeaderButton aria-label="users">
+                  <Icon16Users />
+                </PanelHeaderButton>
               </div>
-              <div className="time">
-                <p>
-                  {event?.date?.day} {months[event?.date?.month]}, {event?.hour}
-                  :{event?.minute}
-                </p>
-                <p>{event?.place}</p>
-              </div>
+            </div>
+            <div className="time">
+              <p>
+                {event?.date?.day} {months[event?.date?.month]}, {event?.hour}:
+                {event?.minute}
+              </p>
+              <p>{event?.place}</p>
             </div>
           </div>
           <div className="desc">
             <p>{event?.description}</p>
             <div className="btns">
-              <button className="btn">Присоединиться</button>
-              <button className="btn">Чат</button>
-              <button className="btn noActive">Не участвовать</button>
-              <button
-                className="btn noActive"
-                onClick={() => navigate("/event/create")}
-              >
-                Редактировать
-              </button>
+              {isAdmin && (
+                <>
+                  <button
+                    className="btn"
+                    onClick={() => navigate(`/messenger/chat/${idChat}`)}
+                  >
+                    Чат
+                  </button>
+                  <button
+                    className="btn noActive"
+                    onClick={() => navigate("/event/create")}
+                  >
+                    Редактировать
+                  </button>
+                </>
+              )}
+              {participant && !isAdmin && (
+                <>
+                  <button
+                    className="btn"
+                    onClick={() => navigate(`/messenger/chat/${idChat}`)}
+                  >
+                    Чат
+                  </button>
+                  <button className="btn noActive">Не участвовать</button>
+                </>
+              )}
+              {!isAdmin && !participant && (
+                <button
+                  className="btn"
+                  onClick={() => navigate(`/messenger/chat/${idChat}`)}
+                >
+                  Присоединиться
+                </button>
+              )}
             </div>
           </div>
         </Group>

@@ -33,6 +33,41 @@ import {
 import { setActiveTab } from "../../store/reducers/chatSlice";
 import { fetchChats } from "./../../store/reducers/chatSlice";
 
+const tabs = [
+  {
+    id: "all_events",
+    text: "Все события",
+  },
+  {
+    id: "favorites_events",
+    text: "Избранное",
+  },
+  {
+    id: "my_events",
+    text: "Мои события",
+  },
+];
+
+const TabsHeader = ({ selected, setSelected }) => {
+  return (
+    <Tabs>
+      {tabs.map(({ id, text }) => (
+        <TabsItem
+          selected={selected === id}
+          onClick={() => {
+            setSelected(id);
+          }}
+          key={id}
+          id={id}
+          aria-controls={id}
+        >
+          {text}
+        </TabsItem>
+      ))}
+    </Tabs>
+  );
+};
+
 const Event = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -73,16 +108,13 @@ const Event = () => {
         >
           <Title>События</Title>
         </PanelHeader>
-        <Tabs mode={"default"}>
-          <HorizontalScroll arrowSize="m">
-            <TabsItem>Все события</TabsItem>
-            <TabsItem>Избранное</TabsItem>
-            <TabsItem>Мои события</TabsItem>
-          </HorizontalScroll>
-        </Tabs>
+        <TabsHeader
+          selected={selected}
+          setSelected={(value) => dispatch(setActiveTab(value))}
+        />
         <Group>
           <div className="wrapper">
-            {chats.map(({ chat, last_message }, i) => {
+            {chats.map(({ chat }, i) => {
               return (
                 <EventCard
                   // isSelected={selectedChat?.id == chat?.id}

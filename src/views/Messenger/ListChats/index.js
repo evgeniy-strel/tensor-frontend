@@ -46,7 +46,8 @@ const TabsHeader = ({ selected, setSelected }) => {
           }}
           key={id}
           id={id}
-          aria-controls={id}>
+          aria-controls={id}
+        >
           {text}
         </TabsItem>
       ))}
@@ -83,7 +84,8 @@ const ListChats = () => {
       className={cn("list-chats-container", {
         "search-active": search.isActive,
         "shown-subchats": Boolean(selectedChat),
-      })}>
+      })}
+    >
       <PanelHeader
         isShownSubchats={Boolean(selectedChat)}
         hideSubChats={() => setSelectedChat(null)}

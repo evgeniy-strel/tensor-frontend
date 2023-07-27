@@ -9,13 +9,20 @@ import {
 } from "@vkontakte/vkui";
 import { Icon28LikeOutline, Icon16Users } from "@vkontakte/icons";
 import "./EventCard.scss";
+import { getFullUrlImg } from "../../utils/helpersMethods";
+import { useNavigate } from "react-router-dom";
 
-const EventCard = () => {
+const EventCard = ({
+  id,
+  external: { title, avatar, place, day, month, year, hour, minute },
+}) => {
+  const navigate = useNavigate();
+
   return (
-    <div id="eventCard">
+    <div id="eventCard" onClick={() => navigate(`event/${id}`)} key={id}>
       <div>
         <div className="eventsImage">
-          <img src="https://ic.pics.livejournal.com/evfimi/71423938/386042/386042_original.jpg" />
+          <img src={getFullUrlImg(avatar)} />
           <div className="infoImage">
             <div>Танцы</div>
             <PanelHeaderButton
@@ -31,7 +38,7 @@ const EventCard = () => {
       </div>
       <div className="info">
         <div className="title">
-          <p>Исторические танцы</p>
+          <p>{title}</p>
           <div>
             <span>12</span>
             <PanelHeaderButton>
@@ -40,8 +47,10 @@ const EventCard = () => {
           </div>
         </div>
         <div className="time">
-          <p>10 октября, 12:00</p>
-          <p>ул. Колотушкина, 23</p>
+          <p>
+            {day} {month}октября, {hour}:{minute}
+          </p>
+          <p>{place}</p>
         </div>
       </div>
     </div>

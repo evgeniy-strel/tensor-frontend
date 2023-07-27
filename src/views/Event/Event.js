@@ -11,6 +11,8 @@ import {
   HorizontalScroll,
   Title,
   Image,
+  FormLayout,
+  FormItem,
 } from "@vkontakte/vkui";
 import {
   Icon28CalendarOutline,
@@ -23,10 +25,19 @@ import {
 import { useNavigate } from "react-router-dom";
 import EventCard from "./EventCard";
 import "./Event.scss";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  activeTabChatSelector,
+  chatsSelector,
+} from "../../store/selectors/chatSelectors";
+import { setActiveTab } from "../../store/reducers/chatSlice";
 
 const Event = () => {
-  const [selected, setSelected] = useState("events");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const chats = useSelector(chatsSelector);
+  const selected = useSelector(activeTabChatSelector);
 
   return (
     <View id="event" activePanel="event">
@@ -59,30 +70,23 @@ const Event = () => {
         </PanelHeader>
         <Tabs mode={"default"}>
           <HorizontalScroll arrowSize="m">
-            <TabsItem
-              selected={selected === "events"}
-              onClick={() => setSelected("events")}
-            >
-              Все события
-            </TabsItem>
-            <TabsItem
-              selected={selected === "favorites"}
-              onClick={() => setSelected("favorites")}
-            >
-              Избранное
-            </TabsItem>
-            <TabsItem
-              selected={selected === "myEvents"}
-              onClick={() => setSelected("myEvents")}
-            >
-              Мои события
-            </TabsItem>
+            <TabsItem>Все события</TabsItem>
+            <TabsItem>Избранное</TabsItem>
+            <TabsItem>Мои события</TabsItem>
           </HorizontalScroll>
         </Tabs>
-        <Group onClick={() => navigate("/event/event1")} className="wrapper">
-          <EventCard />
-          <EventCard />
-          <EventCard />
+        <Group>
+          <div className="wrapper">
+            {chats.map((chat, i) => {
+              return (
+                <EventCard
+                  // isSelected={selectedChat?.id == chat?.id}
+                  key={i}
+                  {...chat}
+                />
+              );
+            })}
+          </div>
         </Group>
       </Panel>
     </View>

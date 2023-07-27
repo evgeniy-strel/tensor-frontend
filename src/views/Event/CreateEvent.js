@@ -21,20 +21,27 @@ import { useState } from "react";
 import RequestAPI from "../../API/requests";
 import { useSelector, useDispatch } from "react-redux";
 import { createNewChat } from "./../../store/reducers/chatSlice";
+import { categoriesSelector } from "./../../store/selectors/categoriesSelector";
+import { getFullUrlImg } from "../../utils/helpersMethods";
 
-const colors = [
-  { value: "red", label: "Красный" },
-  { value: "blue", label: "Синий" },
-  { value: "navarin", label: "Наваринского пламени с дымом" },
+const numbers = [
+  { value: "1", label: "1" },
+  { value: "2", label: "2" },
+  { value: "3", label: "3" },
 ];
+
+const month = [{ value: "1", label: "январь" }];
 
 const initialData = {
   avatar: "",
   title: "",
   description: "",
   place: "",
-  date: "",
-  time: "",
+  day: "",
+  month: "",
+  year: "",
+  hour: "",
+  minute: "",
 };
 
 const CreateEvent = () => {
@@ -42,6 +49,7 @@ const CreateEvent = () => {
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user.user);
+  const categories = useSelector(categoriesSelector);
   const [tags, setTags] = useState([]);
   const [data, setData] = useState(initialData);
   const [isSubmited, setIsSubmited] = useState(false);
@@ -59,7 +67,7 @@ const CreateEvent = () => {
   const tagsChipsProps = {
     value: tags,
     onChange: setTags,
-    options: colors,
+    options: categories.map(({ title }) => ({ label: title, value: title })),
     placeholder: "Выберите или напишите свои теги",
     emptyText: "Ничего не найдено",
   };
@@ -72,7 +80,7 @@ const CreateEvent = () => {
   };
 
   const onSubmit = async (e) => {
-    console.log("1");
+    console.log(data);
     e.preventDefault();
     setIsSubmited(true);
     if (Object.values(rules).filter((rule) => rule).length !== 0) return;
@@ -109,9 +117,9 @@ const CreateEvent = () => {
             <FormItem className="eventsImage">
               <File onChange={fileOnChange} accept="image/*">
                 <Image
-                  className="img"
                   borderRadius="s"
                   // size={196}
+                  src={getFullUrlImg(data.avatar)}
                   fallbackIcon={<Icon28AddOutline />}
                 />
               </File>
@@ -144,10 +152,27 @@ const CreateEvent = () => {
                   <Select
                     placeholder="День"
                     id="formSelect"
-                    options={colors}
+                    options={numbers}
+                    onChange={(e) => {
+                      setData((prev) => ({ ...prev, day: e.target.value }));
+                    }}
                   ></Select>
-                  <Select placeholder="Месяц" id="formSelect"></Select>
-                  <Select placeholder="Год" id="formSelect"></Select>
+                  <Select
+                    placeholder="Месяц"
+                    id="formSelect"
+                    options={month}
+                    onChange={(e) => {
+                      setData((prev) => ({ ...prev, month: e.target.value }));
+                    }}
+                  ></Select>
+                  <Select
+                    placeholder="Год"
+                    id="formSelect"
+                    options={numbers}
+                    onChange={(e) => {
+                      setData((prev) => ({ ...prev, year: e.target.value }));
+                    }}
+                  ></Select>
                 </div>
               </FormItem>
               <FormItem
@@ -155,8 +180,20 @@ const CreateEvent = () => {
                 bottom={isSubmited && "Заполните поля"}
               >
                 <div className="time">
-                  <Select placeholder="Часов"></Select>
-                  <Select placeholder="Минут"></Select>
+                  <Select
+                    placeholder="Часов"
+                    options={numbers}
+                    onChange={(e) => {
+                      setData((prev) => ({ ...prev, hour: e.target.value }));
+                    }}
+                  ></Select>
+                  <Select
+                    placeholder="Минут"
+                    options={numbers}
+                    onChange={(e) => {
+                      setData((prev) => ({ ...prev, minute: e.target.value }));
+                    }}
+                  ></Select>
                 </div>
               </FormItem>
               <FormItem

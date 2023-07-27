@@ -5,7 +5,7 @@ export const getFirstDigitGuid = (guid) => {
 };
 
 export const getFullUrlImg = (img) => {
-  return `${process.env.REACT_APP_URL_API}/${img}`;
+  return `${process.env.REACT_APP_URL_API}${img}`;
 };
 
 export const getCaseOfUchastnik = (countUsers) => {

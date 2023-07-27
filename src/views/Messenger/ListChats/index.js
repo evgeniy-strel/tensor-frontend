@@ -105,7 +105,7 @@ const ListChats = () => {
     return chats.filter((item) => {
       const chat = item?.chat || item;
 
-      if (chat?.type == "group") {
+      if (chat?.type == "group" || chat?.type == "event") {
         return chat?.external?.title?.toLowerCase().includes(searchText);
       } else if (chat?.email) {
         const name = `${chat?.external?.firstName} ${chat?.external?.lastName}`;

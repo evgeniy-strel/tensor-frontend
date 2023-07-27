@@ -19,51 +19,57 @@ const Messages = ({ messages }) => {
 
   return (
     <>
-      {messages.map(({ external: { message, user } }, i) => {
-        const isMine = currentUser?.id == user?.id;
+      {messages
+        .filter(
+          (message) => message?.external?.message && message?.external?.user
+        )
+        .map(({ external: { message, user } }, i) => {
+          const isMine = currentUser?.id == user?.id;
 
-        let isFirstMessage = true;
-        let isLastMessage = true;
+          let isFirstMessage = true;
+          let isLastMessage = true;
 
-        if (i != 0) {
-          const prevMessage = messages[i - 1];
-          isFirstMessage = user?.id != prevMessage?.external.user.id;
-        }
+          if (i != 0) {
+            const prevMessage = messages[i - 1];
+            isFirstMessage = user?.id != prevMessage?.external?.user?.id;
+          }
 
-        if (i != messages.length - 1) {
-          const nextMessage = messages[i + 1];
-          isLastMessage = user?.id != nextMessage?.external.user?.id;
-        }
+          if (i != messages.length - 1) {
+            const nextMessage = messages[i + 1];
+            isLastMessage = user?.id != nextMessage?.external?.user?.id;
+          }
 
-        const initials =
-          user?.firstName &&
-          user?.lastName &&
-          `${user?.firstName?.substr(0, 1)}${user?.lastName?.substr(0, 1)}`;
+          const initials =
+            user?.firstName &&
+            user?.lastName &&
+            `${user?.firstName?.substr(0, 1)}${user?.lastName?.substr(0, 1)}`;
 
-        return (
-          <div
-            key={i}
-            className={`message-block ${
-              isFirstMessage ? "first-message" : ""
-            } ${isLastMessage ? "last-message" : ""} ${isMine ? "mine" : ""}`}>
-            <Avatar
-              size={32}
-              initials={initials}
-              src={getFullUrlImg(user?.avatar)}
-              className="user-avatar"
-              gradientColor={calcInitialsAvatarColor(
-                getFirstDigitGuid(user?.id)
-              )}
-            />
-            <div className="message">
-              <div className="username">
-                {user?.firstName} {user?.lastName}
+          return (
+            <div
+              key={i}
+              className={`message-block ${
+                isFirstMessage ? "first-message" : ""
+              } ${isLastMessage ? "last-message" : ""} ${
+                isMine ? "mine" : ""
+              }`}>
+              <Avatar
+                size={32}
+                initials={initials}
+                src={getFullUrlImg(user?.avatar)}
+                className="user-avatar"
+                gradientColor={calcInitialsAvatarColor(
+                  getFirstDigitGuid(user?.id)
+                )}
+              />
+              <div className="message">
+                <div className="username">
+                  {user?.firstName} {user?.lastName}
+                </div>
+                <div className="text">{message}</div>
               </div>
-              <div className="text">{message}</div>
             </div>
-          </div>
-        );
-      })}
+          );
+        })}
     </>
   );
 };

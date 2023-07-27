@@ -175,11 +175,11 @@ const CreateEvent = () => {
       users_id: [user.id],
     };
 
-    const tagsValues = tags.map((tag) => tag.value);
+    const tagsValues = tags.map((tag) => ({ title: tag?.value }));
 
     const chatInfo = (await dispatch(createNewChat({ chat, tags: tagsValues })))
       .payload;
-    navigate(`/messenger/chat/${chatInfo.id}`);
+    navigate(`/messenger/chat/${chatInfo?.id}`);
   };
 
   return (
@@ -190,12 +190,10 @@ const CreateEvent = () => {
           before={
             <PanelHeaderButton
               onClick={() => navigate("/event")}
-              aria-label="back"
-            >
+              aria-label="back">
               <Icon28Cancel />
             </PanelHeaderButton>
-          }
-        >
+          }>
           <Title>Создание события</Title>
         </PanelHeader>
         <Group>
@@ -220,8 +218,7 @@ const CreateEvent = () => {
                   isSubmited &&
                   rules.title &&
                   "Введите название от 4-х символов"
-                }
-              >
+                }>
                 <Input
                   type="text"
                   minLength={4}
@@ -235,8 +232,7 @@ const CreateEvent = () => {
               </FormItem>
               <FormItem
                 status={isSubmited ? "error" : "default"}
-                bottom={isSubmited && "Заполните поля"}
-              >
+                bottom={isSubmited && "Заполните поля"}>
                 <DatePicker
                   // min={{ day: 1, month: 1, year: 1901 }}
                   max={{ day: 1, month: 1, year: 2030 }}
@@ -251,15 +247,13 @@ const CreateEvent = () => {
               <FormLayoutGroup segmented mode="horizontal">
                 <FormItem
                   status={isSubmited ? "error" : "default"}
-                  bottom={isSubmited && "Заполните поля"}
-                >
+                  bottom={isSubmited && "Заполните поля"}>
                   <Select
                     placeholder="Часов"
                     options={hours}
                     onChange={(e) => {
                       setHour(e.target.value);
-                    }}
-                  ></Select>
+                    }}></Select>
                 </FormItem>
                 <FormItem>
                   <Select
@@ -270,8 +264,7 @@ const CreateEvent = () => {
                         ...prev,
                         datetime: `${date} ${hour}:${e.target.value}`,
                       }));
-                    }}
-                  ></Select>
+                    }}></Select>
                 </FormItem>
               </FormLayoutGroup>
               <FormItem
@@ -280,8 +273,7 @@ const CreateEvent = () => {
                   isSubmited &&
                   rules.title &&
                   "Введите название от 4-х символов"
-                }
-              >
+                }>
                 <Input
                   placeholder="Место проведения"
                   type="text"
@@ -295,8 +287,7 @@ const CreateEvent = () => {
               </FormItem>
               <FormItem
                 status={isSubmited && rules.tags ? "error" : "default"}
-                bottom={isSubmited && rules.tags && "Выберите хотя-бы 1 тег"}
-              >
+                bottom={isSubmited && rules.tags && "Выберите хотя-бы 1 тег"}>
                 <ChipsSelect
                   {...tagsChipsProps}
                   showSelected={false}
@@ -310,8 +301,7 @@ const CreateEvent = () => {
                   isSubmited &&
                   rules.description &&
                   "Опишите событие от 10 символов"
-                }
-              >
+                }>
                 <Textarea
                   placeholder="Описание события"
                   value={data.description}

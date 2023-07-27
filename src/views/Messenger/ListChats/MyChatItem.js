@@ -49,7 +49,7 @@ const MyChatItem = ({
   user: receivedUser,
   date,
 }) => {
-  const isGroup = type == "group";
+  const isGroup = type == "group" || type == "event";
 
   const currentUser = useSelector((state) => state.user.user);
   const url = `/messenger/chat/${id}`;

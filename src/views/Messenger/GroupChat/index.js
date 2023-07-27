@@ -27,7 +27,7 @@ import cn from "classnames";
 const GroupChat = ({
   id,
   type,
-  external: { title, avatar },
+  external: { title, avatar, place, datetime },
   users,
   messages,
 }) => {
@@ -83,8 +83,8 @@ const GroupChat = ({
         <FixedLayout vertical="top" className="group-chat__fixed-layout">
           <Separator wide className="group-chat__fixed-layout__separator" />
           <div className="group-chat__fixed-layout__description">
-            <span>29 февраля, 31:99</span>
-            <span>Ельцин центр</span>
+            <span>{datetime}</span>
+            <span>{place}</span>
           </div>
         </FixedLayout>
       )}

@@ -32,16 +32,64 @@ import {
 } from "../../store/selectors/chatSelectors";
 import { setActiveTab } from "../../store/reducers/chatSlice";
 import { fetchChats } from "./../../store/reducers/chatSlice";
+import RequestAPI from "../../API/requests";
+
+const tabs = [
+  {
+    id: "all_events",
+    text: "Все события",
+  },
+  {
+    id: "favorites_events",
+    text: "Избранное",
+  },
+  {
+    id: "my_events",
+    text: "Мои события",
+  },
+];
+
+const TabsHeader = ({ selected, setSelected }) => {
+  return (
+    <Tabs>
+      {tabs.map(({ id, text }) => (
+        <TabsItem
+          selected={selected === id}
+          onClick={() => {
+            setSelected(id);
+          }}
+          key={id}
+          id={id}
+          aria-controls={id}
+        >
+          {text}
+        </TabsItem>
+      ))}
+    </Tabs>
+  );
+};
 
 const Event = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
-  const chats = useSelector(chatsSelector);
-  const selected = useSelector(activeTabChatSelector);
+  const [chats, setChats] = useState();
+  const [selected, setSelected] = useState("all_events");
 
   useEffect(() => {
-    dispatch(fetchChats());
+    if (selected === "all_events") {
+      RequestAPI.fetchUserEvents().then((e) => setChats(e?.data));
+    }
+    if (selected === "my_events") {
+      RequestAPI.fetchUserChats().then((e) => {
+        const info = e?.data
+          ?.filter((el) => el?.chat?.type === "event")
+          ?.map((e) => {
+            return e?.chat;
+          });
+
+        setChats(info);
+      });
+    }
   }, [selected]);
 
   return (
@@ -73,23 +121,14 @@ const Event = () => {
         >
           <Title>События</Title>
         </PanelHeader>
-        <Tabs mode={"default"}>
-          <HorizontalScroll arrowSize="m">
-            <TabsItem>Все события</TabsItem>
-            <TabsItem>Избранное</TabsItem>
-            <TabsItem>Мои события</TabsItem>
-          </HorizontalScroll>
-        </Tabs>
+        <TabsHeader
+          selected={selected}
+          setSelected={(value) => setSelected(value)}
+        />
         <Group>
           <div className="wrapper">
-            {chats.map(({ chat, last_message }, i) => {
-              return (
-                <EventCard
-                  // isSelected={selectedChat?.id == chat?.id}
-                  key={i}
-                  {...chat}
-                />
-              );
+            {chats?.map((chat, i) => {
+              return <EventCard {...chat} key={i} />;
             })}
           </div>
         </Group>

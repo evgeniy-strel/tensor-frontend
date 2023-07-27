@@ -64,15 +64,49 @@
       left: 0;
     }
 
+    .noImg {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #A2A2A2;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
     .infoImage {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-end;
       position: absolute;
       padding: 18px 16px 0px 16px;
       width: 100%;
       box-sizing: border-box;
+    }
 
-      div {
+    .tags{
+      position: absolute;
+      top: 85%;
+      left: 16px;
+
+      .vkuiHorizontalScroll__in-wrapper{
+
+        div{
+          display: flex;
+          gap: 8px;
+        }
+      }
+
+      // .vkuiCard{
+      //   background: none;
+      //   div{
+      //     display: flex;
+      //     gap: 8px;
+      //   }
+      // }
+
+      .tag{
         background-color: #FFF;
         border-radius: 87px;
         padding: 4px 8px;

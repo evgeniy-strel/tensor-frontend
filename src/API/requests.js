@@ -113,7 +113,7 @@ export default class RequestAPI {
     const res = axios.post("current/tags", formTags);
     res.then((res) =>
       localStorage.setItem("userTags", JSON.stringify(res.data))
-    )
+    );
     return res;
   }
 
@@ -192,5 +192,17 @@ export default class RequestAPI {
   // Получение списка тегов
   static async fetchTags() {
     return axios.get("tags");
+  }
+
+  // -----------EVENTS
+
+  // Получение событий
+  static async fetchUserEvents() {
+    return axios.get("chats/recomended/events");
+  }
+
+  // Обновление событий
+  static async updateEvents(id, infoEvents) {
+    return axios.put(`chats/${id}`, infoEvents);
   }
 }

@@ -100,6 +100,7 @@ const chatSlice = createSlice({
   initialState,
   reducers: {
     setActiveTab(state, action) {
+      if (state.activeTab == action.payload) return;
       state.chats = [];
       state.activeTab = action.payload;
     },

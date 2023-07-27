@@ -88,7 +88,7 @@ const ListChats = () => {
         <MyChatItem
           {...props}
           isSelected={selectedChat?.id == chat?.id}
-          key={chat.id}
+          key={chat?.id}
           lastMessage={last_message}
           {...chat}
         />
@@ -114,7 +114,7 @@ const ListChats = () => {
 
   const ListReccomendChats = ({ ...props }) => {
     return sortChats(chats).map((chat, i) => {
-      return <ReccomendChatItem {...props} key={chat.id} {...chat} />;
+      return <ReccomendChatItem {...props} key={chat?.id} {...chat} />;
     });
   };
 

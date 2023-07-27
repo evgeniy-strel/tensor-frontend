@@ -17,7 +17,9 @@ import { createNewChat } from "../../store/reducers/chatSlice";
 const Another = ({ userId }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { loaderUserInfo, anothUser } = useSelector((state) => state.user);
+  const { loaderUserInfo, anothUser, user } = useSelector(
+    (state) => state.user
+  );
 
   useEffect(() => {
     dispatch(userInfoById(userId)).then((res) => {

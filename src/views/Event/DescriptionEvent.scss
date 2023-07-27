@@ -1,0 +1,112 @@
+#description{
+  .header {
+    .vkuiPanelHeader__before {
+      flex-grow: 0 !important;
+    }
+  }
+
+  p {
+    margin: 0;
+  }
+
+  .wrapper{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 85vh;
+
+    .desc{
+      margin: 0px 16px;
+    }
+
+    .btns{
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: absolute;
+      bottom: 60px;
+      margin-left: auto;
+      margin-right: auto;
+      left: 16px;
+      right: 16px;
+
+      .btn {
+        background-color: #2688EB;
+        border: none;
+        padding: 10px 16px 10px 16px;
+        border-radius: 8px;
+        color: #FFFFFF;
+        font-family: Roboto;
+        font-size: 16px;
+        box-sizing: border-box;
+        width: 100%;
+        cursor: pointer;
+      }
+
+      .noActive{
+        background: var(--light-background-background-secondary-alpha, rgba(0, 0, 0, 0.04));
+        color: #2688EB;
+      }
+    }
+  }
+
+  .eventsImage {
+    overflow: hidden;
+    position: relative;
+    padding: 0px 0px 58% 0px;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .infoImage {
+      display: flex;
+      justify-content: space-between;
+      position: absolute;
+      padding: 18px 16px 0px 16px;
+      width: 100%;
+      box-sizing: border-box;
+
+      div {
+        background-color: #FFF;
+        border-radius: 87px;
+        padding: 4px 8px;
+        color: #2688EB;
+      }
+    }
+  }
+
+  .info {
+    margin: 0px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .title {
+      font-weight: 500;
+      font-size: 15px;
+      display: flex;
+      justify-content: space-between;
+
+      div {
+        display: flex;
+        gap: 4px;
+        color: #99A2AD;
+        font-size: 12px;
+        align-items: center;
+      }
+    }
+
+    .time {
+      display: flex;
+      justify-content: space-between;
+      color: #818C99;
+      font-size: 12px;
+    }
+  }
+}

@@ -53,6 +53,7 @@ const CreateChat = () => {
   // обработка фотографии
   const fileOnChange = async (e) => {
     const img = e.target.files[0];
+    console.log(img);
     if (!img) return;
 
     const formData = new FormData();
@@ -98,7 +99,8 @@ const CreateChat = () => {
             className="panel-header__icon"
             onClick={onClickBack}
           />
-        }>
+        }
+      >
         <span className="panel-header__title">Создание чата</span>
       </PanelHeader>
       <Group className="create-chat__group">
@@ -123,7 +125,8 @@ const CreateChat = () => {
                   isSubmited &&
                   rules.title &&
                   "Введите название от 4-х символов"
-                }>
+                }
+              >
                 <Input
                   name="title"
                   id="form-layout__title"
@@ -140,7 +143,8 @@ const CreateChat = () => {
               </FormItem>
               <FormItem
                 status={isSubmited && rules.tags ? "error" : "default"}
-                bottom={isSubmited && rules.tags && "Выберите хотя-бы 1 тег"}>
+                bottom={isSubmited && rules.tags && "Выберите хотя-бы 1 тег"}
+              >
                 <ChipsSelect
                   id="groups"
                   {...tagsChipsProps}
@@ -155,7 +159,8 @@ const CreateChat = () => {
                   isSubmited &&
                   rules.description &&
                   "Опишите чат от 10 символов"
-                }>
+                }
+              >
                 <Textarea
                   placeholder="Описание чата"
                   value={data.description}

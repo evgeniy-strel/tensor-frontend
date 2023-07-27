@@ -70,7 +70,9 @@ function App() {
     <ModalRoot
       activeModal={activeModal}
       onClose={() => {
-        dispatch(resetTags());
+        if (token !== "") {
+          dispatch(resetTags());
+        }
         dispatch(modalBack());
       }}
     >
@@ -93,7 +95,8 @@ function App() {
     <SplitLayout
       header={isVKCOM && <PanelHeader separator={false} />}
       style={{ justifyContent: "center" }}
-      modal={modal}>
+      modal={modal}
+    >
       {viewWidth.tabletPlus && token !== "" && (
         <Desktop
           isVKCOM={isVKCOM}
@@ -117,7 +120,8 @@ function App() {
                 setActiveStory={setActiveStory}
               />
             )
-          }>
+          }
+        >
           <Rout id={activeStory} />
         </Epic>
       </SplitCol>

@@ -62,15 +62,13 @@ const TabsHeader = ({ selected, setSelected }) => {
           }}
           key={id}
           id={id}
-          aria-controls={id}
-        >
+          aria-controls={id}>
           {text}
         </TabsItem>
       ))}
     </Tabs>
   );
 };
-
 
 const Event = () => {
   const navigate = useNavigate();
@@ -104,25 +102,21 @@ const Event = () => {
             <>
               <PanelHeaderButton
                 onClick={() => navigate("/event/create")}
-                aria-label="addition"
-              >
+                aria-label="addition">
                 <Icon28AddOutline />
               </PanelHeaderButton>
               <PanelHeaderButton
                 onClick={() => dispatch(changeActiveModal("filtration"))}
-                aria-label="filtration"
-              >
+                aria-label="filtration">
                 <Icon28SlidersOutline />
               </PanelHeaderButton>
               <PanelHeaderButton
                 onClick={() => console.log("search")}
-                aria-label="search"
-              >
+                aria-label="search">
                 <Icon28SearchOutline />
               </PanelHeaderButton>
             </>
-          }
-        >
+          }>
           <Title>События</Title>
         </PanelHeader>
         {/*<Tabs mode={"default"}>*/}
@@ -134,12 +128,11 @@ const Event = () => {
         {/*</Tabs>*/}
 
         <Group id="all-event">
-
           <TabsHeader
             selected={selected}
             setSelected={(value) => setSelected(value)}
           />
-          <div className="wrapper">
+          <div className="wrapper" style={{ background: "#EBEDEF" }}>
             {chats?.map((chat, i) => {
               return <EventCard {...chat} key={i} />;
             })}

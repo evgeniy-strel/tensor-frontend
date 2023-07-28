@@ -23,7 +23,7 @@ import RequestAPI from "../../API/requests";
 import { useSelector, useDispatch } from "react-redux";
 import { createNewChat } from "./../../store/reducers/chatSlice";
 import { categoriesSelector } from "./../../store/selectors/categoriesSelector";
-import { getFullUrlImg } from "../../utils/helpersMethods";
+import { getFullUrlImg, addZero } from "../../utils/helpersMethods";
 import { useLocation, matchRoutes } from "react-router-dom";
 
 const hours = [
@@ -161,8 +161,8 @@ const EditEvent = () => {
         day: dd.getDate(),
         month: dd.getMonth(),
         year: dd.getFullYear(),
-        hour: dd.getHours(),
-        minute: dd.getMinutes(),
+        hour: addZero(dd.getHours()),
+        minute: addZero(dd.getMinutes()),
       });
     }
   }, [event?.datetime]);

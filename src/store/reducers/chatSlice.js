@@ -161,7 +161,11 @@ const chatSlice = createSlice({
       state.isLoaded.activeChat = true;
     });
     builder.addCase(addUsersToChat.fulfilled, (state, action) => {
-      state.activeChat.users = action.payload;
+      if (!state.activeChat) {
+        state.activeChat = { users: action.payload };
+      } else {
+        state.activeChat.users = action.payload;
+      }
     });
     builder.addCase(fetchChats.fulfilled, (state, action) => {
       state.chats = action.payload;

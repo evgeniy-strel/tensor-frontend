@@ -24,6 +24,7 @@ import { getFullUrlImg } from "../../../utils/helpersMethods";
 import { changeActiveModal } from "../../../store/reducers/modalSlice";
 import { tagsNewChatSelector } from "../../../store/selectors/chatSelectors";
 import cn from "classnames";
+import { useLocation } from "react-router";
 
 const initialData = {
   avatar: "",
@@ -40,6 +41,10 @@ const CreateChat = () => {
   const [data, setData] = useState(initialData);
   const tags = useSelector(tagsNewChatSelector);
   const [isSubmited, setIsSubmited] = useState(false);
+
+  const location = useLocation();
+  const pathname = location.pathname;
+  const onThisPage = pathname?.includes("create_chat");
 
   const onClickBack = () => {
     navigate(-1);
@@ -139,11 +144,18 @@ const CreateChat = () => {
               </FormItem>
 
               <FormItem
-                status={isSubmited && rules.tags ? "error" : "default"}
-                bottom={isSubmited && rules.tags && "Выберите от 3-х тегов"}>
+                status={
+                  isSubmited && rules.tags && onThisPage ? "error" : "default"
+                }
+                bottom={
+                  isSubmited &&
+                  rules.tags &&
+                  onThisPage &&
+                  "Выберите от 3-х тегов"
+                }>
                 <div
                   className={cn("form-layout__tags", {
-                    error: isSubmited && rules.tags,
+                    error: isSubmited && rules.tags && onThisPage,
                   })}
                   onClick={onChooseTags}>
                   {tags.length

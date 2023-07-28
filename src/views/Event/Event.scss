@@ -1,9 +1,10 @@
-#event{
-  .vkuiPanelHeader__before{
+#event {
+  .vkuiPanelHeader__before {
     flex-grow: 0 !important;
   }
 
-  .wrapper{
+  .wrapper {
+    margin-top: 8px;
     display: flex;
     flex-direction: column;
     gap: 8px;

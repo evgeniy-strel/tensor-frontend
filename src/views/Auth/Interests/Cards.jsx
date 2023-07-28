@@ -19,8 +19,7 @@ const Cards = ({ tags, onClick }) => {
           }
           onClick={() => onClick(category)}
           mode="outline"
-          key={category.id}
-        >
+          key={category.id}>
           {tags.filter((el) => el.category_id === category.id).length > 0 && (
             <Counter
               mode="primary"

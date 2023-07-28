@@ -42,10 +42,6 @@ const tabs = [
     text: "Все события",
   },
   {
-    id: "favorites_events",
-    text: "Избранное",
-  },
-  {
     id: "my_events",
     text: "Мои события",
   },

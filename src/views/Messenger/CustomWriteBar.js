@@ -27,7 +27,7 @@ const CustomWriteBar = ({ user, chatId: chatIdProps, onMessage }) => {
       console.log(chatInfo);
     }
 
-    if (text.length == 0) return;
+    if (text?.trim().length == 0) return;
 
     const message = {
       type: "text",

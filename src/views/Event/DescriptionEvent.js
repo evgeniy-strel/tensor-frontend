@@ -18,7 +18,7 @@ import {
 import "./DescriptionEvent.scss";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchChatById } from "../../store/reducers/chatSlice";
+import { addUsersToChat, fetchChatById } from "../../store/reducers/chatSlice";
 import { useLocation, matchRoutes } from "react-router-dom";
 import { useEffect, useState } from "react";
 import RequestAPI from "../../API/requests";
@@ -27,6 +27,7 @@ import { getFullUrlImg } from "../../utils/helpersMethods";
 
 const DescriptionEvent = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const location = useLocation();
   const [idChat, setIdChat] = useState();
   const [event, setEvent] = useState();
@@ -35,6 +36,22 @@ const DescriptionEvent = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [participant, setParticipant] = useState(false);
   const [idUser, setIdUser] = useState();
+
+  const currentUser = useSelector((state) => state.user.user);
+
+  const onJoin = async () => {
+    await dispatch(
+      addUsersToChat({
+        chatId: idChat,
+        users: [{ user_id: currentUser.id, role: "user" }],
+      })
+    );
+    goToChat();
+  };
+
+  const goToChat = () => {
+    navigate(`/messenger/chat/${idChat}`);
+  };
 
   useEffect(() => {
     setIdChat(location.pathname.split("/")[2]);
@@ -166,9 +183,7 @@ const DescriptionEvent = () => {
                 </>
               )}
               {!isAdmin && !participant && (
-                <button
-                  className="btn"
-                  onClick={() => navigate(`/messenger/chat/${idChat}`)}>
+                <button className="btn" onClick={onJoin}>
                   Присоединиться
                 </button>
               )}

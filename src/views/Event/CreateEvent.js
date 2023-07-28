@@ -129,6 +129,8 @@ const CreateEvent = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const currentDate = new Date();
+
   const user = useSelector((state) => state.user.user);
   const categories = useSelector(categoriesSelector);
   const [tags, setTags] = useState([]);
@@ -193,8 +195,6 @@ const CreateEvent = () => {
     // navigate(`/event`);
   };
 
-  const currentDate = new Date();
-
   return (
     <View id="createEvent" activePanel="createEvent">
       <Panel id="createEvent">
@@ -246,7 +246,6 @@ const CreateEvent = () => {
               <FormItem
                 status={isSubmited ? "error" : "default"}
                 bottom={isSubmited && "Заполните поля"}>
-              >
                 <DatePicker
                   min={{
                     day: currentDate.getDate(),
@@ -256,6 +255,11 @@ const CreateEvent = () => {
                   max={{ day: 1, month: 1, year: 2030 }}
                   onDateChange={(value) => {
                     setDate(`${value.year}-${value.month}-${value.day}`);
+                  }}
+                  defaultValue={{
+                    day: currentDate?.getDate(),
+                    month: currentDate.getMonth() + 1,
+                    year: currentDate.getFullYear(),
                   }}
                   dayPlaceholder="ДД"
                   monthPlaceholder="ММММ"

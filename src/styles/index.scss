@@ -2,14 +2,25 @@ html {
   width: 100vw;
 }
 
-html,
+html {
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
 body {
-  overflow-x: hidden;
+  height: 100%;
+  overflow: auto;
+  position: relative;
 }
 
 :root {
   --app-height: 100%;
 }
+
+// .vkuiModalPage__content {
+//   overflow-y: scroll !important;
+// }
 
 body {
   margin: 0;

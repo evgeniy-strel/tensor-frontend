@@ -31,6 +31,7 @@ import HobbiesModalPageChat from "./modals/HobbiesModalPage/chat";
 import CategoryModalPageChat from "./modals/CategoryModalPage/chat";
 import { resetTags } from "./store/reducers/userSlice";
 import FilterModalPage from "./modals/FilterModalPage";
+import { removeBounceEffect } from "./utils/bounceEffect";
 
 const pages = [
   {
@@ -75,8 +76,7 @@ function App() {
           dispatch(resetTags());
         }
         dispatch(modalBack());
-      }}
-    >
+      }}>
       <SettingsModalPage id="settings" />
       <HobbiesModalPage id="hobbies" />
       <CategoryModalPage id="tags" />
@@ -85,21 +85,22 @@ function App() {
       <HobbiesModalPageChat id="hobbies_chat" />
       <CategoryModalPageChat id="tags_chat" />
       {/* event */}
-      <FilterModalPage id="filtration"/>
+      <FilterModalPage id="filtration" />
     </ModalRoot>
   );
 
   useEffect(() => {
     dispatch(fetchCategories());
     calculateAppHeight();
+
+    removeBounceEffect();
   }, []);
 
   return (
     <SplitLayout
       header={isVKCOM && <PanelHeader separator={false} />}
       style={{ justifyContent: "center" }}
-      modal={modal}
-    >
+      modal={modal}>
       {viewWidth.tabletPlus && token !== "" && (
         <Desktop
           isVKCOM={isVKCOM}
@@ -123,8 +124,7 @@ function App() {
                 setActiveStory={setActiveStory}
               />
             )
-          }
-        >
+          }>
           <Rout id={activeStory} />
         </Epic>
       </SplitCol>

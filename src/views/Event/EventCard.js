@@ -29,7 +29,7 @@ const EventCard = ({ id, external: { title, avatar, place, datetime } }) => {
 
     let dd = new Date(datetime?.replace(/-/g, "/"));
     setDate({
-      day: dd.getDay(),
+      day: dd.getDate(),
       month: dd.getMonth(),
       year: dd.getFullYear(),
       hour: dd.getHours(),

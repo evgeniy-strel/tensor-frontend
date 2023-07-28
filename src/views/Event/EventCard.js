@@ -43,7 +43,7 @@ const EventCard = ({ id, external: { title, avatar, place, datetime } }) => {
       style={{
         borderRadius: 8,
         overflow: "hidden",
-        background: "#fff",
+        background: "var(--vkui--color_background_content)",
       }}
       id="eventCard"
       onClick={() => navigate(`/event/${id}`)}

@@ -132,7 +132,9 @@ const Event = () => {
             selected={selected}
             setSelected={(value) => setSelected(value)}
           />
-          <div className="wrapper" style={{ background: "#EBEDEF" }}>
+          <div
+            className="wrapper"
+            style={{ background: "var(--vkui--color_background_content)" }}>
             {chats?.map((chat, i) => {
               return <EventCard {...chat} key={i} />;
             })}

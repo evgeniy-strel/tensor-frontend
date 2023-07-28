@@ -69,13 +69,13 @@ const EventCard = ({ id, external: { title, avatar, place, datetime } }) => {
           )}
           <div className="infoImage">
             <div>{tags[0]?.title}</div>
-            <PanelHeaderButton
+            {/* <PanelHeaderButton
               onClick={(e) => {
                 e.stopPropagation();
                 console.log("123");
               }}>
               <Icon28LikeOutline fill="white" style={{ padding: "0px" }} />
-            </PanelHeaderButton>
+            </PanelHeaderButton> */}
           </div>
         </div>
       </div>

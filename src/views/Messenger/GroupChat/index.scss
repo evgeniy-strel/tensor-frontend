@@ -50,19 +50,30 @@
   }
 
   .messages-container-group {
-    .messages-container {
-      height: calc(
-        var(--app-height) - var(--vkui--size_panel_header_height--regular) -
-          54px - var(--vkui_internal--safe_area_inset_bottom)
-      );
-
-      &.event {
+    &.event {
+      .messages-container {
         margin-top: 32.5px;
         height: calc(
           var(--app-height) - var(--vkui--size_panel_header_height--regular) -
             32.5px - 54px - var(--vkui_internal--safe_area_inset_bottom)
         );
+
+        @media screen and (min-width: 768px) {
+          margin-top: 32.5px;
+          height: calc(
+            var(--app-height) - var(--vkui--size_panel_header_height--regular) -
+              32.5px - 54px - 16px -
+              var(--vkui_internal--safe_area_inset_bottom)
+          );
+        }
       }
+    }
+
+    .messages-container {
+      height: calc(
+        var(--app-height) - var(--vkui--size_panel_header_height--regular) -
+          54px - var(--vkui_internal--safe_area_inset_bottom)
+      );
 
       .message-block {
         &.mine {

@@ -36,6 +36,7 @@ const DescriptionEvent = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [participant, setParticipant] = useState(false);
   const [idUser, setIdUser] = useState();
+  const [date, setDate] = useState(new Date());
 
   const currentUser = useSelector((state) => state.user.user);
 
@@ -78,6 +79,11 @@ const DescriptionEvent = () => {
     });
   }, [idUser]);
 
+  useEffect(() => {
+    console.log(event);
+    setDate(new Date(event?.datetime));
+  }, [event]);
+
   return (
     <View id="description" activePanel="description">
       <Panel id="description">
@@ -118,7 +124,9 @@ const DescriptionEvent = () => {
                   onClick={(e) => {
                     e.stopPropagation();
                     console.log(idChat);
-                  }}>
+                    console.log(date);
+                  }}
+                >
                   <Icon28LikeOutline fill="white" style={{ padding: "0px" }} />
                 </PanelHeaderButton>
               </div>
@@ -149,8 +157,8 @@ const DescriptionEvent = () => {
             </div>
             <div className="time">
               <p>
-                {event?.date?.day} {months[event?.date?.month]}, {event?.hour}:
-                {event?.minute}
+                {date.getDate()} {months[date.getMonth()]}, {date.getHours()}:
+                {date.getMinutes()}
               </p>
               <p>{event?.place}</p>
             </div>

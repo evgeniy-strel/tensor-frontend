@@ -162,10 +162,19 @@ const CreateEvent = () => {
     place: data.place.length < 4,
   };
 
+  const onKK = () => {
+    console.log(data);
+    console.log(date);
+  };
+
   const onSubmit = async (e) => {
+    console.log(data);
+    console.log(date);
+    console.log(Object.values(rules).filter((rule) => rule).length !== 0);
     e.preventDefault();
     setIsSubmited(true);
     if (Object.values(rules).filter((rule) => rule).length !== 0) return;
+    console.log("dasd");
     const chat = {
       chat: {
         type: "event",
@@ -175,11 +184,13 @@ const CreateEvent = () => {
       users_id: [user.id],
     };
 
-    const tagsValues = tags.map((tag) => ({ title: tag?.value }));
-
+    const tagsValues = tags.map((tag) => ({
+      title: tag?.value,
+    }));
     const chatInfo = (await dispatch(createNewChat({ chat, tags: tagsValues })))
       .payload;
     navigate(`/messenger/chat/${chatInfo?.id}`);
+    // navigate(`/event`);
   };
 
   const currentDate = new Date();
@@ -235,6 +246,7 @@ const CreateEvent = () => {
               <FormItem
                 status={isSubmited ? "error" : "default"}
                 bottom={isSubmited && "Заполните поля"}>
+              >
                 <DatePicker
                   min={{
                     day: currentDate.getDate(),

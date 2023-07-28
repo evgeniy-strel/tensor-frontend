@@ -158,7 +158,7 @@ const EditEvent = () => {
       // console.log(event?.datetime?.tolocaledatestring());
       let dd = new Date(event?.datetime?.replace(/-/g, "/"));
       setDat({
-        day: dd.getDay(),
+        day: dd.getDate(),
         month: dd.getMonth(),
         year: dd.getFullYear(),
         hour: dd.getHours(),
@@ -169,7 +169,7 @@ const EditEvent = () => {
 
   const onSubmit = () => {
     console.log(event);
-    RequestAPI.updateEvents(idChat, event);
+    // RequestAPI.updateEvents(idChat, event);
     // navigate(`/event/${idChat}`);
   };
 
@@ -258,7 +258,11 @@ const EditEvent = () => {
                     year: currentDate.getFullYear(),
                   }}
                   max={{ day: 1, month: 1, year: 2030 }}
-                  value={`${dat.year}-${dat.month}-${dat.day}`}
+                  defaultValue={{
+                    day: dat.day,
+                    month: dat.month,
+                    year: dat.year,
+                  }}
                   onDateChange={(value) => {
                     setDate(`${value.year}-${value.month}-${value.day}`);
                   }}
